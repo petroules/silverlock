@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/main">
+        <file>res/help.png</file>
+        <file>res/print.png</file>
+        <file>res/print_preview.png</file>
+        <file>res/app.svg</file>
+        <file>res/account.png</file>
+        <file>res/category.png</file>
+        <file>res/new.png</file>
+        <file>res/open.png</file>
+        <file>res/save.png</file>
+    </qresource>
+</RCC>
