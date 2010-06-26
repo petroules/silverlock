@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
+    <width>1000</width>
     <height>600</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>Silverlock</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="resources.qrc">
     <normaloff>:/main/res/app.svg</normaloff>:/main/res/app.svg</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -121,7 +121,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
+     <width>1000</width>
      <height>21</height>
     </rect>
    </property>
@@ -171,7 +171,7 @@
     </property>
     <addaction name="actionMove_Entries"/>
     <addaction name="actionEdit_Entry"/>
-    <addaction name="actionRemove_Entry"/>
+    <addaction name="actionDelete_Entries"/>
    </widget>
    <widget class="QMenu" name="menuGroup">
     <property name="title">
@@ -213,7 +213,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_New">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/main/res/new.png</normaloff>:/main/res/new.png</iconset>
    </property>
    <property name="text">
@@ -225,7 +225,7 @@
   </action>
   <action name="action_Open">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/main/res/open.png</normaloff>:/main/res/open.png</iconset>
    </property>
    <property name="text">
@@ -237,7 +237,7 @@
   </action>
   <action name="action_Save">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/main/res/save.png</normaloff>:/main/res/save.png</iconset>
    </property>
    <property name="text">
@@ -257,7 +257,7 @@
   </action>
   <action name="action_Print">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/main/res/print.png</normaloff>:/main/res/print.png</iconset>
    </property>
    <property name="text">
@@ -266,7 +266,7 @@
   </action>
   <action name="actionPrint_Preview">
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/main/res/print_preview.png</normaloff>:/main/res/print_preview.png</iconset>
    </property>
    <property name="text">
@@ -293,25 +293,40 @@
    <property name="text">
     <string>Always on Top</string>
    </property>
+   <property name="statusTip">
+    <string>Keep the application on top of other windows</string>
+   </property>
   </action>
   <action name="actionCenter_to_Screen">
    <property name="text">
     <string>Center to Screen</string>
+   </property>
+   <property name="statusTip">
+    <string>Move the application window to  the center of the screen</string>
    </property>
   </action>
   <action name="actionShow_Passwords">
    <property name="text">
     <string>Show Passwords</string>
    </property>
+   <property name="statusTip">
+    <string>Show or hide passwords in the grid view</string>
+   </property>
   </action>
   <action name="actionOptions">
    <property name="text">
     <string>Options...</string>
    </property>
+   <property name="statusTip">
+    <string>Configure program options</string>
+   </property>
   </action>
   <action name="actionCheck_for_Updates">
    <property name="text">
     <string>Check for Updates</string>
+   </property>
+   <property name="statusTip">
+    <string>Check for an newer version of the application</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -331,44 +346,70 @@
    <property name="text">
     <string>Edit Entry</string>
    </property>
+   <property name="statusTip">
+    <string>Edit the properties of the selected entry</string>
+   </property>
   </action>
-  <action name="actionRemove_Entry">
+  <action name="actionDelete_Entries">
    <property name="text">
-    <string>Remove Entry</string>
+    <string>Delete Entries</string>
+   </property>
+   <property name="statusTip">
+    <string>Delete the selected entries</string>
    </property>
   </action>
   <action name="actionMove_Entries">
    <property name="text">
     <string>Move Entries</string>
    </property>
+   <property name="statusTip">
+    <string>Move the selected entries to a different group</string>
+   </property>
   </action>
   <action name="actionAdd_Subgroup">
    <property name="text">
     <string>Add Subgroup</string>
+   </property>
+   <property name="statusTip">
+    <string>Add a subgroup to the selected group</string>
    </property>
   </action>
   <action name="actionMove_Groups">
    <property name="text">
     <string>Move Groups</string>
    </property>
+   <property name="statusTip">
+    <string>Move the selected groups to a new group</string>
+   </property>
   </action>
   <action name="actionEdit_Group">
    <property name="text">
     <string>Edit Group</string>
+   </property>
+   <property name="statusTip">
+    <string>Edit the selected group</string>
    </property>
   </action>
   <action name="actionDelete_Groups">
    <property name="text">
     <string>Delete Groups</string>
    </property>
+   <property name="statusTip">
+    <string>Delete the selected groups</string>
+   </property>
   </action>
   <action name="actionAdd_Entry">
    <property name="text">
     <string>Add Entry</string>
    </property>
+   <property name="statusTip">
+    <string>Adds a new entry to the selected group</string>
+   </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

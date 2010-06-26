@@ -1,7 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "version.h"
+#include <silverlocklib.h>
 #include "aboutdialog.h"
+#include "version.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

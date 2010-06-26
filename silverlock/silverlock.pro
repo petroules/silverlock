@@ -22,10 +22,9 @@ FORMS += mainwindow.ui \
 RESOURCES += resources.qrc
 DESTDIR = ../bin
 INCLUDEPATH += ../silverlocklib
-!mac:LIBS += -L../bin \
-    -lsilverlocklib1
-mac:LIBS += -L../bin \
-    -lsilverlocklib.1
+win32:LIBS += -L../bin -lsilverlocklib1
+macx:LIBS += -L../bin -lsilverlocklib.1
+linux-g++:LIBS += -L../bin -lsilverlocklib
 OTHER_FILES += botan.txt \
     silverlock.rc
 

@@ -3,7 +3,8 @@
 
 #include <QtCore>
 #include <QtGui>
-#include <entry.h>
+
+class Entry;
 
 namespace Ui {
     class EntryEditDialog;

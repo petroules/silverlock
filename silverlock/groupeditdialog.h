@@ -3,7 +3,8 @@
 
 #include <QtCore>
 #include <QtGui>
-#include <group.h>
+
+class Group;
 
 namespace Ui {
     class GroupEditDialog;

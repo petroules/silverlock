@@ -1,5 +1,6 @@
 #include "groupeditdialog.h"
 #include "ui_groupeditdialog.h"
+#include <silverlocklib.h>
 
 GroupEditDialog::GroupEditDialog(Group *group, QWidget *parent) :
     QDialog(parent),

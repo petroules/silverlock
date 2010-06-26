@@ -1,5 +1,6 @@
 #include "entryeditdialog.h"
 #include "ui_entryeditdialog.h"
+#include <silverlocklib.h>
 
 EntryEditDialog::EntryEditDialog(Entry *entry, QWidget *parent) :
     QDialog(parent),

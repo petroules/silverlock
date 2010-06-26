@@ -8,12 +8,15 @@ TEMPLATE = lib
 DEFINES += SILVERLOCKLIB_LIBRARY
 SOURCES += database.cpp \
     entry.cpp \
-    group.cpp
+    group.cpp \
+    qversion.cpp
 HEADERS += silverlocklib_global.h \
     database.h \
     entry.h \
     group.h \
-    version.h
+    version.h \
+    silverlocklib.h \
+    qversion.h
 FORMS += 
 OTHER_FILES += silverlocklib.rc
 DESTDIR = ../bin

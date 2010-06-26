@@ -3,7 +3,9 @@
 
 #include <QtCore>
 #include <QtGui>
-#include <database.h>
+
+class Database;
+class Group;
 
 namespace Ui {
     class MainWindow;

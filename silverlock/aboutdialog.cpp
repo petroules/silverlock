@@ -1,6 +1,5 @@
 #include "aboutdialog.h"
 #include "version.h"
-#include <QMessageBox>
 
 void AboutDialog::show(QWidget* parent, const QString& title, const QString& description)
 {
