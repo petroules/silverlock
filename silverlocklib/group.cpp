@@ -1,70 +1,49 @@
 #include "group.h"
+#include "database.h"
+#include "entry.h"
+#include "database_keys.h"
 
-Group::Group(const QString &name)
-    : m_uuid(QUuid::createUuid()), m_name(name)
+/*!
+    \class Group
+    Represents a group of password entries in a database.
+
+    The parent of a group cannot be \c NULL and an assertion failure will
+    result if a \c NULL pointer is passed to any of the constructors.
+ */
+
+Group::Group(const QString &title, GroupNode *parent) :
+    GroupNode(), ItemNode()
 {
+    this->setTitle(title);
+    this->setParentNode(parent);
 }
 
+/*!
+    Destroys the group, deleting all its child objects.
+
+    The group's entries and subgroups are deleted upon deconstruction, which will recursively
+    delete all subgroups and all entries contained within them. The group also removes itself
+    from its parent group, if any.
+ */
 Group::~Group()
 {
-    for (int i = 0; i < this->m_groups.length(); i++)
-    {
-        delete this->m_groups[i];
-        this->m_groups[i] = NULL;
-    }
-
-    for (int i = 0; i < this->m_entries.length(); i++)
-    {
-        delete this->m_entries[i];
-        this->m_entries[i] = NULL;
-    }
+    this->detach();
 }
 
-QUuid Group::uuid() const
+void Group::attachToList()
 {
-    return this->m_uuid;
+    this->parentNode()->m_groups.append(this);
 }
 
-QString Group::name() const
+void Group::detachFromList()
 {
-    return this->m_name;
+    this->parentNode()->m_groups.removeAll(this);
 }
 
-void Group::setName(const QString &name)
+QDomElement Group::toXml(QDomDocument &document) const
 {
-    this->m_name = name;
-}
-
-QList<Group*>& Group::groups()
-{
-    return this->m_groups;
-}
-
-QList<Entry*>& Group::entries()
-{
-    return this->m_entries;
-}
-
-int Group::countGroups()
-{
-    int total = 0;
-
-    for (int i = 0; i < this->groups().count(); i++)
-    {
-        total += this->groups().at(i)->countGroups();
-    }
-
-    return total;
-}
-
-int Group::countEntries()
-{
-    int total = 0;
-
-    for (int i = 0; i < this->groups().count(); i++)
-    {
-        total += this->groups().at(i)->countEntries();
-    }
-
-    return total + this->entries().count();
+    QDomElement element = document.createElement(XML_GROUP);
+    element.setAttribute(XML_UUID, this->uuid().toString());
+    element.setAttribute(XML_TITLE, this->title());
+    return element;
 }

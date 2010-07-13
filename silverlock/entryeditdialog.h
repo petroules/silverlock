@@ -30,6 +30,7 @@ private:
     QString inputErrorString() const;
 
 private slots:
+    void on_revealToolButton_toggled(bool checked);
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();
 };

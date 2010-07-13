@@ -1,27 +1,28 @@
 #ifndef GROUP_H
 #define GROUP_H
 
-#include "entry.h"
+#include "silverlocklib_global.h"
+#include "groupnode.h"
+#include "itemnode.h"
 #include <QtCore>
 
-class SILVERLOCKLIBSHARED_EXPORT Group
-{
-public:
-    Group(const QString &name);
-    ~Group();
-    QUuid uuid() const;
-    QString name() const;
-    void setName(const QString &name);
-    QList<Group*>& groups();
-    QList<Entry*>& entries();
-    int countGroups();
-    int countEntries();
+class Database;
+class Entry;
 
-private:
-    QUuid m_uuid;
-    QString m_name;
-    QList<Group*> m_groups;
-    QList<Entry*> m_entries;
+class SILVERLOCKLIBSHARED_EXPORT Group : public GroupNode, public ItemNode
+{
+    Q_OBJECT
+    Q_PROPERTY(QUuid uuid READ uuid WRITE setUuid)
+    Q_PROPERTY(QString title READ title WRITE setTitle)
+
+public:
+    explicit Group(const QString &title = QString(), GroupNode *parent = NULL);
+    ~Group();
+    QDomElement toXml(QDomDocument &document) const;
+
+protected:
+    void attachToList();
+    void detachFromList();
 };
 
 #endif // GROUP_H

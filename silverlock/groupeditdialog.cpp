@@ -7,6 +7,7 @@ GroupEditDialog::GroupEditDialog(Group *group, QWidget *parent) :
     ui(new Ui::GroupEditDialog), m_group(group)
 {
     this->ui->setupUi(this);
+    this->read();
 }
 
 GroupEditDialog::~GroupEditDialog()
@@ -52,7 +53,7 @@ void GroupEditDialog::read()
     if (this->m_group)
     {
         // Basic information
-        this->ui->titleLineEdit->setText(this->m_group->name());
+        this->ui->titleLineEdit->setText(this->m_group->title());
 
         // UUID
         this->ui->uuidLineEdit->setText(this->m_group->uuid().toString());
@@ -67,7 +68,7 @@ void GroupEditDialog::write() const
     if (this->m_group)
     {
         // Basic information
-        this->m_group->setName(this->ui->titleLineEdit->text());
+        this->m_group->setTitle(this->ui->titleLineEdit->text());
     }
 }
 

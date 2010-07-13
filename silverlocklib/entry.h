@@ -2,16 +2,25 @@
 #define ENTRY_H
 
 #include "silverlocklib_global.h"
+#include "itemnode.h"
 #include <QtCore>
 
-class SILVERLOCKLIBSHARED_EXPORT Entry
+class Database;
+class Group;
+class GroupNode;
+
+class SILVERLOCKLIBSHARED_EXPORT Entry : public ItemNode
 {
+    Q_OBJECT
+    Q_PROPERTY(QUrl url READ url WRITE setUrl)
+    Q_PROPERTY(QString username READ username WRITE setUsername)
+    Q_PROPERTY(QString password READ password WRITE setPassword)
+    Q_PROPERTY(QString emailAddress READ emailAddress WRITE setEmailAddress)
+    Q_PROPERTY(QString notes READ notes WRITE setNotes)
+
 public:
-    Entry();
-    Entry(const QString &title);
-    QUuid uuid() const;
-    QString title() const;
-    void setTitle(const QString &title);
+    explicit Entry(const QString &title = QString(), GroupNode *parent = NULL);
+    ~Entry();
     QUrl url() const;
     void setUrl(const QUrl &url);
     QString username() const;
@@ -22,12 +31,21 @@ public:
     void setEmailAddress(const QString &emailAddress);
     QString notes() const;
     void setNotes(const QString &notes);
-    QHash<QString, QString>& recoveryInfo();
-    QHash<QString, QString>& additionalData();
+    const QHash<QString, QString>& recoveryInfo() const;
+    const QHash<QString, QString>& additionalData() const;
+    void insertRecoveryInfo(const QString &key, const QString &value);
+    int removeRecoveryInfo(const QString &key);
+    void clearRecoveryInfo();
+    void insertAdditionalData(const QString &key, const QString &value);
+    int removeAdditionalData(const QString &key);
+    void clearAdditionalData();
+    QDomElement toXml(QDomDocument &document) const;
+
+protected:
+    void attachToList();
+    void detachFromList();
 
 private:
-    QUuid m_uuid;
-    QString m_title;
     QUrl m_url;
     QString m_username;
     QString m_password;

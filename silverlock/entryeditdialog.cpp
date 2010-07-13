@@ -7,6 +7,7 @@ EntryEditDialog::EntryEditDialog(Entry *entry, QWidget *parent) :
     ui(new Ui::EntryEditDialog), m_entry(entry)
 {
     this->ui->setupUi(this);
+    this->read();
 }
 
 EntryEditDialog::~EntryEditDialog()
@@ -92,19 +93,19 @@ void EntryEditDialog::write() const
     {
         // Basic information
         this->m_entry->setTitle(this->ui->titleLineEdit->text());
-        this->m_entry->setUrl(QUrl(this->ui->urlLineEdit->text()));
+        this->m_entry->setUrl(QUrl(this->ui->urlLineEdit->text(), QUrl::StrictMode));
         this->m_entry->setUsername(this->ui->usernameLineEdit->text());
         this->m_entry->setPassword(this->ui->passwordLineEdit->text());
         this->m_entry->setEmailAddress(this->ui->emailLineEdit->text());
         this->m_entry->setNotes(this->ui->notesTextEdit->toPlainText());
 
         // Recovery questions & answers
-        this->m_entry->recoveryInfo().clear();
+        this->m_entry->clearRecoveryInfo();
         for (int i = 0; i < this->ui->tableWidget->rowCount(); i++)
         {
             QString question = this->ui->tableWidget->itemAt(0, i)->text();
             QString answer = this->ui->tableWidget->itemAt(1, i)->text();
-            this->m_entry->recoveryInfo().insert(question, answer);
+            this->m_entry->insertRecoveryInfo(question, answer);
         }
     }
 }
@@ -144,7 +145,7 @@ QString EntryEditDialog::inputErrorString() const
 
     // We only want to give an error if the URL is not valid AND
     // not empty (because the user can leave the field blank)
-    QUrl testUrl(this->ui->urlLineEdit->text());
+    QUrl testUrl(this->ui->urlLineEdit->text(), QUrl::StrictMode);
     if (!testUrl.isValid() && !testUrl.isEmpty())
     {
         errorString += "<li>" + tr("The URL you entered is improperly formatted: ") + testUrl.errorString() + "</li>";
@@ -156,4 +157,9 @@ QString EntryEditDialog::inputErrorString() const
     }
 
     return errorString;
+}
+
+void EntryEditDialog::on_revealToolButton_toggled(bool checked)
+{
+    this->ui->passwordLineEdit->setEchoMode(checked ? QLineEdit::Password : QLineEdit::Normal);
 }

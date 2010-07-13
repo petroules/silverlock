@@ -2,11 +2,15 @@
 #include "ui_mainwindow.h"
 #include <silverlocklib.h>
 #include "aboutdialog.h"
+#include "entryeditdialog.h"
+#include "groupeditdialog.h"
+#include "preferencesdialog.h"
+#include "silverlockpreferences.h"
 #include "version.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow), m_preferences(new SilverlockPreferences()), m_database(NULL)
 {
     // Set information about the application
     QCoreApplication::setOrganizationName(VER_COMPANYNAME_STR);
@@ -17,23 +21,25 @@ MainWindow::MainWindow(QWidget *parent) :
     // Setup the user interface
     this->ui->setupUi(this);
 
-    // We're connecting these manually because they need to return bool
-    // and be used in multiple places; we don't want to use long names
-    QObject::connect(this->ui->action_Save, SIGNAL(triggered()), this, SLOT(save()));
-    QObject::connect(this->ui->actionSave_As, SIGNAL(triggered()), this, SLOT(saveAs()));
+    // Initialize the document state
+    this->m_isUntitled = true;
+    this->setCurrentFile(QString());
+    this->setWindowTitle(VER_PRODUCTNAME_STR);
 
+    // User interface
     this->setAttribute(Qt::WA_DeleteOnClose);
     this->setUnifiedTitleAndToolBarOnMac(true);
-    //???
-    //TODO:documentWasModifiedAction > this->setWindowModified(true);
     this->statusBar()->showMessage(tr("Ready"));
+    this->statusBar()->addPermanentWidget(this->m_nodeCountStatusLabel = new QLabel(this));
+    this->ui->groupBrowser->setPreferences(this->m_preferences);
+    this->ui->entryTable->setPreferences(this->m_preferences);
+    this->updateNodeActions();
 
-#ifdef Q_WS_X11
-    // Actions
-    this->ui->actionE_xit->setIcon(QIcon::fromTheme("application-exit"));
-    this->ui->actionOptions->setIcon(QIcon::fromTheme("preferences-other"));
-    this->ui->actionAbout->setIcon(QIcon::fromTheme("help-about"));
-#endif
+    // Signals and slots
+    QObject::connect(this->ui->action_Save, SIGNAL(triggered()), SLOT(save()));
+    QObject::connect(this->ui->actionSave_As, SIGNAL(triggered()), SLOT(saveAs()));
+    QObject::connect(this->ui->groupBrowser, SIGNAL(populating()), SLOT(clearViews()));
+    QObject::connect(this->ui->entryTable, SIGNAL(populating()), SLOT(clearViews()));
 
     // Keyboard Shortcuts
     this->ui->action_New->setShortcut(QKeySequence::New);
@@ -45,67 +51,33 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->actionE_xit->setShortcut(QKeySequence::Quit);
     this->ui->actionOptions->setShortcut(QKeySequence::Preferences);
 
-    test();
-
-    this->setCurrentFile("");
-}
-
-void MainWindow::test()
-{
-    QList<Entry*> a;
-    a.append(new Entry("Amazon.com"));
-    a.append(new Entry("eBay"));
-    a.append(new Entry("Stuffland.com"));
-    a.append(new Entry("StuffEmporium.net"));
-    a.append(new Entry("toyota secret account"));
-    a.append(new Entry("race car"));
-    a.append(new Entry("thingthing"));
-
-    for (int i = 0; i < a.count(); i++)
-    {
-        Entry *x = a.at(i);
-        x->setEmailAddress("jake.petroules@gmail.com");
-        x->setNotes("This is a larger series of test notes.\nIt is designed to test multiline wrapping stuff of the etc kind.");
-        x->setPassword("s3cr3tp4$$");
-        x->setUsername("jaekdaSnaek");
-        x->setUrl(QUrl("http://www.google.com/"));
-    }
-
-    Group *shopping = new Group("Shopping");
-    Group *stuff = new Group("Stuff");
-    Group *things = new Group("Things");
-    stuff->groups().append(things);
-    Group *other = new Group("Other");
-
-    shopping->entries().append(a[0]);
-    shopping->entries().append(a[1]);
-
-    stuff->entries().append(a[2]);
-    stuff->entries().append(a[3]);
-
-    other->entries().append(a[4]);
-    other->entries().append(a[5]);
-
-    things->entries().append(a[6]);
-
-    this->db = new Database("Bob's DB", "secr3t");
-    this->db->rootGroup()->groups().append(shopping);
-    this->db->rootGroup()->groups().append(stuff);
-    this->db->rootGroup()->groups().append(other);
-    this->db->rootGroup()->groups().append(new Group("Test Cat"));
-
-    this->populateTreeView(this->db);
-
-    QFile file("test.xml");
-    if (file.open(QIODevice::WriteOnly))
-    {
-        this->db->write(file);
-    }
+#ifdef Q_WS_X11
+    // X11 action icons
+    this->ui->actionE_xit->setIcon(QIcon::fromTheme("application-exit"));
+    this->ui->actionOptions->setIcon(QIcon::fromTheme("preferences-other"));
+    this->ui->actionAbout->setIcon(QIcon::fromTheme("help-about"));
+#endif
 }
 
 MainWindow::~MainWindow()
 {
-    delete this->ui;
+    if (this->ui)
+    {
+        delete this->ui;
+        this->ui = NULL;
+    }
+
+    if (this->m_preferences)
+    {
+        delete this->m_preferences;
+        this->m_preferences = NULL;
+    }
+
+    if (this->m_database)
+    {
+        delete this->m_database;
+        this->m_database = NULL;
+    }
 }
 
 void MainWindow::changeEvent(QEvent* e)
@@ -123,8 +95,10 @@ void MainWindow::changeEvent(QEvent* e)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    // Do the prompting and saving, and it'll tell us whether the window should be closed or not
     if (this->maybeSave())
     {
+        this->m_preferences->save();
         event->accept();
     }
     else
@@ -135,7 +109,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::on_action_New_triggered()
 {
-    MainWindow *other = new MainWindow;
+    MainWindow *other = new MainWindow();
     other->move(this->x() + 40, this->y() + 40);
     other->show();
 }
@@ -145,7 +119,8 @@ void MainWindow::on_action_Open_triggered()
     QString fileName = QFileDialog::getOpenFileName(this);
     if (!fileName.isEmpty())
     {
-        MainWindow *existing = findMainWindow(fileName);
+        // If this file is already open in another window, show that window
+        MainWindow *existing = this->findMainWindow(fileName);
         if (existing)
         {
             existing->show();
@@ -154,15 +129,20 @@ void MainWindow::on_action_Open_triggered()
             return;
         }
 
-        if (this->isUntitled && !this->isWindowModified())
+        // If this window does not have a file loaded and hasn't been modified,
+        // open the file in this window
+        if (this->m_isUntitled && !this->isWindowModified())
         {
             this->loadFile(fileName);
         }
         else
         {
+            // Otherwise create a new window to open it
             MainWindow *other = new MainWindow();
             other->loadFile(fileName);
-            if (other->isUntitled)
+
+            // If it didn't load successfully, bail out
+            if (other->m_isUntitled)
             {
                 delete other;
                 return;
@@ -181,24 +161,28 @@ void MainWindow::on_actionClose_triggered()
 
 bool MainWindow::save()
 {
-    if (this->isUntitled)
+    // If the open document doesn't have a file name set, prompt for one
+    if (this->m_isUntitled)
     {
         return this->saveAs();
     }
     else
     {
-        return this->saveFile(this->currentFile);
+        // Otherwise go ahead and save the file
+        return this->saveFile(this->m_currentFile);
     }
 }
 
 bool MainWindow::saveAs()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), this->currentFile);
+    // Prompt the user for a file name, and if it was empty, bail out
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), this->m_currentFile);
     if (fileName.isEmpty())
     {
         return false;
     }
 
+    // Otherwise save the file normally
     return this->saveFile(fileName);
 }
 
@@ -215,6 +199,142 @@ void MainWindow::on_actionPrint_Preview_triggered()
 void MainWindow::on_actionE_xit_triggered()
 {
     QApplication::closeAllWindows();
+}
+
+void MainWindow::on_actionMove_Entries_triggered()
+{
+
+}
+
+void MainWindow::on_actionEdit_Entry_triggered()
+{
+    QUuid uuid = this->ui->entryTable->selectedUuid();
+    if (!uuid.isNull() && this->m_database)
+    {
+        Entry *entry = this->m_database->findEntry(uuid);
+        if (entry)
+        {
+            EntryEditDialog dialog(entry, this);
+            if (dialog.exec() == QDialog::Accepted)
+            {
+                this->ui->groupBrowser->populate(this->m_database);
+                this->ui->entryTable->populate(entry->parentNode());
+            }
+        }
+    }
+}
+
+void MainWindow::on_actionDelete_Entries_triggered()
+{
+    int result = QMessageBox::warning(this, tr("Delete Entries"),
+        tr("Are you sure you want to delete the selected entries?"),
+        QMessageBox::Yes, QMessageBox::No);
+    if (result == QMessageBox::Yes)
+    {
+        QList<QUuid> uuids = this->ui->entryTable->selectedUuids();
+        foreach (QUuid uuid, uuids)
+        {
+            Entry* entry = this->m_database->findEntry(uuid);
+            if (entry)
+            {
+                delete entry;
+            }
+        }
+    }
+}
+
+void MainWindow::on_actionAdd_Subgroup_triggered()
+{
+    QUuid uuid = this->ui->groupBrowser->selectedUuid();
+    if (!uuid.isNull() && this->m_database)
+    {
+        Group *group = this->m_database->findGroup(uuid);
+        if (group)
+        {
+            Group *newGroup = new Group();
+
+            GroupEditDialog dialog(newGroup, this);
+            if (dialog.exec() == QDialog::Accepted)
+            {
+                newGroup->setParentNode(group);
+                this->ui->groupBrowser->populate(this->m_database);
+                this->ui->entryTable->populate(group);
+            }
+            else
+            {
+                delete newGroup;
+            }
+        }
+    }
+}
+
+void MainWindow::on_actionAdd_Entry_triggered()
+{
+    QUuid uuid = this->ui->groupBrowser->selectedUuid();
+    if (!uuid.isNull() && this->m_database)
+    {
+        Group *group = this->m_database->findGroup(uuid);
+        if (group)
+        {
+            Entry *newEntry = new Entry();
+
+            EntryEditDialog dialog(newEntry, this);
+            if (dialog.exec() == QDialog::Accepted)
+            {
+                newEntry->setParentNode(group);
+                this->ui->groupBrowser->populate(this->m_database);
+                this->ui->entryTable->populate(group);
+            }
+            else
+            {
+                delete newEntry;
+            }
+        }
+    }
+}
+
+void MainWindow::on_actionMove_Groups_triggered()
+{
+
+}
+
+void MainWindow::on_actionEdit_Group_triggered()
+{
+    QUuid uuid = this->ui->groupBrowser->selectedUuid();
+    if (!uuid.isNull() && this->m_database)
+    {
+        Group *group = this->m_database->findGroup(uuid);
+        if (group)
+        {
+            GroupEditDialog dialog(group, this);
+            if (dialog.exec() == QDialog::Accepted)
+            {
+                this->ui->groupBrowser->populate(this->m_database);
+                this->ui->entryTable->populate(group);
+            }
+        }
+    }
+}
+
+void MainWindow::on_actionDelete_Groups_triggered()
+{
+    int result = QMessageBox::warning(this, tr("Delete Groups"),
+        tr("Are you sure you want to delete the selected groups?"),
+        QMessageBox::Yes, QMessageBox::No);
+    if (result == QMessageBox::Yes)
+    {
+        QList<QUuid> uuids = this->ui->groupBrowser->selectedUuids();
+        foreach (QUuid uuid, uuids)
+        {
+            Group* group = this->m_database->findGroup(uuid);
+            if (group)
+            {
+                delete group;
+            }
+        }
+
+        this->ui->groupBrowser->populate(this->m_database);
+    }
 }
 
 void MainWindow::on_actionAlways_on_Top_triggered(bool checked)
@@ -242,185 +362,202 @@ void MainWindow::on_actionCheck_for_Updates_triggered()
 
 void MainWindow::on_actionOptions_triggered()
 {
-
+    PreferencesDialog preferences(this->m_preferences, this);
+    preferences.exec();
 }
 
 void MainWindow::on_actionAbout_triggered()
 {
     QString str = tr("<p>Silverlock is a secure password management program designed to ease the management of account credentials and related information.</p>");
     str.append(tr("<p>The padlock icon used in this program is a public domain image. Details can be found <a href=\"http://www.openclipart.org/detail/33505\">here</a>.</p>"));
-    AboutDialog::show(this, this->windowTitle(), str);
+    AboutDialog::show(this, tr("About Silverlock"), str);
 }
 
 /*!
-    Performs handling for when an item in the left-hand tree browser is selected.
+    Opens URLs in the entry info view in the user's browser.
  */
-void MainWindow::on_treeBrowser_itemSelectionChanged()
+void MainWindow::on_infoView_anchorClicked(QUrl url)
 {
+    QDesktopServices::openUrl(url);
+}
+
+/*!
+    Shows the context menu for the selected group in the left hand group browser.
+ */
+void MainWindow::on_groupBrowser_customContextMenuRequested(QPoint pos)
+{
+    Q_UNUSED(pos);
+    if (this->ui->groupBrowser->selectedUuids().count() > 0)
+    {
+        this->ui->menuGroup->exec(QCursor::pos());
+    }
+}
+
+/*!
+    Shows the context menu for the selected entry in the right hand entry table.
+ */
+void MainWindow::on_entryTable_customContextMenuRequested(QPoint pos)
+{
+    Q_UNUSED(pos);
+    if (this->ui->entryTable->selectedUuids().count() > 0)
+    {
+        this->ui->menuEntry->exec(QCursor::pos());
+    }
+}
+
+/*!
+    Populates the detail view with a list of the entries in the
+    group selected in the left hand tree view.
+ */
+void MainWindow::on_groupBrowser_itemSelectionChanged()
+{
+    this->updateNodeActions();
+
+    // Safety and logic checks
+    if (!this->m_database || this->ui->groupBrowser->selectedUuids().count() > 1)
+    {
+        this->clearViews();
+        return;
+    }
+
     // Get the selected group UUID
-    QUuid uuid = this->selectedGroupUuid();
+    QUuid uuid = this->ui->groupBrowser->selectedUuid();
     if (!uuid.isNull())
     {
-        // Find the group for this UUID and populate the detail view with it
-        Group *group = this->db->findGroup(uuid);
-        if (group != NULL)
+        // Find the group for this UUID and populate the entry table with it
+        Group *group = this->m_database->findGroup(uuid);
+        if (group)
         {
-            this->populateDetailView(group);
-            qDebug() << "Groups: " << group->countGroups() << "Entries: " << group->countEntries();
+            this->ui->entryTable->populate(group);
+
+            // Display the number of groups and entries in the selected group, in the status bar
+            QString nodeCount = QString("<b>%1:</b> %2 %3 / %4, %5 %6 / %7")
+                                .arg(group->title())
+                                .arg(tr("Groups:"))
+                                .arg(group->groups().count())
+                                .arg(group->countGroups())
+                                .arg(tr("Entries:"))
+                                .arg(group->entries().count())
+                                .arg(group->countEntries());
+            this->m_nodeCountStatusLabel->setText(nodeCount);
         }
         else
         {
-            this->ui->detailView->clear();
+            // If we couldn't find the group, just clear the entry table
+            this->m_nodeCountStatusLabel->setText(QString());
+            this->ui->entryTable->clear();
         }
     }
 }
 
 /*!
-    Shows the context menu for the selected group when the tree browser is right-clicked.
+    Populates the info view with the details of the entry selected in the right hand detail view.
  */
-void MainWindow::on_treeBrowser_customContextMenuRequested(QPoint pos)
+void MainWindow::on_entryTable_itemSelectionChanged()
 {
-    this->ui->menuGroup->exec(QCursor::pos());
-}
+    this->updateNodeActions();
 
-/*!
-    Populates the left-hand tree view with the specified account database.
- */
-void MainWindow::populateTreeView(Database *const db)
-{
-    // Remove any previous items from the tree browser
-    this->ui->treeBrowser->clear();
-
-    // Get the root item of the tree browser and call the recursive
-    // populate function with the account database's root category
-    QTreeWidgetItem *parentItem = this->ui->treeBrowser->invisibleRootItem();
-    this->populateTreeView(parentItem, db->rootGroup());
-
-    // Then expand all the nodes
-    qWarning("Make this a settings option");
-    this->ui->treeBrowser->expandAll();
-}
-
-/*!
-    Populates the left-hand tree view item with the specified category and its children. Do not call this method directly.
- */
-void MainWindow::populateTreeView(QTreeWidgetItem *parentItem, Group *const cat)
-{
-    // Create a widget item for the category, set the text, icon, etc., and add it to the parent item
-    QTreeWidgetItem *item = new QTreeWidgetItem();
-    item->setText(0, cat->name());
-    item->setIcon(0, QIcon(":/main/res/category.png"));
-    item->setData(0, Qt::UserRole, cat->uuid().toString());
-    parentItem->addChild(item);
-
-    // Then add all the category's subcategories as children of itself
-    for (int i = 0; i < cat->groups().count(); i++)
+    // Safety and logic checks
+    if (!this->m_database || this->ui->entryTable->selectedUuids().count() > 1)
     {
-        this->populateTreeView(item, cat->groups().at(i));
+        this->ui->infoView->clear();
+        return;
     }
 
-#ifdef SL_ADD_CHILDREN
-    // Then we add this category's accounts as children of itself
-    for (int i = 0; i < cat->accounts().count(); i++)
+    // Get the selected entry UUID
+    QUuid uuid = this->ui->entryTable->selectedUuid();
+    if (!uuid.isNull())
     {
-        Account *acc = cat->accounts().at(i);
-
-        // Create a widget item for the account, set the text, icon, etc.,
-        // and add it to the item we made for the category passed to this method
-        QTreeWidgetItem *account = new QTreeWidgetItem();
-        account->setText(0, acc->title());
-        account->setIcon(0, QIcon(":/main/res/account.png"));
-        account->setData(0, Qt::UserRole, acc->uuid().toString());
-        item->addChild(account);
-    }
-#endif
-}
-
-/*!
-    Populates the detail with the the specified category and its child categories and accounts.
- */
-void MainWindow::populateDetailView(Group *const cat)
-{
-    // Clears the detail view of any previous data.
-    this->ui->detailView->clear();
-
-#ifdef SL_ADD_SUBCAT
-    // Add all the subcategories of the category
-    for (int i = 0; i < cat->categories().count(); i++)
-    {
-        Category *category = cat->categories().at(i);
-        QTreeWidgetItem *item = new QTreeWidgetItem();
-        item->setIcon(0, QIcon(":/main/res/category.png"));
-        item->setText(0, category->name());
-        item->setText(6, category->uuid());
-        this->ui->detailView->invisibleRootItem()->addChild(item);
-    }
-#endif
-
-    // Add all the accounts in the category
-    for (int i = 0; i < cat->entries().count(); i++)
-    {
-        Entry *account = cat->entries().at(i);
-        QTreeWidgetItem *item = new QTreeWidgetItem();
-        item->setIcon(0, QIcon(":/main/res/account.png"));
-        item->setText(0, account->title());
-        item->setText(1, account->url().toString());
-        item->setText(2, account->username());
-        item->setText(3, account->password());
-        item->setText(4, account->emailAddress());
-        item->setText(5, account->notes());
-        item->setText(6, account->uuid().toString());
-        this->ui->detailView->invisibleRootItem()->addChild(item);
-    }
-
-    // Tell the columns to auto-adjust to their contents
-    int cols = this->ui->detailView->header()->count();
-    for (int i = 0; i < cols; i++)
-    {
-        this->ui->detailView->header()->setResizeMode(i, QHeaderView::ResizeToContents);
-    }
-}
-
-/*!
-    Gets the UUID of the group selected in the left-hand tree browser,
-    or an empty UUID if none (or the root group) is selected.
- */
-QUuid MainWindow::selectedGroupUuid() const
-{
-    // Get the list of selected items and make sure there's only 1 selected
-    QList<QTreeWidgetItem*> selected = this->ui->treeBrowser->selectedItems();
-    if (selected.count() == 1)
-    {
-        // Get the first item if it exists...
-        QTreeWidgetItem *item = selected.first();
-        if (item)
+        // Find the entry for this UUID and update the info view with its data
+        Entry *entry = this->m_database->findEntry(uuid);
+        if (entry)
         {
-            // And find and return its UUID
-            return QUuid(item->data(0, Qt::UserRole).toString());
+            this->populateInfoView(entry);
+        }
+        else
+        {
+            // If we couldn't find the entry, just clear the info view
+            this->ui->infoView->clear();
         }
     }
-
-    return QUuid();
 }
 
-void MainWindow::documentWasModified()
+/*!
+    Tells the window that the database was modified.
+ */
+void MainWindow::databaseWasModified()
 {
     this->setWindowModified(true);
 }
 
+void MainWindow::clearViews()
+{
+    this->m_nodeCountStatusLabel->setText(QString());
+    this->ui->entryTable->clear();
+    this->ui->infoView->clear();
+}
+
+/*!
+    Updates the actions in the group and entry menus to reflect
+    the abilities of the current selection state.
+ */
+void MainWindow::updateNodeActions()
+{
+    int groups = this->ui->groupBrowser->selectedUuids().count();
+    int entries = this->ui->entryTable->selectedUuids().count();
+
+    this->ui->actionAdd_Subgroup->setEnabled(groups == 1);
+    this->ui->actionAdd_Entry->setEnabled(groups == 1);
+    this->ui->actionMove_Groups->setEnabled(groups > 0);
+    this->ui->actionEdit_Group->setEnabled(groups == 1);
+    this->ui->actionDelete_Groups->setEnabled(groups > 0);
+
+    this->ui->actionMove_Entries->setEnabled(entries > 0);
+    this->ui->actionEdit_Entry->setEnabled(entries == 1);
+    this->ui->actionDelete_Entries->setEnabled(entries > 0);
+}
+
+void MainWindow::populateInfoView(Entry *const entry)
+{
+    QStringList pairs;
+    pairs.append(QString("<b>%1</b> %2").arg(tr("Group:")).arg(entry->parentNode()->title()));
+    pairs.append(QString("<b>%1</b> %2").arg(tr("Title:")).arg(entry->title()));
+    pairs.append(QString("<b>%1</b> <a href=\"%2\">%2</a>").arg("URL:").arg(entry->url().toString()));
+    pairs.append(QString("<b>%1</b> %2").arg(tr("Username:")).arg(entry->username()));
+    pairs.append(QString("<b>%1</b> %2").arg(tr("Password:")).arg(entry->password()));
+    pairs.append(QString("<b>%1</b> %2").arg(tr("Email address:")).arg(entry->emailAddress()));
+    pairs.append(QString("<b>%1</b> %2").arg("UUID:").arg(entry->uuid().toString()));
+
+    QString recoveryString;
+    QHashIterator<QString, QString> i(entry->recoveryInfo());
+    while (i.hasNext())
+    {
+        i.next();
+        recoveryString += QString("<li><b>%1</b>: %2</li>").arg(i.key()).arg(i.value());
+    }
+
+    QString info = QString("<p>%1</p><ul>%2</ul><p>%3</p>")
+        .arg(pairs.join(", "))
+        .arg(recoveryString)
+        .arg(entry->notes().replace("\n", "<br />"));
+    this->ui->infoView->setText(info);
+}
+
+/*!
+    Check if the database needs to be saved, and prompt the user for a choice.
+
+    \return Whether the window should be closed.
+ */
 bool MainWindow::maybeSave()
 {
     if (this->isWindowModified())
     {
-        QMessageBox::StandardButton ret;
-        ret = QMessageBox::warning(this, tr("Silverlock"),
-                     tr("The database has been modified.\n"
-                        "Do you want to save your changes?"),
-                     QMessageBox::Save | QMessageBox::Discard
-                     | QMessageBox::Cancel);
+        QMessageBox::StandardButton ret = QMessageBox::warning(this, tr("Save Changes"),
+            tr("The database has been modified.\nDo you want to save your changes?"),
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         if (ret == QMessageBox::Save)
         {
-            return save();
+            return this->save();
         }
         else if (ret == QMessageBox::Cancel)
         {
@@ -431,39 +568,57 @@ bool MainWindow::maybeSave()
     return true;
 }
 
+/*!
+    Reads a database file from \a fileName and sets it as the current file if it succeeds.
+
+    \param fileName The name of the file to read from.
+ */
 void MainWindow::loadFile(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly))
     {
-        file.close();
-        QMessageBox::warning(this, tr("Silverlock"), tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
+        QMessageBox::critical(this, tr("Error"), tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
         return;
     }
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
     bool ok;
-    QString str = QInputDialog::getText(this, tr("Enter password"), tr("Password:"), QLineEdit::Password, "", &ok);
+    QString str = QInputDialog::getText(this, tr("Enter password"), tr("Password:"), QLineEdit::Password, QString(), &ok);
     if (ok)
     {
-        this->db = Database::read(file, str);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+
+        // Try to read the database, if it succeeds, populate the tree view, otherwise show an error message
+        DatabaseReader reader;
+        this->m_database = reader.read(file, str);
+        if (this->m_database)
+        {
+            QObject::connect(this->m_database, SIGNAL(modified()), this, SLOT(databaseWasModified()));
+            this->ui->groupBrowser->populate(this->m_database);
+            QApplication::restoreOverrideCursor();
+
+            this->setCurrentFile(fileName);
+            this->statusBar()->showMessage(tr("File loaded"), 2000);
+        }
+        else
+        {
+            QApplication::restoreOverrideCursor();
+            QMessageBox::critical(this, tr("Error"), QString("%1\n\n%2").arg(tr("The database file is in an incorrect format, or corrupted."), reader.errorString()));
+        }
     }
-
-    file.close();
-
-    QApplication::restoreOverrideCursor();
-
-    this->setCurrentFile(fileName);
-    this->statusBar()->showMessage(tr("File loaded"), 2000);
 }
 
+/*!
+    Attempts to write the database file to \a fileName.
+
+    \param fileName The file to write the database to.
+ */
 bool MainWindow::saveFile(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly))
     {
-        QMessageBox::warning(this, tr("Silverlock"), tr("Cannot write file %1:\n%2").arg(fileName).arg(file.errorString()));
+        QMessageBox::critical(this, tr("Error"), tr("Cannot write file %1:\n%2").arg(fileName).arg(file.errorString()));
         return false;
     }
 
@@ -471,8 +626,11 @@ bool MainWindow::saveFile(const QString &fileName)
 
     // Try to write the database to the IO device
     bool status = false;
-    if (this->db->write(file))
+    DatabaseWriter writer;
+    if (writer.write(this->m_database, file))
     {
+        QApplication::restoreOverrideCursor();
+
         // If it succeeded, we set the filename to the name of the file we saved and show a status message
         this->setCurrentFile(fileName);
         this->statusBar()->showMessage(tr("File saved"), 2000);
@@ -481,34 +639,41 @@ bool MainWindow::saveFile(const QString &fileName)
     else
     {
         // Otherwise show a failure message
-        QMessageBox::warning(this, tr("Silverlock"), tr("Cannot write file %1").arg(fileName));
+        QApplication::restoreOverrideCursor();
+        QMessageBox::critical(this, tr("Silverlock"), tr("Cannot write file %1").arg(fileName));
     }
-
-    QApplication::restoreOverrideCursor();
 
     return status;
 }
 
+/*!
+    Sets the name of the currently loaded file to \a fileName.
+
+    \param fileName The name of the file to set.
+ */
 void MainWindow::setCurrentFile(const QString &fileName)
 {
     static int sequenceNumber = 1;
 
-    this->isUntitled = fileName.isEmpty();
-    if (this->isUntitled)
+    this->m_isUntitled = fileName.isEmpty();
+    if (this->m_isUntitled)
     {
-        this->currentFile = tr("database%1.adb").arg(sequenceNumber++);
+        this->m_currentFile = tr("database%1.adb").arg(sequenceNumber++);
     }
     else
     {
-        this->currentFile = QFileInfo(fileName).canonicalFilePath();
+        this->m_currentFile = QFileInfo(fileName).canonicalFilePath();
     }
 
+    this->setWindowTitle(QString());
     this->setWindowModified(false);
-    this->setWindowFilePath(this->currentFile);
+    this->setWindowFilePath(this->m_currentFile);
 }
 
 /*!
     Returns the name of the file, excluding the path.
+
+    \param fullFileName The full file path to strip.
  */
 QString MainWindow::strippedName(const QString &fullFileName)
 {
@@ -518,6 +683,8 @@ QString MainWindow::strippedName(const QString &fullFileName)
 /*!
     Finds the window which has the file with the specified file name open.
     Returns NULL if the file is not opened by any window.
+
+    \param fileName The name of the file to find the open window of.
  */
 MainWindow* MainWindow::findMainWindow(const QString &fileName)
 {
@@ -526,16 +693,11 @@ MainWindow* MainWindow::findMainWindow(const QString &fileName)
     foreach (QWidget *widget, qApp->topLevelWidgets())
     {
         MainWindow *mainWin = qobject_cast<MainWindow*>(widget);
-        if (mainWin && mainWin->currentFile == canonicalFilePath)
+        if (mainWin && mainWin->m_currentFile == canonicalFilePath)
         {
             return mainWin;
         }
     }
 
     return NULL;
-}
-
-void MainWindow::on_actionMove_Entries_triggered()
-{
-
 }
