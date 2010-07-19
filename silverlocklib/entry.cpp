@@ -1,7 +1,5 @@
 #include "entry.h"
-#include "database.h"
 #include "group.h"
-#include "database_keys.h"
 
 /*!
     \class Entry
@@ -19,8 +17,8 @@
     \param title The title of the entry.
     \param parent The group to which this entry will belong.
  */
-Entry::Entry(const QString &title, GroupNode *parent) :
-    ItemNode()
+Entry::Entry(const QString &title, Group *parent) :
+    DatabaseNode()
 {
     this->setTitle(title);
     this->setParentNode(parent);
@@ -214,4 +212,38 @@ QDomElement Entry::toXml(QDomDocument &document) const
     }
 
     return element;
+}
+
+/*!
+    Creates a copy of the entry.
+
+    The copy will not have all the same properties as the original.
+    Specifically, a new UUID will be generated and the copy will be
+    initialized without a parent node.
+ */
+Entry* Entry::createCopy() const
+{
+    Entry *entry = new Entry();
+    entry->setTitle(this->title());
+    entry->setUrl(this->url());
+    entry->setUsername(this->username());
+    entry->setPassword(this->password());
+    entry->setEmailAddress(this->emailAddress());
+    entry->setNotes(this->notes());
+
+    QHashIterator<QString, QString> i(this->recoveryInfo());
+    while (i.hasNext())
+    {
+        i.next();
+        entry->m_recoveryInfo.insert(i.key(), i.value());
+    }
+
+    QHashIterator<QString, QString> j(this->additionalData());
+    while (j.hasNext())
+    {
+        j.next();
+        entry->m_additionalData.insert(j.key(), j.value());
+    }
+
+    return entry;
 }

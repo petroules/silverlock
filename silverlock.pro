@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS += silverlocklib silverlock
+SUBDIRS += silverlocklib silverlock botan

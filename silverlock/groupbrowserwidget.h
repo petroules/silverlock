@@ -5,7 +5,7 @@
 
 class Database;
 class Group;
-class GroupNode;
+class Group;
 class SilverlockPreferences;
 
 namespace Ui
@@ -22,10 +22,15 @@ public:
     ~GroupBrowserWidget();
     SilverlockPreferences* preferences() const;
     void setPreferences(SilverlockPreferences *preferences);
+    bool multiselect() const;
+    void setMultiselect(bool on);
     QUuid selectedUuid() const;
     QList<QUuid> selectedUuids() const;
     void populate(Database *const database);
+
+public slots:
     void clear();
+    void selectAll();
 
 signals:
     void itemSelectionChanged();
@@ -36,7 +41,7 @@ signals:
     void populating();
 
 private:
-    void populate(QTreeWidgetItem *item, GroupNode *const group);
+    void populate(QTreeWidgetItem *item, Group *const group);
     Ui::GroupBrowserWidget *ui;
     SilverlockPreferences *m_preferences;
 };

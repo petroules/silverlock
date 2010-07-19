@@ -1,7 +1,5 @@
 #include "database.h"
 #include "database_keys.h"
-#include "entry.h"
-#include "group.h"
 
 /*!
     \class Database
@@ -34,7 +32,7 @@
     \param parent The parent object of the Database. Setting \a parent to \c NULL constructs an object with no parent.
  */
 Database::Database(const QString &title, const QString &password)
-    : GroupNode(), m_password(password)
+    : Group(), m_password(password)
 {
     this->setTitle(title);
 }
@@ -87,6 +85,19 @@ QString Database::password() const
 void Database::setPassword(const QString &password)
 {
     this->m_password = password;
+}
+
+void Database::setParentNode(Group *node)
+{
+    Q_UNUSED(node);
+}
+
+void Database::attachToList()
+{
+}
+
+void Database::detachFromList()
+{
 }
 
 QDomElement Database::toXml(QDomDocument &document) const

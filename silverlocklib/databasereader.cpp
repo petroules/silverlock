@@ -3,6 +3,7 @@
 #include "database_keys.h"
 #include "entry.h"
 #include "group.h"
+#include "databasecrypto.h"
 
 DatabaseReader::DatabaseReader(QObject *parent) :
     QObject(parent)
@@ -25,29 +26,53 @@ DatabaseReader::DatabaseReader(QObject *parent) :
 Database* DatabaseReader::read(QIODevice &device, const QString &password)
 {
     // Clear the last error
-    this->s_errorString = QString();
+    this->m_errorString = QString();
 
     // Check if the device is not open or is unreadable
     if (!device.isOpen() || !device.isReadable())
     {
-        this->s_errorString = device.errorString();
+        this->m_errorString = device.errorString();
+        return NULL;
+    }
+
+    DatabaseCrypto::CryptoStatus status;
+    QString decrypted = DatabaseCrypto::decrypt(QString(device.readAll()), password, &status);
+    if (status != DatabaseCrypto::NoError)
+    {
+        if (status == DatabaseCrypto::MissingHeader)
+        {
+            this->m_errorString = tr("The file was missing its standard header.");
+        }
+        else if (status == DatabaseCrypto::VerificationFailed)
+        {
+            this->m_errorString = tr("The message authentication codes were mismatched. The file may have been corrupted or tampered with.");
+        }
+        else if (status == DatabaseCrypto::DecodingError)
+        {
+            this->m_errorString = tr("There was a problem decoding the file; either the password was invalid or the file may be corrupt.");
+        }
+        else if (status == DatabaseCrypto::UnknownError)
+        {
+            this->m_errorString = tr("An unknown error occurred while decoding the file.");
+        }
+
         return NULL;
     }
 
     QDomDocument doc(XML_DATABASE);
-    if (doc.setContent(&device))
+    if (doc.setContent(decrypted))
     {
         QDomElement root = doc.documentElement();
         if (root.tagName() != XML_DATABASE)
         {
-            this->s_errorString = tr("Missing root XML element.");
+            this->m_errorString = tr("Missing root XML element.");
             return NULL;
         }
 
         QVersion version = QVersion(root.attribute(XML_VERSION));
         if (version != Database::version())
         {
-            this->s_errorString = tr("Unsupported database version: ") + version.toString();
+            this->m_errorString = tr("Unsupported database version: ") + version.toString();
             return NULL;
         }
 
@@ -68,7 +93,7 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
     }
     else
     {
-        this->s_errorString = tr("Unable to parse the XML tree.");
+        this->m_errorString = tr("Unable to parse the XML tree.");
         return NULL;
     }
 
@@ -84,7 +109,7 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
     \param element The element whose child nodes are being read.
     \param process Whether to continue processing. This is used to avoid overwriting an error state.
  */
-void DatabaseReader::readGroup(GroupNode *const group, const QDomElement &element, bool &process)
+void DatabaseReader::readGroup(Group *const group, const QDomElement &element, bool &process)
 {
     if (!group || !process)
     {
@@ -109,7 +134,7 @@ void DatabaseReader::readGroup(GroupNode *const group, const QDomElement &elemen
                 {
                     if (process)
                     {
-                        this->s_errorString = tr("Invalid group UUID.");
+                        this->m_errorString = tr("Invalid group UUID.");
                         process = false;
                     }
 
@@ -136,7 +161,7 @@ void DatabaseReader::readGroup(GroupNode *const group, const QDomElement &elemen
                 {
                     if (process)
                     {
-                        this->s_errorString = tr("Invalid entry UUID.");
+                        this->m_errorString = tr("Invalid entry UUID.");
                         process = false;
                     }
 
@@ -175,5 +200,5 @@ void DatabaseReader::readGroup(GroupNode *const group, const QDomElement &elemen
  */
 QString DatabaseReader::errorString()
 {
-    return this->s_errorString;
+    return this->m_errorString;
 }

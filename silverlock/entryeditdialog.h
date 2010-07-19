@@ -1,22 +1,27 @@
 #ifndef ENTRYEDITDIALOG_H
 #define ENTRYEDITDIALOG_H
 
-#include <QtCore>
 #include <QtGui>
 
 class Entry;
 
-namespace Ui {
+namespace Ui
+{
     class EntryEditDialog;
 }
 
-class EntryEditDialog : public QDialog {
+class EntryEditDialog : public QDialog
+{
     Q_OBJECT
+
 public:
     EntryEditDialog(Entry *account, QWidget *parent = 0);
     ~EntryEditDialog();
     Entry* entry() const;
     void setEntry(Entry *account);
+
+public slots:
+    void accept();
 
 protected:
     void changeEvent(QEvent *e);
@@ -28,11 +33,10 @@ private:
     void read();
     void write() const;
     QString inputErrorString() const;
+    bool checkRecoveryModified() const;
 
 private slots:
-    void on_revealToolButton_toggled(bool checked);
-    void on_buttonBox_accepted();
-    void on_buttonBox_rejected();
+    void hidePassword(bool checked);
 };
 
 #endif // ENTRYEDITDIALOG_H

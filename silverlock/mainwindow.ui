@@ -20,7 +20,7 @@
      <number>6</number>
     </property>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="GroupBrowserWidget" name="groupBrowser" native="true"/>
       </item>
@@ -59,73 +59,109 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_File">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_New"/>
-    <addaction name="action_Open"/>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="separator"/>
-    <addaction name="action_Save"/>
-    <addaction name="actionSave_As"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
-    <addaction name="action_Print"/>
-    <addaction name="actionPrint_Preview"/>
+    <addaction name="actionPrint"/>
+    <addaction name="actionPrintPreview"/>
     <addaction name="separator"/>
-    <addaction name="actionE_xit"/>
+    <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menu_View">
+   <widget class="QMenu" name="menuView">
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <addaction name="actionAlways_on_Top"/>
-    <addaction name="actionCenter_to_Screen"/>
+    <widget class="QMenu" name="menuToolbars">
+     <property name="title">
+      <string>Toolbars</string>
+     </property>
+    </widget>
+    <addaction name="actionAlwaysOnTop"/>
+    <addaction name="actionCenterToScreen"/>
     <addaction name="separator"/>
-    <addaction name="actionShow_Passwords"/>
+    <addaction name="actionConfigureColumns"/>
+    <addaction name="separator"/>
+    <addaction name="menuToolbars"/>
+    <addaction name="separator"/>
+    <addaction name="actionShowEntryView"/>
+    <addaction name="actionFullScreen"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionCheck_for_Updates"/>
-    <addaction name="separator"/>
-    <addaction name="actionOptions"/>
+    <addaction name="actionPreferences"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionAbout"/>
-   </widget>
-   <widget class="QMenu" name="menuEntry">
-    <property name="title">
-     <string>Entry</string>
-    </property>
-    <addaction name="actionMove_Entries"/>
-    <addaction name="actionEdit_Entry"/>
-    <addaction name="actionDelete_Entries"/>
-   </widget>
-   <widget class="QMenu" name="menuGroup">
-    <property name="title">
-     <string>Group</string>
-    </property>
-    <addaction name="actionAdd_Subgroup"/>
-    <addaction name="actionAdd_Entry"/>
+    <addaction name="actionHelpContents"/>
     <addaction name="separator"/>
-    <addaction name="actionMove_Groups"/>
-    <addaction name="actionEdit_Group"/>
-    <addaction name="actionDelete_Groups"/>
+    <addaction name="actionWebsite"/>
+    <addaction name="actionDonate"/>
+    <addaction name="separator"/>
+    <addaction name="actionCheckForUpdates"/>
+    <addaction name="separator"/>
+    <addaction name="actionAboutSilverlock"/>
    </widget>
-   <addaction name="menu_File"/>
-   <addaction name="menuEntry"/>
-   <addaction name="menuGroup"/>
-   <addaction name="menu_View"/>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <widget class="QMenu" name="menuEntry">
+     <property name="title">
+      <string>Entry</string>
+     </property>
+     <addaction name="actionMoveEntries"/>
+     <addaction name="actionDuplicateEntries"/>
+     <addaction name="actionEditEntry"/>
+     <addaction name="actionDeleteEntries"/>
+    </widget>
+    <widget class="QMenu" name="menuGroup">
+     <property name="title">
+      <string>Group</string>
+     </property>
+     <addaction name="actionAddSubgroup"/>
+     <addaction name="actionAddEntry"/>
+     <addaction name="separator"/>
+     <addaction name="actionMoveGroup"/>
+     <addaction name="actionEditGroup"/>
+     <addaction name="actionDeleteGroups"/>
+    </widget>
+    <widget class="QMenu" name="menuSelectAll">
+     <property name="title">
+      <string>Select All</string>
+     </property>
+     <addaction name="actionSelectAllEntries"/>
+     <addaction name="actionSelectAllGroups"/>
+    </widget>
+    <addaction name="menuEntry"/>
+    <addaction name="menuGroup"/>
+    <addaction name="separator"/>
+    <addaction name="menuSelectAll"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
    <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="windowTitle">
+    <string>Main</string>
+   </property>
    <property name="iconSize">
     <size>
      <width>16</width>
@@ -138,14 +174,14 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_New"/>
-   <addaction name="action_Open"/>
-   <addaction name="action_Save"/>
-   <addaction name="action_Print"/>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionPrint"/>
    <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_New">
+  <action name="actionNew">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/main/res/new.png</normaloff>:/main/res/new.png</iconset>
@@ -157,7 +193,7 @@
     <string>Create a new file</string>
    </property>
   </action>
-  <action name="action_Open">
+  <action name="actionOpen">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/main/res/open.png</normaloff>:/main/res/open.png</iconset>
@@ -169,7 +205,7 @@
     <string>Open an existing file</string>
    </property>
   </action>
-  <action name="action_Save">
+  <action name="actionSave">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/main/res/save.png</normaloff>:/main/res/save.png</iconset>
@@ -181,7 +217,7 @@
     <string>Save the database to disk</string>
    </property>
   </action>
-  <action name="actionSave_As">
+  <action name="actionSaveAs">
    <property name="text">
     <string>Save As...</string>
    </property>
@@ -189,7 +225,7 @@
     <string>Save the database under a new name</string>
    </property>
   </action>
-  <action name="action_Print">
+  <action name="actionPrint">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/main/res/print.png</normaloff>:/main/res/print.png</iconset>
@@ -198,7 +234,7 @@
     <string>&amp;Print...</string>
    </property>
   </action>
-  <action name="actionPrint_Preview">
+  <action name="actionPrintPreview">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/main/res/print_preview.png</normaloff>:/main/res/print_preview.png</iconset>
@@ -207,7 +243,7 @@
     <string>Print Preview</string>
    </property>
   </action>
-  <action name="actionE_xit">
+  <action name="actionExit">
    <property name="text">
     <string>E&amp;xit</string>
    </property>
@@ -223,7 +259,10 @@
     <string>Close this window</string>
    </property>
   </action>
-  <action name="actionAlways_on_Top">
+  <action name="actionAlwaysOnTop">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Always on Top</string>
    </property>
@@ -231,31 +270,23 @@
     <string>Keep the application on top of other windows</string>
    </property>
   </action>
-  <action name="actionCenter_to_Screen">
+  <action name="actionCenterToScreen">
    <property name="text">
     <string>Center to Screen</string>
    </property>
    <property name="statusTip">
-    <string>Move the application window to  the center of the screen</string>
+    <string>Move the application window to the center of the screen</string>
    </property>
   </action>
-  <action name="actionShow_Passwords">
+  <action name="actionPreferences">
    <property name="text">
-    <string>Show Passwords</string>
+    <string>Preferences...</string>
    </property>
    <property name="statusTip">
-    <string>Show or hide passwords in the grid view</string>
+    <string>Configure application settings and preferences</string>
    </property>
   </action>
-  <action name="actionOptions">
-   <property name="text">
-    <string>Options...</string>
-   </property>
-   <property name="statusTip">
-    <string>Configure program options</string>
-   </property>
-  </action>
-  <action name="actionCheck_for_Updates">
+  <action name="actionCheckForUpdates">
    <property name="text">
     <string>Check for Updates</string>
    </property>
@@ -263,39 +294,39 @@
     <string>Check for an newer version of the application</string>
    </property>
   </action>
-  <action name="actionAbout">
+  <action name="actionAboutSilverlock">
    <property name="text">
-    <string>About</string>
+    <string>About Silverlock</string>
    </property>
    <property name="statusTip">
-    <string>Show the application's About box</string>
+    <string>Show the application's about box</string>
    </property>
   </action>
-  <action name="actionEdit_Entry">
+  <action name="actionEditEntry">
    <property name="text">
-    <string>Edit Entry</string>
+    <string>Edit</string>
    </property>
    <property name="statusTip">
     <string>Edit the properties of the selected entry</string>
    </property>
   </action>
-  <action name="actionDelete_Entries">
+  <action name="actionDeleteEntries">
    <property name="text">
-    <string>Delete Entries</string>
+    <string>Delete</string>
    </property>
    <property name="statusTip">
     <string>Delete the selected entries</string>
    </property>
   </action>
-  <action name="actionMove_Entries">
+  <action name="actionMoveEntries">
    <property name="text">
-    <string>Move Entries</string>
+    <string>Move</string>
    </property>
    <property name="statusTip">
     <string>Move the selected entries to a different group</string>
    </property>
   </action>
-  <action name="actionAdd_Subgroup">
+  <action name="actionAddSubgroup">
    <property name="text">
     <string>Add Subgroup</string>
    </property>
@@ -303,36 +334,122 @@
     <string>Add a subgroup to the selected group</string>
    </property>
   </action>
-  <action name="actionMove_Groups">
+  <action name="actionMoveGroup">
    <property name="text">
-    <string>Move Groups</string>
+    <string>Move</string>
    </property>
    <property name="statusTip">
-    <string>Move the selected groups to a new group</string>
+    <string>Move the selected group to a new group</string>
    </property>
   </action>
-  <action name="actionEdit_Group">
+  <action name="actionEditGroup">
    <property name="text">
-    <string>Edit Group</string>
+    <string>Edit</string>
    </property>
    <property name="statusTip">
     <string>Edit the selected group</string>
    </property>
   </action>
-  <action name="actionDelete_Groups">
+  <action name="actionDeleteGroups">
    <property name="text">
-    <string>Delete Groups</string>
+    <string>Delete</string>
    </property>
    <property name="statusTip">
     <string>Delete the selected groups</string>
    </property>
   </action>
-  <action name="actionAdd_Entry">
+  <action name="actionAddEntry">
    <property name="text">
     <string>Add Entry</string>
    </property>
    <property name="statusTip">
-    <string>Adds a new entry to the selected group</string>
+    <string>Add a new entry to the selected group</string>
+   </property>
+  </action>
+  <action name="actionDuplicateEntries">
+   <property name="text">
+    <string>Duplicate</string>
+   </property>
+   <property name="statusTip">
+    <string>Create duplicates of the selected entries</string>
+   </property>
+  </action>
+  <action name="actionConfigureColumns">
+   <property name="text">
+    <string>Configure Columns...</string>
+   </property>
+   <property name="statusTip">
+    <string>Configure the columns shown in the entry table</string>
+   </property>
+  </action>
+  <action name="actionShowEntryView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Entry View</string>
+   </property>
+   <property name="statusTip">
+    <string>Show the entry information box</string>
+   </property>
+  </action>
+  <action name="actionFullScreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Full Screen</string>
+   </property>
+   <property name="statusTip">
+    <string>Toggle the window state of the application</string>
+   </property>
+  </action>
+  <action name="actionHelpContents">
+   <property name="text">
+    <string>Help Contents</string>
+   </property>
+   <property name="statusTip">
+    <string>Display the application's help menu</string>
+   </property>
+  </action>
+  <action name="actionWebsite">
+   <property name="text">
+    <string>Website</string>
+   </property>
+   <property name="statusTip">
+    <string>Visit the Silverlock website</string>
+   </property>
+  </action>
+  <action name="actionDonate">
+   <property name="text">
+    <string>Donate</string>
+   </property>
+   <property name="statusTip">
+    <string>Submit a donation to Petroules Enterprises</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>Find...</string>
+   </property>
+   <property name="statusTip">
+    <string>Search the database for entries</string>
+   </property>
+  </action>
+  <action name="actionSelectAllEntries">
+   <property name="text">
+    <string>Entries</string>
+   </property>
+   <property name="statusTip">
+    <string>Select all entries in the entry table</string>
+   </property>
+  </action>
+  <action name="actionSelectAllGroups">
+   <property name="text">
+    <string>Groups</string>
+   </property>
+   <property name="statusTip">
+    <string>Select all groups in the group browser</string>
    </property>
   </action>
  </widget>

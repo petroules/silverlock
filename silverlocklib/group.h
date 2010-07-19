@@ -2,27 +2,42 @@
 #define GROUP_H
 
 #include "silverlocklib_global.h"
-#include "groupnode.h"
-#include "itemnode.h"
+#include "databasenode.h"
+#include "searchparameters.h"
 #include <QtCore>
 
-class Database;
 class Entry;
 
-class SILVERLOCKLIBSHARED_EXPORT Group : public GroupNode, public ItemNode
+class SILVERLOCKLIBSHARED_EXPORT Group : public DatabaseNode
 {
     Q_OBJECT
-    Q_PROPERTY(QUuid uuid READ uuid WRITE setUuid)
-    Q_PROPERTY(QString title READ title WRITE setTitle)
+
+    friend class Entry;
 
 public:
-    explicit Group(const QString &title = QString(), GroupNode *parent = NULL);
+    explicit Group(const QString &title = QString(), Group *parent = NULL);
     ~Group();
+    const QList<Group*>& groups() const;
+    const QList<Entry*>& entries() const;
+    int countGroups() const;
+    int countEntries() const;
+    bool containsUuid(const QUuid &uuid) const;
+    bool isGroup(const QUuid &uuid) const;
+    bool isEntry(const QUuid &uuid) const;
+    Group* findGroup(const QUuid &uuid, bool includeThis = false);
+    const Group* findGroup(const QUuid &uuid, bool includeThis = false) const;
+    Entry* findEntry(const QUuid &uuid) const;
+    QList<Entry*> findEntries(const SearchParameters &params) const;
     QDomElement toXml(QDomDocument &document) const;
 
 protected:
     void attachToList();
     void detachFromList();
+
+private:
+    Group* findGroupInternal(const QUuid &uuid) const;
+    QList<Group*> m_groups;
+    QList<Entry*> m_entries;
 };
 
 #endif // GROUP_H

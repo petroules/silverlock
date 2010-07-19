@@ -3,8 +3,8 @@
 
 #include <QtGui>
 
+class Entry;
 class Group;
-class GroupNode;
 class SilverlockPreferences;
 
 namespace Ui
@@ -21,10 +21,17 @@ public:
     ~EntryTableWidget();
     SilverlockPreferences* preferences() const;
     void setPreferences(SilverlockPreferences *preferences);
+    bool passwordsShown() const;
+    void setPasswordsShown(bool on);
     QUuid selectedUuid() const;
     QList<QUuid> selectedUuids() const;
-    void populate(GroupNode *const group);
+    void populate(Group *const group);
+    void populate(const QList<Entry*> &entries);
+    void autoAdjust();
+
+public slots:
     void clear();
+    void selectAll();
 
 signals:
     void itemSelectionChanged();
@@ -37,6 +44,8 @@ signals:
 private:
     Ui::EntryTableWidget *ui;
     SilverlockPreferences *m_preferences;
+
+    void populateHelper(const QList<Entry*> &entries);
 };
 
 #endif // ENTRYTABLEWIDGET_H

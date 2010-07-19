@@ -2,15 +2,11 @@
 #define DATABASE_H
 
 #include "silverlocklib_global.h"
-#include "groupnode.h"
+#include "group.h"
 #include "qversion.h"
-#include <QtCore>
 #include <QtXml>
 
-class Entry;
-class Group;
-
-class SILVERLOCKLIBSHARED_EXPORT Database : public GroupNode
+class SILVERLOCKLIBSHARED_EXPORT Database : public Group
 {
     Q_OBJECT
     Q_PROPERTY(QVersion version READ version)
@@ -23,7 +19,12 @@ public:
     static QVersion version();
     QString password() const;
     void setPassword(const QString &password);
+    void setParentNode(Group *node);
     QDomElement toXml(QDomDocument &document) const;
+
+protected:
+    void attachToList();
+    void detachFromList();
 
 private:
     QString m_password;

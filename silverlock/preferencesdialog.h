@@ -16,6 +16,11 @@ class PreferencesDialog : public QDialog
 public:
     explicit PreferencesDialog(SilverlockPreferences *preferences, QWidget *parent = 0);
     ~PreferencesDialog();
+    SilverlockPreferences* preferences() const;
+    void setPreferences(SilverlockPreferences *preferences);
+
+public slots:
+    void accepted();
 
 private:
     void load();

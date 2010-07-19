@@ -14,7 +14,9 @@ SOURCES += aboutdialog.cpp \
     preferencesdialog.cpp \
     silverlockpreferences.cpp \
     groupbrowserwidget.cpp \
-    entrytablewidget.cpp
+    entrytablewidget.cpp \
+    selectgroupdialog.cpp \
+    searchdatabasedialog.cpp
 HEADERS += aboutdialog.h \
     mainwindow.h \
     version.h \
@@ -24,13 +26,17 @@ HEADERS += aboutdialog.h \
     silverlockpreferences.h \
     groupbrowserwidget.h \
     entrytablewidget.h \
-    silverlockpreferences_keys.h
+    silverlockpreferences_keys.h \
+    selectgroupdialog.h \
+    searchdatabasedialog.h
 FORMS += mainwindow.ui \
     entryeditdialog.ui \
     groupeditdialog.ui \
     preferencesdialog.ui \
     groupbrowserwidget.ui \
-    entrytablewidget.ui
+    entrytablewidget.ui \
+    selectgroupdialog.ui \
+    searchdatabasedialog.ui
 RESOURCES += resources.qrc
 DESTDIR = ../bin
 INCLUDEPATH += ../silverlocklib

@@ -8,6 +8,7 @@ EntryTableWidget::EntryTableWidget(QWidget *parent) :
     ui(new Ui::EntryTableWidget), m_preferences(NULL)
 {
     this->ui->setupUi(this);
+    this->ui->table->sortByColumn(0, Qt::AscendingOrder);
     QObject::connect(this->ui->table, SIGNAL(itemSelectionChanged()), SIGNAL(itemSelectionChanged()));
     QObject::connect(this->ui->table, SIGNAL(customContextMenuRequested(QPoint)), SIGNAL(customContextMenuRequested(QPoint)));
 }
@@ -25,6 +26,16 @@ SilverlockPreferences* EntryTableWidget::preferences() const
 void EntryTableWidget::setPreferences(SilverlockPreferences *preferences)
 {
     this->m_preferences = preferences;
+}
+
+bool EntryTableWidget::passwordsShown() const
+{
+    return !this->ui->table->isColumnHidden(3);
+}
+
+void EntryTableWidget::setPasswordsShown(bool on)
+{
+    this->ui->table->setColumnHidden(3, !on);
 }
 
 /*!
@@ -65,27 +76,46 @@ QList<QUuid> EntryTableWidget::selectedUuids() const
 /*!
     Populates the entry table with the the specified group and its subgroups and entries.
  */
-void EntryTableWidget::populate(GroupNode *const group)
+void EntryTableWidget::populate(Group *const group)
 {
-    // Clears the detail view of any previous data.
+    // Clear the detail view of any previous data
     this->clear();
     emit this->populating();
 
-    if (this->m_preferences->subgroupsInDetailView())
+    if (group)
     {
-        // Add all the subgroups of the group
-        foreach (Group *subgroup, group->groups())
+        if (this->m_preferences->subgroupsInDetailView())
         {
-            QTreeWidgetItem *subgroupItem = new QTreeWidgetItem();
-            subgroupItem->setIcon(0, QIcon(":/main/res/group.png"));
-            subgroupItem->setText(0, subgroup->title());
-            subgroupItem->setText(6, subgroup->uuid());
-            this->ui->table->invisibleRootItem()->addChild(subgroupItem);
+            // Add all the subgroups of the group
+            foreach (Group *subgroup, group->groups())
+            {
+                QTreeWidgetItem *subgroupItem = new QTreeWidgetItem();
+                subgroupItem->setIcon(0, QIcon(":/main/res/group.png"));
+                subgroupItem->setText(0, subgroup->title());
+                subgroupItem->setText(6, subgroup->uuid());
+                this->ui->table->invisibleRootItem()->addChild(subgroupItem);
+            }
         }
+
+        // Add all the entries in the group
+        this->populateHelper(group->entries());
     }
 
-    // Add all the entries in the group
-    foreach (Entry *entry, group->entries())
+    this->autoAdjust();
+}
+
+void EntryTableWidget::populate(const QList<Entry*> &entries)
+{
+    // Clear the detail view of any previous data
+    this->clear();
+    emit this->populating();
+    this->populateHelper(entries);
+    this->autoAdjust();
+}
+
+void EntryTableWidget::populateHelper(const QList<Entry*> &entries)
+{
+    foreach (Entry *entry, entries)
     {
         QTreeWidgetItem *entryItem = new QTreeWidgetItem();
         entryItem->setIcon(0, QIcon(":/main/res/entry.png"));
@@ -99,7 +129,10 @@ void EntryTableWidget::populate(GroupNode *const group)
         entryItem->setData(6, Qt::UserRole, entry->uuid().toString());
         this->ui->table->invisibleRootItem()->addChild(entryItem);
     }
+}
 
+void EntryTableWidget::autoAdjust()
+{
     // Tell the columns to auto-adjust to their contents
     int cols = this->ui->table->header()->count();
     for (int i = 0; i < cols; i++)
@@ -111,4 +144,9 @@ void EntryTableWidget::populate(GroupNode *const group)
 void EntryTableWidget::clear()
 {
     this->ui->table->clear();
+}
+
+void EntryTableWidget::selectAll()
+{
+    this->ui->table->selectAll();
 }

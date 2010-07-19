@@ -3,6 +3,7 @@
 #include "database_keys.h"
 #include "group.h"
 #include "entry.h"
+#include "databasecrypto.h"
 
 DatabaseWriter::DatabaseWriter(QObject *parent) :
     QObject(parent)
@@ -26,8 +27,15 @@ bool DatabaseWriter::write(const Database *const database, QIODevice &device) co
 
     if (device.isOpen() && device.isWritable())
     {
+        DatabaseCrypto::CryptoStatus status;
+        QString encrypted = DatabaseCrypto::encrypt(document.toString(4), database->password(), &status);
+        if (status != DatabaseCrypto::NoError)
+        {
+            return false;
+        }
+
         QTextStream ts(&device);
-        ts << document.toString(4);
+        ts << encrypted;
         return true;
     }
 
@@ -41,7 +49,7 @@ bool DatabaseWriter::write(const Database *const database, QIODevice &device) co
     \param domNode The DOM node which \a group should have its element created as a child of.
     \param group The group node whose contents are to be appended to the XML document.
  */
-void DatabaseWriter::append(QDomDocument &document, QDomNode &domNode, const GroupNode *const group) const
+void DatabaseWriter::append(QDomDocument &document, QDomNode &domNode, const Group *const group) const
 {
     if (!group)
     {

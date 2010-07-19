@@ -651,11 +651,8 @@ RECURSIVE              = YES
 
 EXCLUDE                = bin \
                          doc \
-                         silverlock/debug \
-                         silverlock/release \
-                         silverlocklib/debug \
-                         silverlocklib/release \
-                         silverlock/res
+                         silverlock/res \
+                         botan
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 

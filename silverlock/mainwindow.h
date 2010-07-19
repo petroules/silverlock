@@ -25,6 +25,9 @@ protected:
     void changeEvent(QEvent *e);
     void closeEvent(QCloseEvent *event);
 
+protected slots:
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+
 private:
     Ui::MainWindow *ui;
     SilverlockPreferences *m_preferences;
@@ -34,8 +37,16 @@ private:
 
     QLabel *m_nodeCountStatusLabel;
 
+    void setupDocumentState();
+    void setupSignals();
+    void setupUiAdditional();
+    void setupKeyboardShortcuts();
+    void setupMenuIcons();
+
+    void setNodeCount(Group *group);
     void updateNodeActions();
     void populateInfoView(Entry *const entry);
+    void populateWithSearchResults(const QList<Entry*> &entries, const QString &keywords);
     bool maybeSave();
     void loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
@@ -44,28 +55,35 @@ private:
     MainWindow* findMainWindow(const QString &fileName);
 
 private slots:
-    void on_action_New_triggered();
-    void on_action_Open_triggered();
+    void on_actionNew_triggered();
+    void on_actionOpen_triggered();
     void on_actionClose_triggered();
     bool save();
     bool saveAs();
-    void on_action_Print_triggered();
-    void on_actionPrint_Preview_triggered();
-    void on_actionE_xit_triggered();
-    void on_actionMove_Entries_triggered();
-    void on_actionEdit_Entry_triggered();
-    void on_actionDelete_Entries_triggered();
-    void on_actionAdd_Subgroup_triggered();
-    void on_actionAdd_Entry_triggered();
-    void on_actionMove_Groups_triggered();
-    void on_actionEdit_Group_triggered();
-    void on_actionDelete_Groups_triggered();
-    void on_actionAlways_on_Top_triggered(bool checked);
-    void on_actionCenter_to_Screen_triggered();
-    void on_actionShow_Passwords_triggered(bool checked);
-    void on_actionCheck_for_Updates_triggered();
-    void on_actionOptions_triggered();
-    void on_actionAbout_triggered();
+    void on_actionPrint_triggered();
+    void on_actionPrintPreview_triggered();
+    void on_actionExit_triggered();
+    void on_actionMoveEntries_triggered();
+    void on_actionDuplicateEntries_triggered();
+    void on_actionEditEntry_triggered();
+    void on_actionDeleteEntries_triggered();
+    void on_actionAddSubgroup_triggered();
+    void on_actionAddEntry_triggered();
+    void on_actionMoveGroup_triggered();
+    void on_actionEditGroup_triggered();
+    void on_actionDeleteGroups_triggered();
+    void on_actionFind_triggered();
+    void on_actionAlwaysOnTop_triggered(bool checked);
+    void on_actionCenterToScreen_triggered();
+    void on_actionConfigureColumns_triggered();
+    void on_actionFullScreen_triggered(bool checked);
+    void on_actionShowPasswords_triggered(bool checked);
+    void on_actionPreferences_triggered();
+    void on_actionHelpContents_triggered();
+    void on_actionWebsite_triggered();
+    void on_actionDonate_triggered();
+    void on_actionCheckForUpdates_triggered();
+    void on_actionAboutSilverlock_triggered();
     void on_infoView_anchorClicked(QUrl url);
     void on_groupBrowser_customContextMenuRequested(QPoint pos);
     void on_entryTable_customContextMenuRequested(QPoint pos);

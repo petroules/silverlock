@@ -2,14 +2,12 @@
 #define ENTRY_H
 
 #include "silverlocklib_global.h"
-#include "itemnode.h"
+#include "databasenode.h"
 #include <QtCore>
 
-class Database;
 class Group;
-class GroupNode;
 
-class SILVERLOCKLIBSHARED_EXPORT Entry : public ItemNode
+class SILVERLOCKLIBSHARED_EXPORT Entry : public DatabaseNode
 {
     Q_OBJECT
     Q_PROPERTY(QUrl url READ url WRITE setUrl)
@@ -19,7 +17,7 @@ class SILVERLOCKLIBSHARED_EXPORT Entry : public ItemNode
     Q_PROPERTY(QString notes READ notes WRITE setNotes)
 
 public:
-    explicit Entry(const QString &title = QString(), GroupNode *parent = NULL);
+    explicit Entry(const QString &title = QString(), Group *parent = NULL);
     ~Entry();
     QUrl url() const;
     void setUrl(const QUrl &url);
@@ -40,6 +38,7 @@ public:
     int removeAdditionalData(const QString &key);
     void clearAdditionalData();
     QDomElement toXml(QDomDocument &document) const;
+    Entry* createCopy() const;
 
 protected:
     void attachToList();

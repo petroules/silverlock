@@ -5,7 +5,7 @@
 #include <QtXml>
 
 class Database;
-class GroupNode;
+class Group;
 
 class SILVERLOCKLIBSHARED_EXPORT DatabaseReader : public QObject
 {
@@ -17,8 +17,8 @@ public:
     QString errorString();
 
 private:
-    void readGroup(GroupNode *const group, const QDomElement &element, bool &process);
-    QString s_errorString;
+    void readGroup(Group *const group, const QDomElement &element, bool &process);
+    QString m_errorString;
 };
 
 #endif // DATABASEREADER_H

@@ -2,22 +2,45 @@
 #include "ui_entryeditdialog.h"
 #include <silverlocklib.h>
 
+/*!
+    \class EntryEditDialog
+
+    The EntryEditDialog class represents a dialog that
+    allows the user to edit the properties of a Entry.
+ */
+
+/*!
+    Constructs a new EntryEditDialog.
+
+    \param entry The entry to begin editing.
+    \param parent The parent widget of the dialog.
+ */
 EntryEditDialog::EntryEditDialog(Entry *entry, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::EntryEditDialog), m_entry(entry)
 {
     this->ui->setupUi(this);
     this->read();
+
+    // Connect our show/hide password button and hide the password by default
+    QObject::connect(this->ui->revealToolButton, SIGNAL(toggled(bool)), this, SLOT(hidePassword(bool)));
+    this->ui->revealToolButton->setChecked(true);
 }
 
+/*!
+    Destroys the EntryEditDialog.
+ */
 EntryEditDialog::~EntryEditDialog()
 {
     delete this->ui;
 }
 
+/*!
+    \internal
+ */
 void EntryEditDialog::changeEvent(QEvent *e)
 {
-    QWidget::changeEvent(e);
+    QDialog::changeEvent(e);
     switch (e->type())
     {
         case QEvent::LanguageChange:
@@ -100,12 +123,15 @@ void EntryEditDialog::write() const
         this->m_entry->setNotes(this->ui->notesTextEdit->toPlainText());
 
         // Recovery questions & answers
-        this->m_entry->clearRecoveryInfo();
-        for (int i = 0; i < this->ui->tableWidget->rowCount(); i++)
+        if (this->checkRecoveryModified())
         {
-            QString question = this->ui->tableWidget->itemAt(0, i)->text();
-            QString answer = this->ui->tableWidget->itemAt(1, i)->text();
-            this->m_entry->insertRecoveryInfo(question, answer);
+            this->m_entry->clearRecoveryInfo();
+            for (int i = 0; i < this->ui->tableWidget->rowCount(); i++)
+            {
+                QString question = this->ui->tableWidget->item(i, 0)->text();
+                QString answer = this->ui->tableWidget->item(i, 1)->text();
+                this->m_entry->insertRecoveryInfo(question, answer);
+            }
         }
     }
 }
@@ -114,26 +140,18 @@ void EntryEditDialog::write() const
     Closes the dialog and saves any changes if there are no input errors,
     or displays an error message if there are input errors.
  */
-void EntryEditDialog::on_buttonBox_accepted()
+void EntryEditDialog::accept()
 {
     QString errorString = this->inputErrorString();
     if (errorString.isEmpty())
     {
         this->write();
-        this->accept();
+        QDialog::accept();
     }
     else
     {
         QMessageBox::critical(this, tr("Error"), tr("The following input errors have occurred:") + errorString);
     }
-}
-
-/*!
-    Closes the dialog and does not save any changes.
- */
-void EntryEditDialog::on_buttonBox_rejected()
-{
-    this->reject();
 }
 
 /*!
@@ -159,7 +177,56 @@ QString EntryEditDialog::inputErrorString() const
     return errorString;
 }
 
-void EntryEditDialog::on_revealToolButton_toggled(bool checked)
+/*!
+    Sets a value indicating whether the password should be hidden using asterisks.
+
+    \param checked \c true to hide the password, \c false to display it verbatim.
+ */
+void EntryEditDialog::hidePassword(bool checked)
 {
     this->ui->passwordLineEdit->setEchoMode(checked ? QLineEdit::Password : QLineEdit::Normal);
+}
+
+/*!
+    Helper method to check whether the user actually made any changes to the recovery
+    questions/answers.
+
+    Because of the way recovery questions/answers are stored in an Entry, this lets us
+    easily just clear the array in the Entry, and re-add everything from the table view,
+    without emitting a modified signal when nothing has actually been modified.
+ */
+bool EntryEditDialog::checkRecoveryModified() const
+{
+    // Make sure to sort the table so it's in the same order as the entry for comparing
+    this->ui->tableWidget->sortItems(0, Qt::AscendingOrder);
+
+    // If the number of items differ we know they're different right away
+    if (this->ui->tableWidget->rowCount() != this->m_entry->recoveryInfo().count())
+    {
+        return true;
+    }
+
+    // Now let's loop through all the items and check if the question or answer
+    // for each pair differs from its counterpart in the table... we can do this
+    // linearly since we sorted the table earlier
+    QHashIterator<QString, QString> i(this->m_entry->recoveryInfo());
+    int index = 0;
+    while (i.hasNext())
+    {
+        i.next();
+
+        // Get the question and answer from the table...
+        QString question = this->ui->tableWidget->item(index, 0)->text();
+        QString answer = this->ui->tableWidget->item(index, 1)->text();
+
+        // ...and if either of them don't match the entry itself, there was a modification
+        if (i.key() != question || i.value() != answer)
+        {
+            return true;
+        }
+
+        index++;
+    }
+
+    return false;
 }

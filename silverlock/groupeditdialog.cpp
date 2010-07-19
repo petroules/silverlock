@@ -2,6 +2,19 @@
 #include "ui_groupeditdialog.h"
 #include <silverlocklib.h>
 
+/*!
+    \class GroupEditDialog
+
+    The GroupEditDialog class represents a dialog that
+    allows the user to edit the properties of a Group.
+ */
+
+/*!
+    Constructs a new GroupEditDialog.
+
+    \param group The group to begin editing.
+    \param parent The parent widget of the dialog.
+ */
 GroupEditDialog::GroupEditDialog(Group *group, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::GroupEditDialog), m_group(group)
@@ -10,11 +23,17 @@ GroupEditDialog::GroupEditDialog(Group *group, QWidget *parent) :
     this->read();
 }
 
+/*!
+    Destroys the GroupEditDialog.
+ */
 GroupEditDialog::~GroupEditDialog()
 {
     delete this->ui;
 }
 
+/*!
+    \internal
+ */
 void GroupEditDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
@@ -76,13 +95,13 @@ void GroupEditDialog::write() const
     Closes the dialog and saves any changes if there are no input errors,
     or displays an error message if there are input errors.
  */
-void GroupEditDialog::on_buttonBox_accepted()
+void GroupEditDialog::accept()
 {
     QString errorString = this->inputErrorString();
     if (errorString.isEmpty())
     {
         this->write();
-        this->accept();
+        QDialog::accept();
     }
     else
     {
@@ -91,17 +110,16 @@ void GroupEditDialog::on_buttonBox_accepted()
 }
 
 /*!
-    Closes the dialog and does not save any changes.
- */
-void GroupEditDialog::on_buttonBox_rejected()
-{
-    this->reject();
-}
-
-/*!
     Gets an HTML-formatted string containing the list of input errors, or an empty string if there are no errors.
  */
 QString GroupEditDialog::inputErrorString() const
 {
-    return QString();
+    QString errorString;
+
+    if (!errorString.isEmpty())
+    {
+        return "<ul>" + errorString + "</ul>";
+    }
+
+    return errorString;
 }

@@ -27,11 +27,27 @@ void GroupBrowserWidget::setPreferences(SilverlockPreferences *preferences)
     this->m_preferences = preferences;
 }
 
+bool GroupBrowserWidget::multiselect() const
+{
+    return this->ui->treeBrowser->selectionMode() == QAbstractItemView::ExtendedSelection;
+}
+
+void GroupBrowserWidget::setMultiselect(bool on)
+{
+    if (on)
+    {
+        this->ui->treeBrowser->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    }
+    else
+    {
+        this->ui->treeBrowser->setSelectionMode(QAbstractItemView::SingleSelection);
+    }
+}
+
 /*!
     Gets the UUID of the group selected in the left-hand tree browser.
 
     This method returns empty UUID if no group or more than one group is selected.
-
  */
 QUuid GroupBrowserWidget::selectedUuid() const
 {
@@ -93,12 +109,12 @@ void GroupBrowserWidget::populate(Database *const database)
 /*!
     Populates the left-hand tree view item with the specified group and its children.
  */
-void GroupBrowserWidget::populate(QTreeWidgetItem *parentItem, GroupNode *const group)
+void GroupBrowserWidget::populate(QTreeWidgetItem *parentItem, Group *const group)
 {
     // If the cast to Database is not null then the GroupNode is a database
     bool isDatabase = qobject_cast<Database*>(group);
 
-    // Create a widget item for the category, set the text, icon, etc., and add it to the parent item
+    // Create a widget item for the group, set the text, icon, etc., and add it to the parent item
     QTreeWidgetItem *groupItem = new QTreeWidgetItem();
     groupItem->setText(0, group->title());
     groupItem->setIcon(0, QIcon(QString(":/main/res/%1.png").arg(isDatabase ? "database" : "group")));
@@ -116,7 +132,7 @@ void GroupBrowserWidget::populate(QTreeWidgetItem *parentItem, GroupNode *const 
     parentItem->addChild(groupItem);
 
     // Then add all the category's subcategories as children of itself
-    foreach (GroupNode *node, group->groups())
+    foreach (Group *node, group->groups())
     {
         this->populate(groupItem, node);
     }
@@ -140,4 +156,9 @@ void GroupBrowserWidget::populate(QTreeWidgetItem *parentItem, GroupNode *const 
 void GroupBrowserWidget::clear()
 {
     this->ui->treeBrowser->clear();
+}
+
+void GroupBrowserWidget::selectAll()
+{
+    this->ui->treeBrowser->selectAll();
 }

@@ -5,7 +5,7 @@
 #include <QtXml>
 
 class Database;
-class GroupNode;
+class Group;
 
 class SILVERLOCKLIBSHARED_EXPORT DatabaseWriter : public QObject
 {
@@ -16,7 +16,7 @@ public:
     bool write(const Database *const database, QIODevice &device) const;
 
 private:
-    void append(QDomDocument &document, QDomNode &element, const GroupNode *const group) const;
+    void append(QDomDocument &document, QDomNode &element, const Group *const group) const;
 };
 
 #endif // DATABASEWRITER_H

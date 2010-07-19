@@ -2,9 +2,10 @@
 #define DATABASENODE_H
 
 #include "silverlocklib_global.h"
+#include "database_keys.h"
 #include <QtXml>
 
-class GroupNode;
+class Group;
 
 class SILVERLOCKLIBSHARED_EXPORT DatabaseNode : public QObject
 {
@@ -19,7 +20,15 @@ public:
     QUuid uuid() const;
     QString title() const;
     void setTitle(const QString &title);
-    GroupNode* parentNode() const;
+    Group* parentNode() const;
+    virtual void setParentNode(Group *node);
+    Group* rootNode() const;
+    bool hasDatabase() const;
+
+    /*!
+        Returns whether the item is attached to a parent node.
+     */
+    inline bool isAttached() const { return this->parentNode(); }
     virtual QDomElement toXml(QDomDocument &document) const = 0;
 
 signals:
@@ -31,9 +40,13 @@ signals:
 protected:
     explicit DatabaseNode();
     void setUuid(QUuid uuid);
-    GroupNode *m_parent;
+    void detach();
+    virtual void attachToList() = 0;
+    virtual void detachFromList() = 0;
+    Group *m_parent;
 
 private:
+    void attach();
     QUuid m_uuid;
     QString m_title;
 };
