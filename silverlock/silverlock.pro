@@ -16,7 +16,9 @@ SOURCES += aboutdialog.cpp \
     groupbrowserwidget.cpp \
     entrytablewidget.cpp \
     selectgroupdialog.cpp \
-    searchdatabasedialog.cpp
+    searchdatabasedialog.cpp \
+    documentstate.cpp \
+    configurecolumnsdialog.cpp
 HEADERS += aboutdialog.h \
     mainwindow.h \
     version.h \
@@ -28,7 +30,10 @@ HEADERS += aboutdialog.h \
     entrytablewidget.h \
     silverlockpreferences_keys.h \
     selectgroupdialog.h \
-    searchdatabasedialog.h
+    searchdatabasedialog.h \
+    documentstate.h \
+    configurecolumnsdialog.h \
+    entryviewindexes.h
 FORMS += mainwindow.ui \
     entryeditdialog.ui \
     groupeditdialog.ui \
@@ -36,8 +41,10 @@ FORMS += mainwindow.ui \
     groupbrowserwidget.ui \
     entrytablewidget.ui \
     selectgroupdialog.ui \
-    searchdatabasedialog.ui
-RESOURCES += resources.qrc
+    searchdatabasedialog.ui \
+    configurecolumnsdialog.ui
+RESOURCES += resources.qrc \
+    ../res/globalresources.qrc
 DESTDIR = ../bin
 INCLUDEPATH += ../silverlocklib
 win32:LIBS += -L../bin -lsilverlocklib1

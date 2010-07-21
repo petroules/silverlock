@@ -12,8 +12,6 @@ public:
     void restoreDefaults();
     bool expandTreeViewNodes() const;
     void setExpandTreeViewNodes(bool expand);
-    bool subgroupsInDetailView() const;
-    bool entriesInTreeView() const;
 
 private:
     bool m_expandTreeViewNodes;

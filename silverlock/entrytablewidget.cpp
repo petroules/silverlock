@@ -1,5 +1,6 @@
 #include "entrytablewidget.h"
 #include "ui_entrytablewidget.h"
+#include "entryviewindexes.h"
 #include "silverlockpreferences.h"
 #include <silverlocklib.h>
 
@@ -8,7 +9,18 @@ EntryTableWidget::EntryTableWidget(QWidget *parent) :
     ui(new Ui::EntryTableWidget), m_preferences(NULL)
 {
     this->ui->setupUi(this);
-    this->ui->table->sortByColumn(0, Qt::AscendingOrder);
+    this->ui->table->sortByColumn(COLUMN_TITLE, Qt::AscendingOrder);
+
+    // All columns' obscured flags should be false by default
+    for (int i = 0; i < COLUMN_COUNT; i++)
+    {
+        this->m_isColumnObscured.append(false);
+    }
+
+    // Obscure the password column
+    this->setColumnObscured(COLUMN_PASSWORD, true);
+    this->setColumnShown(COLUMN_UUID, false);
+
     QObject::connect(this->ui->table, SIGNAL(itemSelectionChanged()), SIGNAL(itemSelectionChanged()));
     QObject::connect(this->ui->table, SIGNAL(customContextMenuRequested(QPoint)), SIGNAL(customContextMenuRequested(QPoint)));
 }
@@ -28,14 +40,31 @@ void EntryTableWidget::setPreferences(SilverlockPreferences *preferences)
     this->m_preferences = preferences;
 }
 
-bool EntryTableWidget::passwordsShown() const
+bool EntryTableWidget::columnShown(int index) const
 {
-    return !this->ui->table->isColumnHidden(3);
+    return !this->ui->table->isColumnHidden(index);
 }
 
-void EntryTableWidget::setPasswordsShown(bool on)
+void EntryTableWidget::setColumnShown(int index, bool on)
 {
-    this->ui->table->setColumnHidden(3, !on);
+    this->ui->table->setColumnHidden(index, !on);
+}
+
+bool EntryTableWidget::columnObscured(int index) const
+{
+    return this->m_isColumnObscured.at(index);
+}
+
+void EntryTableWidget::setColumnObscured(int index, bool on)
+{
+    this->m_isColumnObscured[index] = on;
+
+    QTreeWidgetItem *root = this->ui->table->invisibleRootItem();
+    for (int i = 0; i < root->childCount(); i++)
+    {
+        QTreeWidgetItem *item = root->child(i);
+        item->setText(index, on ? QString(OBSCURETEXT) : item->data(index, Qt::UserRole).toString());
+    }
 }
 
 /*!
@@ -66,7 +95,7 @@ QList<QUuid> EntryTableWidget::selectedUuids() const
     {
         if (item)
         {
-            uuids.append(QUuid(item->data(6, Qt::UserRole).toString()));
+            uuids.append(QUuid(item->data(COLUMN_UUID, DATA_REALTEXT).toString()));
         }
     }
 
@@ -84,19 +113,6 @@ void EntryTableWidget::populate(Group *const group)
 
     if (group)
     {
-        if (this->m_preferences->subgroupsInDetailView())
-        {
-            // Add all the subgroups of the group
-            foreach (Group *subgroup, group->groups())
-            {
-                QTreeWidgetItem *subgroupItem = new QTreeWidgetItem();
-                subgroupItem->setIcon(0, QIcon(":/main/res/group.png"));
-                subgroupItem->setText(0, subgroup->title());
-                subgroupItem->setText(6, subgroup->uuid());
-                this->ui->table->invisibleRootItem()->addChild(subgroupItem);
-            }
-        }
-
         // Add all the entries in the group
         this->populateHelper(group->entries());
     }
@@ -118,17 +134,22 @@ void EntryTableWidget::populateHelper(const QList<Entry*> &entries)
     foreach (Entry *entry, entries)
     {
         QTreeWidgetItem *entryItem = new QTreeWidgetItem();
-        entryItem->setIcon(0, QIcon(":/main/res/entry.png"));
-        entryItem->setText(0, entry->title());
-        entryItem->setText(1, entry->url().toString());
-        entryItem->setText(2, entry->username());
-        entryItem->setText(3, entry->password());
-        entryItem->setText(4, entry->emailAddress());
-        entryItem->setText(5, entry->notes());
-        entryItem->setText(6, entry->uuid().toString());
-        entryItem->setData(6, Qt::UserRole, entry->uuid().toString());
+        entryItem->setIcon(COLUMN_TITLE, this->style()->standardIcon(QStyle::SP_FileIcon));
+        this->setWidgetData(entryItem, COLUMN_TITLE, entry->title());
+        this->setWidgetData(entryItem, COLUMN_URL, entry->url().toString());
+        this->setWidgetData(entryItem, COLUMN_USERNAME, entry->username());
+        this->setWidgetData(entryItem, COLUMN_PASSWORD, entry->password());
+        this->setWidgetData(entryItem, COLUMN_EMAIL, entry->emailAddress());
+        this->setWidgetData(entryItem, COLUMN_NOTES, entry->notes());
+        this->setWidgetData(entryItem, COLUMN_UUID, entry->uuid().toString());
         this->ui->table->invisibleRootItem()->addChild(entryItem);
     }
+}
+
+void EntryTableWidget::setWidgetData(QTreeWidgetItem *item, int index, const QString &data)
+{
+    item->setText(index, !this->m_isColumnObscured.at(index) ? data : QString(OBSCURETEXT));
+    item->setData(index, DATA_REALTEXT, data);
 }
 
 void EntryTableWidget::autoAdjust()

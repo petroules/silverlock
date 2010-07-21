@@ -45,8 +45,37 @@ void PreferencesDialog::save() const
     }
 }
 
-void PreferencesDialog::accepted()
+void PreferencesDialog::restoreDefaults()
+{
+    // Create a new instance so we don't persist the defaults
+    // (allows the user to still click cancel and not save them)
+    SilverlockPreferences *resetter = new SilverlockPreferences();
+    resetter->restoreDefaults();
+
+    // Hold a reference to the current preferences and temporarily
+    // set the new instance and load the settings from it
+    SilverlockPreferences *backup = this->m_preferences;
+    this->m_preferences = resetter;
+    this->load();
+
+    // Restore the old instance and delete the new one
+    this->m_preferences = backup;
+    delete resetter;
+}
+
+void PreferencesDialog::accept()
 {
     this->save();
     QDialog::accept();
+}
+
+void PreferencesDialog::on_buttonBox_clicked(QAbstractButton* button)
+{
+    if (this->m_preferences && this->ui->buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole)
+    {
+        if (QMessageBox::warning(this, tr("Warning"), tr("Are you sure you wish to reset all preferences to their default settings?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+        {
+            this->restoreDefaults();
+        }
+    }
 }

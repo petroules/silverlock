@@ -17,12 +17,14 @@ class EntryTableWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit EntryTableWidget(QWidget *parent = 0);
+    explicit EntryTableWidget(QWidget *parent = NULL);
     ~EntryTableWidget();
     SilverlockPreferences* preferences() const;
     void setPreferences(SilverlockPreferences *preferences);
-    bool passwordsShown() const;
-    void setPasswordsShown(bool on);
+    bool columnShown(int index) const;
+    void setColumnShown(int index, bool on);
+    bool columnObscured(int index) const;
+    void setColumnObscured(int index, bool on);
     QUuid selectedUuid() const;
     QList<QUuid> selectedUuids() const;
     void populate(Group *const group);
@@ -44,8 +46,10 @@ signals:
 private:
     Ui::EntryTableWidget *ui;
     SilverlockPreferences *m_preferences;
+    QList<bool> m_isColumnObscured;
 
     void populateHelper(const QList<Entry*> &entries);
+    void setWidgetData(QTreeWidgetItem *item, int index, const QString &data);
 };
 
 #endif // ENTRYTABLEWIDGET_H

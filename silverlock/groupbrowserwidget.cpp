@@ -117,8 +117,17 @@ void GroupBrowserWidget::populate(QTreeWidgetItem *parentItem, Group *const grou
     // Create a widget item for the group, set the text, icon, etc., and add it to the parent item
     QTreeWidgetItem *groupItem = new QTreeWidgetItem();
     groupItem->setText(0, group->title());
-    groupItem->setIcon(0, QIcon(QString(":/main/res/%1.png").arg(isDatabase ? "database" : "group")));
     groupItem->setData(0, Qt::UserRole, group->uuid().toString());
+
+    if (isDatabase)
+    {
+        groupItem->setIcon(0, QIcon(":/main/res/app.svg"));
+    }
+    else
+    {
+        groupItem->setIcon(0, this->style()->standardIcon(QStyle::SP_DirIcon));
+    }
+
 
     // The database node should have bold text!
     if (isDatabase)
@@ -135,21 +144,6 @@ void GroupBrowserWidget::populate(QTreeWidgetItem *parentItem, Group *const grou
     foreach (Group *node, group->groups())
     {
         this->populate(groupItem, node);
-    }
-
-    if (this->m_preferences->entriesInTreeView())
-    {
-        // Then we add this group's entries as children of itself
-        foreach (Entry *entry, group->entries())
-        {
-            // Create a widget item for the entry, set the text, icon, etc.,
-            // and add it to the item we made for the category passed to this method
-            QTreeWidgetItem *entryItem = new QTreeWidgetItem();
-            entryItem->setText(0, entry->title());
-            entryItem->setIcon(0, QIcon(":/main/res/entry.png"));
-            entryItem->setData(0, Qt::UserRole, entry->uuid().toString());
-            groupItem->addChild(entryItem);
-        }
     }
 }
 

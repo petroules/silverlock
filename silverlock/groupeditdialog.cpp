@@ -21,6 +21,10 @@ GroupEditDialog::GroupEditDialog(Group *group, QWidget *parent) :
 {
     this->ui->setupUi(this);
     this->read();
+
+    // Connect our show/hide password button and hide the password by default
+    QObject::connect(this->ui->revealToolButton, SIGNAL(toggled(bool)), this, SLOT(hidePassword(bool)));
+    this->ui->revealToolButton->setChecked(true);
 }
 
 /*!
@@ -76,6 +80,17 @@ void GroupEditDialog::read()
 
         // UUID
         this->ui->uuidLineEdit->setText(this->m_group->uuid().toString());
+
+        Database *db = dynamic_cast<Database*>(this->m_group);
+        if (db)
+        {
+            this->ui->passwordLineEdit->setText(db->password());
+        }
+
+        this->ui->passwordLabel->setVisible(db);
+        this->ui->passwordLineEdit->setVisible(db);
+        this->ui->revealToolButton->setVisible(db);
+        this->setWindowTitle(db ? tr("Edit Database") : tr("Edit Group"));
     }
 }
 
@@ -88,6 +103,12 @@ void GroupEditDialog::write() const
     {
         // Basic information
         this->m_group->setTitle(this->ui->titleLineEdit->text());
+
+        Database *db = dynamic_cast<Database*>(this->m_group);
+        if (db)
+        {
+            db->setPassword(this->ui->passwordLineEdit->text());
+        }
     }
 }
 
@@ -122,4 +143,14 @@ QString GroupEditDialog::inputErrorString() const
     }
 
     return errorString;
+}
+
+/*!
+    Sets a value indicating whether the password should be hidden using asterisks.
+
+    \param checked \c true to hide the password, \c false to display it verbatim.
+ */
+void GroupEditDialog::hidePassword(bool checked)
+{
+    this->ui->passwordLineEdit->setEchoMode(checked ? QLineEdit::Password : QLineEdit::Normal);
 }

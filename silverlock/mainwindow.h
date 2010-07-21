@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QtGui>
+#include "documentstate.h"
 
 class Database;
 class Entry;
@@ -31,26 +32,24 @@ protected slots:
 private:
     Ui::MainWindow *ui;
     SilverlockPreferences *m_preferences;
-    Database *m_database;
-    QString m_currentFile;
-    bool m_isUntitled;
-
+    DocumentState m_documentState;
     QLabel *m_nodeCountStatusLabel;
 
-    void setupDocumentState();
     void setupSignals();
     void setupUiAdditional();
     void setupKeyboardShortcuts();
     void setupMenuIcons();
 
     void setNodeCount(Group *group);
-    void updateNodeActions();
-    void populateInfoView(Entry *const entry);
     void populateWithSearchResults(const QList<Entry*> &entries, const QString &keywords);
+    void populateEntryTable(Group *const group);
+    void populateInfoView(Entry *const entry);
     bool maybeSave();
     void loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
+    void closeFile();
     void setCurrentFile(const QString &fileName);
+    void clearCurrentFile();
     QString strippedName(const QString &fullFileName);
     MainWindow* findMainWindow(const QString &fileName);
 
@@ -77,7 +76,6 @@ private slots:
     void on_actionCenterToScreen_triggered();
     void on_actionConfigureColumns_triggered();
     void on_actionFullScreen_triggered(bool checked);
-    void on_actionShowPasswords_triggered(bool checked);
     void on_actionPreferences_triggered();
     void on_actionHelpContents_triggered();
     void on_actionWebsite_triggered();
@@ -89,6 +87,7 @@ private slots:
     void on_entryTable_customContextMenuRequested(QPoint pos);
     void on_groupBrowser_itemSelectionChanged();
     void on_entryTable_itemSelectionChanged();
+    void updateInterfaceState();
     void databaseWasModified();
     void clearViews();
 };

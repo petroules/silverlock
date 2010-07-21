@@ -1,7 +1,7 @@
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
-#include <QDialog>
+#include <QtGui>
 
 class SilverlockPreferences;
 
@@ -20,14 +20,18 @@ public:
     void setPreferences(SilverlockPreferences *preferences);
 
 public slots:
-    void accepted();
+    void accept();
 
 private:
     void load();
     void save() const;
+    void restoreDefaults();
 
     Ui::PreferencesDialog *ui;
     SilverlockPreferences *m_preferences;
+
+private slots:
+    void on_buttonBox_clicked(QAbstractButton* button);
 };
 
 #endif // PREFERENCESDIALOG_H

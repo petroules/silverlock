@@ -194,10 +194,6 @@
    </property>
   </action>
   <action name="actionOpen">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/main/res/open.png</normaloff>:/main/res/open.png</iconset>
-   </property>
    <property name="text">
     <string>&amp;Open</string>
    </property>
@@ -206,10 +202,6 @@
    </property>
   </action>
   <action name="actionSave">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/main/res/save.png</normaloff>:/main/res/save.png</iconset>
-   </property>
    <property name="text">
     <string>&amp;Save</string>
    </property>
@@ -405,6 +397,10 @@
    </property>
   </action>
   <action name="actionHelpContents">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/main/res/help.png</normaloff>:/main/res/help.png</iconset>
+   </property>
    <property name="text">
     <string>Help Contents</string>
    </property>

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/main">
+        <file>license/botan.txt</file>
+        <file>license/license.html</file>
+        <file>license/license.txt</file>
+    </qresource>
+</RCC>

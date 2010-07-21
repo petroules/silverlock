@@ -33,6 +33,9 @@ private:
     void read();
     void write() const;
     QString inputErrorString() const;
+
+private slots:
+    void hidePassword(bool checked);
 };
 
 #endif // GROUPEDITDIALOG_H
