@@ -1,5 +1,6 @@
 #include "entry.h"
 #include "group.h"
+#include <climits>
 
 /*!
     \class Entry
@@ -18,9 +19,8 @@
     \param parent The group to which this entry will belong.
  */
 Entry::Entry(const QString &title, Group *parent) :
-    DatabaseNode()
+    DatabaseNode(title)
 {
-    this->setTitle(title);
     this->setParentNode(parent);
 }
 
@@ -51,8 +51,8 @@ void Entry::setUrl(const QUrl &url)
 {
     if (this->m_url != url)
     {
-        emit this->modified();
         this->m_url = url;
+        this->setModified();
     }
 }
 
@@ -65,8 +65,8 @@ void Entry::setUsername(const QString &username)
 {
     if (this->m_username != username)
     {
-        emit this->modified();
         this->m_username = username;
+        this->setModified();
     }
 }
 
@@ -79,22 +79,8 @@ void Entry::setPassword(const QString &password)
 {
     if (this->m_password != password)
     {
-        emit this->modified();
         this->m_password = password;
-    }
-}
-
-QString Entry::emailAddress() const
-{
-    return this->m_emailAddress;
-}
-
-void Entry::setEmailAddress(const QString &emailAddress)
-{
-    if (this->m_emailAddress != emailAddress)
-    {
-        emit this->modified();
-        this->m_emailAddress = emailAddress;
+        this->setModified();
     }
 }
 
@@ -107,25 +93,31 @@ void Entry::setNotes(const QString &notes)
 {
     if (this->m_notes != notes)
     {
-        emit this->modified();
         this->m_notes = notes;
+        this->setModified();
     }
 }
 
-const QHash<QString, QString>& Entry::recoveryInfo() const
+const QMap<QString, QString>& Entry::recoveryInfo() const
 {
     return this->m_recoveryInfo;
 }
 
-const QHash<QString, QString>& Entry::additionalData() const
+const QMap<QString, QString>& Entry::customFields() const
 {
-    return this->m_additionalData;
+    return this->m_customFields;
 }
 
 void Entry::insertRecoveryInfo(const QString &key, const QString &value)
 {
+    // Blank questions are not accepted!
+    if (key.isEmpty())
+    {
+        return;
+    }
+
     this->m_recoveryInfo.insert(key, value);
-    emit this->modified();
+    this->setModified();
 }
 
 int Entry::removeRecoveryInfo(const QString &key)
@@ -135,7 +127,7 @@ int Entry::removeRecoveryInfo(const QString &key)
     // If at least one item was actually removed...
     if (code > 0)
     {
-        emit this->modified();
+        this->setModified();
     }
 
     return code;
@@ -146,51 +138,86 @@ void Entry::clearRecoveryInfo()
     if (this->m_recoveryInfo.count() > 0)
     {
         this->m_recoveryInfo.clear();
-        emit this->modified();
+        this->setModified();
     }
 }
 
-void Entry::insertAdditionalData(const QString &key, const QString &value)
+void Entry::insertCustomField(const QString &key, const QString &value)
 {
-    this->m_additionalData.insert(key, value);
-    emit this->modified();
+    this->m_customFields.insert(key, value);
+    this->setModified();
 }
 
-int Entry::removeAdditionalData(const QString &key)
+int Entry::removeCustomField(const QString &key)
 {
-    int code = this->m_additionalData.remove(key);
+    int code = this->m_customFields.remove(key);
 
     // If at least one item was actually removed...
     if (code > 0)
     {
-        emit this->modified();
+        this->setModified();
     }
 
     return code;
 }
 
-void Entry::clearAdditionalData()
+void Entry::clearCustomFields()
 {
-    if (this->m_additionalData.count() > 0)
+    if (this->m_customFields.count() > 0)
     {
-        this->m_additionalData.clear();
-        emit this->modified();
+        this->m_customFields.clear();
+        this->setModified();
+    }
+}
+
+void Entry::fromXml(const QDomElement &element)
+{
+    DatabaseNode::fromXml(element);
+
+    this->setUrl(element.attribute(XML_URL));
+    this->setUsername(element.attribute(XML_USERNAME));
+    this->setPassword(element.attribute(XML_PASSWORD));
+    this->setNotes(element.attribute(XML_NOTES));
+
+    // This function should NEVER be called from a parented DatabaseNode
+    // It is private and designed to be called in DatabaseReader only
+    // immediately after an Entry is instantiated, therefore they should
+    // always be empty at this point
+    Q_ASSERT(this->m_customFields.count() == 0);
+    Q_ASSERT(this->m_recoveryInfo.count() == 0);
+
+    // Here we'll process any subnodes of the entry containing additional information
+    QDomNode entryNode = element.firstChild();
+    while (!entryNode.isNull())
+    {
+        QDomElement entryElement = entryNode.toElement();
+        if (!entryElement.isNull())
+        {
+            if (entryElement.tagName() == XML_CUSTOMFIELD)
+            {
+                this->m_customFields.insert(entryElement.attribute(XML_CFNAME), entryElement.attribute(XML_CFVALUE));
+            }
+            else if (entryElement.tagName() == XML_RECOVERYINFO)
+            {
+                this->m_recoveryInfo.insert(entryElement.attribute(XML_QUESTION), entryElement.attribute(XML_ANSWER));
+            }
+        }
+
+        entryNode = entryNode.nextSibling();
     }
 }
 
 QDomElement Entry::toXml(QDomDocument &document) const
 {
-    QDomElement element = document.createElement(XML_ENTRY);
-    element.setAttribute(XML_UUID, this->uuid().toString());
-    element.setAttribute(XML_TITLE, this->title());
+    QDomElement element = DatabaseNode::toXml(document);
+    element.setTagName(XML_ENTRY);
     element.setAttribute(XML_URL, this->url().toString());
     element.setAttribute(XML_USERNAME, this->username());
     element.setAttribute(XML_PASSWORD, this->password());
-    element.setAttribute(XML_EMAILADDRESS, this->emailAddress());
     element.setAttribute(XML_NOTES, this->notes());
 
     // Add all the recovery info
-    QHashIterator<QString, QString> i(this->recoveryInfo());
+    QMapIterator<QString, QString> i(this->recoveryInfo());
     while (i.hasNext())
     {
         i.next();
@@ -200,14 +227,14 @@ QDomElement Entry::toXml(QDomDocument &document) const
         element.appendChild(pair);
     }
 
-    // Add all the additional data
-    QHashIterator<QString, QString> j(this->additionalData());
+    // Add all the custom fields
+    QMapIterator<QString, QString> j(this->customFields());
     while (j.hasNext())
     {
         j.next();
-        QDomElement pair = document.createElement(XML_ADDITIONALDATA);
-        pair.setAttribute(XML_ADNAME, j.key());
-        pair.setAttribute(XML_ADVALUE, j.value());
+        QDomElement pair = document.createElement(XML_CUSTOMFIELD);
+        pair.setAttribute(XML_CFNAME, j.key());
+        pair.setAttribute(XML_CFVALUE, j.value());
         element.appendChild(pair);
     }
 
@@ -215,11 +242,12 @@ QDomElement Entry::toXml(QDomDocument &document) const
 }
 
 /*!
-    Creates a copy of the entry.
+    Creates a deep copy of the entry.
 
     The copy will not have all the same properties as the original.
     Specifically, a new UUID will be generated and the copy will be
-    initialized without a parent node.
+    initialized without a parent node. The creation, access and modification
+    dates will also be regenerated.
  */
 Entry* Entry::createCopy() const
 {
@@ -228,21 +256,20 @@ Entry* Entry::createCopy() const
     entry->setUrl(this->url());
     entry->setUsername(this->username());
     entry->setPassword(this->password());
-    entry->setEmailAddress(this->emailAddress());
     entry->setNotes(this->notes());
 
-    QHashIterator<QString, QString> i(this->recoveryInfo());
+    QMapIterator<QString, QString> i(this->recoveryInfo());
     while (i.hasNext())
     {
         i.next();
-        entry->m_recoveryInfo.insert(i.key(), i.value());
+        entry->insertRecoveryInfo(i.key(), i.value());
     }
 
-    QHashIterator<QString, QString> j(this->additionalData());
+    QMapIterator<QString, QString> j(this->customFields());
     while (j.hasNext())
     {
         j.next();
-        entry->m_additionalData.insert(j.key(), j.value());
+        entry->insertCustomField(j.key(), j.value());
     }
 
     return entry;

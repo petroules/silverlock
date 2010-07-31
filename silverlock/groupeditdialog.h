@@ -1,7 +1,7 @@
 #ifndef GROUPEDITDIALOG_H
 #define GROUPEDITDIALOG_H
 
-#include <QtGui>
+#include "guardeddialog.h"
 
 class Group;
 
@@ -10,7 +10,7 @@ namespace Ui
     class GroupEditDialog;
 }
 
-class GroupEditDialog : public QDialog
+class GroupEditDialog : public GuardedDialog
 {
     Q_OBJECT
 
@@ -20,19 +20,15 @@ public:
     Group* group() const;
     void setGroup(Group *group);
 
-public slots:
-    void accept();
-
 protected:
     void changeEvent(QEvent *e);
+    void load();
+    void save();
+    void getMessages(QStringList &errors, QStringList &warnings, QStringList &information) const;
 
 private:
     Ui::GroupEditDialog *ui;
     Group *m_group;
-
-    void read();
-    void write() const;
-    QString inputErrorString() const;
 
 private slots:
     void hidePassword(bool checked);

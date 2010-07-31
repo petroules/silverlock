@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
-    <height>450</height>
+    <width>750</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTabWidget" name="advancedTab">
+    <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -65,23 +65,13 @@
         <widget class="QLineEdit" name="passwordLineEdit"/>
        </item>
        <item row="5" column="0">
-        <widget class="QLabel" name="emailLabel">
-         <property name="text">
-          <string>Email address:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="emailLineEdit"/>
-       </item>
-       <item row="6" column="0">
         <widget class="QLabel" name="notesLabel">
          <property name="text">
           <string>Notes:</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="5" column="1">
         <widget class="QTextEdit" name="notesTextEdit"/>
        </item>
        <item row="3" column="2">
@@ -108,13 +98,25 @@
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QTableWidget" name="tableWidget">
+        <widget class="QTableWidget" name="recoveryTableWidget">
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
          <property name="selectionMode">
-          <enum>QAbstractItemView::NoSelection</enum>
+          <enum>QAbstractItemView::SingleSelection</enum>
          </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>300</number>
+         </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
          <column>
           <property name="text">
            <string>Question</string>
@@ -128,7 +130,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QVBoxLayout" name="recoveryButtonsVerticalLayout">
          <item>
           <widget class="QPushButton" name="addRecoveryPushButton">
            <property name="text">
@@ -144,7 +146,7 @@
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer">
+          <spacer name="recoveryButtonsVerticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -160,13 +162,139 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="customFieldsTab">
+      <attribute name="title">
+       <string>Custom Fields</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QTableWidget" name="customFieldsTableWidget">
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>300</number>
+         </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Value</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="customFieldsVerticalLayout">
+         <item>
+          <widget class="QPushButton" name="addCustomFieldPushButton">
+           <property name="text">
+            <string>Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="removeCustomFieldPushButton">
+           <property name="text">
+            <string>Remove</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="customFieldButtonsVerticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="advancedTab">
       <attribute name="title">
        <string>Advanced</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="4" column="0">
+        <widget class="QLabel" name="uuidLabel">
+         <property name="text">
+          <string>UUID:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="createdLabel">
+         <property name="text">
+          <string>Created:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="accessedLabel">
+         <property name="text">
+          <string>Accessed:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="accessedLineEdit">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="modifiedLabel">
+         <property name="text">
+          <string>Modified:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="modifiedLineEdit">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="createdLineEdit">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="uuidLineEdit">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="1">
-        <spacer name="verticalSpacer_2">
+        <spacer name="advancedTabVerticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -177,20 +305,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="uuidLabel">
-         <property name="text">
-          <string>UUID:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="uuidLineEdit">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -205,6 +319,26 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>titleLineEdit</tabstop>
+  <tabstop>urlLineEdit</tabstop>
+  <tabstop>usernameLineEdit</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+  <tabstop>revealToolButton</tabstop>
+  <tabstop>notesTextEdit</tabstop>
+  <tabstop>recoveryTableWidget</tabstop>
+  <tabstop>addRecoveryPushButton</tabstop>
+  <tabstop>removeRecoveryPushButton</tabstop>
+  <tabstop>customFieldsTableWidget</tabstop>
+  <tabstop>addCustomFieldPushButton</tabstop>
+  <tabstop>removeCustomFieldPushButton</tabstop>
+  <tabstop>createdLineEdit</tabstop>
+  <tabstop>accessedLineEdit</tabstop>
+  <tabstop>modifiedLineEdit</tabstop>
+  <tabstop>uuidLineEdit</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -214,8 +348,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>440</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -230,8 +364,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>440</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -239,5 +373,92 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>revealToolButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>EntryEditDialog</receiver>
+   <slot>hidePassword(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>712</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>746</x>
+     <y>144</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addRecoveryPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EntryEditDialog</receiver>
+   <slot>addRecoveryInfoEntry()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>688</x>
+     <y>56</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>997</x>
+     <y>143</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>removeRecoveryPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EntryEditDialog</receiver>
+   <slot>removeRecoveryInfoEntry()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>670</x>
+     <y>80</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>845</x>
+     <y>230</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addCustomFieldPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EntryEditDialog</receiver>
+   <slot>addCustomFieldEntry()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>688</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>992</x>
+     <y>109</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>removeCustomFieldPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>EntryEditDialog</receiver>
+   <slot>removeCustomFieldEntry()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>670</x>
+     <y>79</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>881</x>
+     <y>175</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>hidePassword(bool)</slot>
+  <slot>addRecoveryInfoEntry()</slot>
+  <slot>removeRecoveryInfoEntry()</slot>
+  <slot>addCustomFieldEntry()</slot>
+  <slot>removeCustomFieldEntry()</slot>
+ </slots>
 </ui>

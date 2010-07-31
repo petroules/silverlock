@@ -4,6 +4,7 @@
 #include "entry.h"
 #include "group.h"
 #include "databasecrypto.h"
+#include <liel.h>
 
 DatabaseReader::DatabaseReader(QObject *parent) :
     QObject(parent)
@@ -35,32 +36,40 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
         return NULL;
     }
 
-    DatabaseCrypto::CryptoStatus status;
-    QString decrypted = DatabaseCrypto::decrypt(QString(device.readAll()), password, &status);
-    if (status != DatabaseCrypto::NoError)
-    {
-        if (status == DatabaseCrypto::MissingHeader)
-        {
-            this->m_errorString = tr("The file was missing its standard header.");
-        }
-        else if (status == DatabaseCrypto::VerificationFailed)
-        {
-            this->m_errorString = tr("The message authentication codes were mismatched. The file may have been corrupted or tampered with.");
-        }
-        else if (status == DatabaseCrypto::DecodingError)
-        {
-            this->m_errorString = tr("There was a problem decoding the file; either the password was invalid or the file may be corrupt.");
-        }
-        else if (status == DatabaseCrypto::UnknownError)
-        {
-            this->m_errorString = tr("An unknown error occurred while decoding the file.");
-        }
+    // Get the contents of the database file and create a new XML document
+    QString fileDataString = QString(device.readAll());
+    QDomDocument doc;
 
-        return NULL;
+    // Try and see if it's a valid XML document; if it is, we'll simply continue on and read
+    // it (unencrypted mode), if it's not, we'll try to decrypt it (encrypted mode)
+    if (!doc.setContent(fileDataString))
+    {
+        DatabaseCrypto::CryptoStatus status;
+        fileDataString = DatabaseCrypto::decrypt(fileDataString, password, &status);
+        if (status != DatabaseCrypto::NoError)
+        {
+            if (status == DatabaseCrypto::MissingHeader)
+            {
+                this->m_errorString = tr("The file was missing its standard header.");
+            }
+            else if (status == DatabaseCrypto::VerificationFailed)
+            {
+                this->m_errorString = tr("The message authentication codes were mismatched. The file may have been corrupted or tampered with.");
+            }
+            else if (status == DatabaseCrypto::DecodingError)
+            {
+                this->m_errorString = tr("There was a problem decoding the file; either the password was invalid or the file may be corrupt.");
+            }
+            else if (status == DatabaseCrypto::UnknownError)
+            {
+                this->m_errorString = tr("An unknown error occurred while decoding the file.");
+            }
+
+            return NULL;
+        }
     }
 
-    QDomDocument doc(XML_DATABASE);
-    if (doc.setContent(decrypted))
+    if (doc.setContent(fileDataString))
     {
         QDomElement root = doc.documentElement();
         if (root.tagName() != XML_DATABASE)
@@ -76,20 +85,13 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
             return NULL;
         }
 
-        Database *db = new Database(root.attribute(XML_TITLE), root.attribute(XML_DBPASSWORD));
-        db->setUuid(root.attribute(XML_UUID));
+        Database *db = new Database();
+        db->fromXml(root);
 
         // Recursively read in all the groups and their subnodes
-        bool noError = true;
-        this->readGroup(db, root, noError);
+        this->readGroup(db, root);
 
-        // If we didn't encounter an error during group processing...
-        if (noError)
-        {
-            return db;
-        }
-
-        return NULL;
+        return db;
     }
     else
     {
@@ -109,9 +111,9 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
     \param element The element whose child nodes are being read.
     \param process Whether to continue processing. This is used to avoid overwriting an error state.
  */
-void DatabaseReader::readGroup(Group *const group, const QDomElement &element, bool &process)
+void DatabaseReader::readGroup(Group *const group, const QDomElement &element)
 {
-    if (!group || !process)
+    if (!group)
     {
         return;
     }
@@ -126,67 +128,20 @@ void DatabaseReader::readGroup(Group *const group, const QDomElement &element, b
         {
             if (e.tagName() == XML_GROUP)
             {
-                Group *ourGroup = new Group(e.attribute(XML_TITLE), group);
-                ourGroup->setUuid(e.attribute(XML_UUID));
-
-                // Little bit of error checking...
-                if (ourGroup->uuid().isNull())
-                {
-                    if (process)
-                    {
-                        this->m_errorString = tr("Invalid group UUID.");
-                        process = false;
-                    }
-
-                    return;
-                }
+                Group *ourGroup = new Group();
+                ourGroup->fromXml(e);
+                ourGroup->setParentNode(group);
 
                 // Call the method again to recursively add child nodes to the one we just added
-                this->readGroup(ourGroup, e, process);
+                this->readGroup(ourGroup, e);
             }
             else if (e.tagName() == XML_ENTRY)
             {
                 // If we found an entry, the process here is simple - read all the
                 // properties and then add it to the group's list of entries
-                Entry *entry = new Entry(e.attribute(XML_TITLE), group);
-                entry->setUuid(e.attribute(XML_UUID));
-                entry->setUrl(e.attribute(XML_URL));
-                entry->setUsername(e.attribute(XML_USERNAME));
-                entry->setPassword(e.attribute(XML_PASSWORD));
-                entry->setEmailAddress(e.attribute(XML_EMAILADDRESS));
-                entry->setNotes(e.attribute(XML_NOTES));
-
-                // Little bit of error checking...
-                if (entry->uuid().isNull())
-                {
-                    if (process)
-                    {
-                        this->m_errorString = tr("Invalid entry UUID.");
-                        process = false;
-                    }
-
-                    return;
-                }
-
-                // Here we'll process any subnodes of the entry containing additional information
-                QDomNode entryNode = e.firstChild();
-                while (!entryNode.isNull())
-                {
-                    QDomElement entryElement = entryNode.toElement();
-                    if (!entryElement.isNull())
-                    {
-                        if (entryElement.tagName() == XML_ADDITIONALDATA)
-                        {
-                            entry->insertAdditionalData(entryElement.attribute(XML_ADNAME), entryElement.attribute(XML_ADVALUE));
-                        }
-                        else if (entryElement.tagName() == XML_RECOVERYINFO)
-                        {
-                            entry->insertRecoveryInfo(entryElement.attribute(XML_QUESTION), entryElement.attribute(XML_ANSWER));
-                        }
-                    }
-
-                    entryNode = entryNode.nextSibling();
-                }
+                Entry *entry = new Entry();
+                entry->fromXml(e);
+                entry->setParentNode(group);
             }
         }
 

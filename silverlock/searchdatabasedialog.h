@@ -1,36 +1,35 @@
 #ifndef SEARCHDATABASEDIALOG_H
 #define SEARCHDATABASEDIALOG_H
 
-#include <QtGui>
+#include "guardeddialog.h"
 #include <silverlocklib.h>
 
 namespace Ui {
     class SearchDatabaseDialog;
 }
 
-class SearchDatabaseDialog : public QDialog
+class SearchDatabaseDialog : public GuardedDialog
 {
     Q_OBJECT
 
 public:
-    explicit SearchDatabaseDialog(const Database *const database, QWidget *parent = NULL);
+    explicit SearchDatabaseDialog(const Group *const group, QWidget *parent = NULL);
     ~SearchDatabaseDialog();
-    const Database *const database() const;
-    void setDatabase(const Database *const database);
+    const Group *const group() const;
+    void setGroup(const Group *const group);
     SearchParameters* searchParameters() const;
     void setSearchParameters(SearchParameters *searchParameters);
     const QList<Entry*>& entriesFound() const;
 
-public slots:
-    void accept();
+protected:
+    void save();
+    void getMessages(QStringList &errors, QStringList &warnings, QStringList &information) const;
 
 private:
     Ui::SearchDatabaseDialog *ui;
-    const Database *m_database;
+    const Group *m_group;
     SearchParameters *m_searchParameters;
     QList<Entry*> m_entries;
-
-    QString inputErrorString() const;
 
 private slots:
     void updateWidgets();

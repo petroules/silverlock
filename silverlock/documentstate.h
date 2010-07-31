@@ -20,6 +20,9 @@ public:
     bool hasDocument() const;
     void load(Database *database);
     void close();
+    bool isLocked() const;
+    void lock();
+    void unlock();
 
 signals:
     void stateChanged();
@@ -33,7 +36,7 @@ private:
     Database *m_database;
     QString m_currentFile;
     bool m_isUntitled;
-
+    bool m_isLocked;
 };
 
 #endif // DOCUMENTSTATE_H

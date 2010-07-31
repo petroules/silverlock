@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>360</width>
+    <width>381</width>
     <height>248</height>
    </rect>
   </property>
@@ -58,27 +58,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="emailAddressCheckBox">
-        <property name="text">
-         <string>Email address</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="notesCheckBox">
-        <property name="text">
-         <string>Notes</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" colspan="2">
-       <widget class="QCheckBox" name="recoveryInfoCheckBox">
-        <property name="text">
-         <string>Recovery questions &amp;&amp; answers</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QCheckBox" name="groupTitleCheckBox">
         <property name="text">
@@ -90,6 +69,27 @@
        <widget class="QCheckBox" name="uuidCheckBox">
         <property name="text">
          <string>UUID</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="notesCheckBox">
+        <property name="text">
+         <string>Notes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QCheckBox" name="recoveryInfoCheckBox">
+        <property name="text">
+         <string>Recovery questions &amp;&amp; answers</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QCheckBox" name="customFieldsCheckBox">
+        <property name="text">
+         <string>Custom fields</string>
         </property>
        </widget>
       </item>
@@ -131,6 +131,21 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>searchLineEdit</tabstop>
+  <tabstop>titleCheckBox</tabstop>
+  <tabstop>urlCheckBox</tabstop>
+  <tabstop>usernameCheckBox</tabstop>
+  <tabstop>passwordCheckBox</tabstop>
+  <tabstop>notesCheckBox</tabstop>
+  <tabstop>recoveryInfoCheckBox</tabstop>
+  <tabstop>customFieldsCheckBox</tabstop>
+  <tabstop>groupTitleCheckBox</tabstop>
+  <tabstop>uuidCheckBox</tabstop>
+  <tabstop>regexCheckBox</tabstop>
+  <tabstop>caseSensitiveCheckBox</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -140,8 +155,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -156,8 +171,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -165,5 +180,200 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>searchLineEdit</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>122</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>18</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>titleCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>44</x>
+     <y>68</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>480</x>
+     <y>35</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>urlCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>129</x>
+     <y>66</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>461</x>
+     <y>46</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>usernameCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>222</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>412</x>
+     <y>55</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>passwordCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>313</x>
+     <y>65</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>438</x>
+     <y>76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>notesCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>25</x>
+     <y>90</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-6</x>
+     <y>87</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recoveryInfoCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>118</x>
+     <y>90</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>customFieldsCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>343</x>
+     <y>92</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>479</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>groupTitleCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-11</x>
+     <y>118</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>uuidCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>113</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>regexCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>48</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>495</x>
+     <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>caseSensitiveCheckBox</sender>
+   <signal>clicked()</signal>
+   <receiver>SearchDatabaseDialog</receiver>
+   <slot>updateSearchParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>115</x>
+     <y>190</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>439</x>
+     <y>191</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>updateSearchParameters()</slot>
+ </slots>
 </ui>

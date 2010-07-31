@@ -13,8 +13,9 @@ class SILVERLOCKLIBSHARED_EXPORT Entry : public DatabaseNode
     Q_PROPERTY(QUrl url READ url WRITE setUrl)
     Q_PROPERTY(QString username READ username WRITE setUsername)
     Q_PROPERTY(QString password READ password WRITE setPassword)
-    Q_PROPERTY(QString emailAddress READ emailAddress WRITE setEmailAddress)
     Q_PROPERTY(QString notes READ notes WRITE setNotes)
+
+    friend class DatabaseReader;
 
 public:
     explicit Entry(const QString &title = QString(), Group *parent = NULL);
@@ -25,33 +26,31 @@ public:
     void setUsername(const QString &username);
     QString password() const;
     void setPassword(const QString &password);
-    QString emailAddress() const;
-    void setEmailAddress(const QString &emailAddress);
     QString notes() const;
     void setNotes(const QString &notes);
-    const QHash<QString, QString>& recoveryInfo() const;
-    const QHash<QString, QString>& additionalData() const;
+    const QMap<QString, QString>& recoveryInfo() const;
+    const QMap<QString, QString>& customFields() const;
     void insertRecoveryInfo(const QString &key, const QString &value);
     int removeRecoveryInfo(const QString &key);
     void clearRecoveryInfo();
-    void insertAdditionalData(const QString &key, const QString &value);
-    int removeAdditionalData(const QString &key);
-    void clearAdditionalData();
+    void insertCustomField(const QString &key, const QString &value);
+    int removeCustomField(const QString &key);
+    void clearCustomFields();
     QDomElement toXml(QDomDocument &document) const;
     Entry* createCopy() const;
 
 protected:
     void attachToList();
     void detachFromList();
+    void fromXml(const QDomElement &element);
 
 private:
     QUrl m_url;
     QString m_username;
     QString m_password;
-    QString m_emailAddress;
     QString m_notes;
-    QHash<QString, QString> m_recoveryInfo;
-    QHash<QString, QString> m_additionalData;
+    QMap<QString, QString> m_recoveryInfo;
+    QMap<QString, QString> m_customFields;
 };
 
 #endif // ENTRY_H

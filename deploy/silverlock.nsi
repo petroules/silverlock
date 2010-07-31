@@ -1,3 +1,7 @@
+# Set the compressor
+SetCompressor /FINAL /SOLID lzma
+SetCompressorDictSize 64
+
 ;--------------------------------
 ; Include Modern UI
 
@@ -6,7 +10,7 @@
 
 ;--------------------------------
 ; Constants
-	
+
 	# Set product information...
 	!define PRODUCT_NAME "Silverlock"
 	!define PRODUCT_UNIXNAME "silverlock"
@@ -19,14 +23,14 @@
 	!define PRODUCT_UNINST_ROOT_KEY "HKLM"
 	!define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
 	!define COPYRIGHT_YEARS "2010"
-	
+
 	# Paths for files and resources
 	!define QT_BIN "C:\Qt\2010.04\qt\bin"
 	!define QT_PLUGINS "${QT_BIN}\..\plugins"
 	!define APP_BIN "..\..\${PRODUCT_UNIXNAME}-build-desktop\bin"
 	!define PATH_RES "..\res"
 	!define PATH_APPRES "..\silverlock\res"
-	
+
 	# Warn the user if they try to close the installer
 	!define MUI_ABORTWARNING
 
@@ -67,7 +71,7 @@
 
 ;--------------------------------
 ; Language strings
-	
+
 	# English
 	LangString LANG_SecCoreFiles ${LANG_ENGLISH} "Core files required for ${PRODUCT_NAME} to operate." ; Core files section description
 	LangString LANG_UnSecCoreFiles ${LANG_ENGLISH} "Removes the ${PRODUCT_NAME} core files."
@@ -78,8 +82,8 @@
 	LangString LANG_UninstallError ${LANG_ENGLISH} "There was a serious error uninstalling ${PRODUCT_NAME}. Please visit www.petroules.com for assistance."
 	LangString LANG_Website ${LANG_ENGLISH} "Website"
 	LangString LANG_Settings ${LANG_ENGLISH} "Settings"
-	LicenseLangString license ${LANG_ENGLISH} "${PATH_RES}\license\license.txt"
-	
+	LicenseLangString license ${LANG_ENGLISH} "${PATH_RES}\license\gpl-3.0.txt"
+
 	# German
 	LangString LANG_SecCoreFiles ${LANG_GERMAN} "Für ${PRODUCT_NAME} erforderliche Kerndateien, um zu funktionieren." ; Core files section description
 	LangString LANG_UnSecCoreFiles ${LANG_GERMAN} "Entfernt die ${PRODUCT_NAME}-Kerndateien."
@@ -90,7 +94,7 @@
 	LangString LANG_UninstallError ${LANG_GERMAN} "Es gab einen ernsten Fehler, der ${PRODUCT_NAME} deinstalliert. Besuchen Sie bitte www.petroules.com für die Hilfe."
 	LangString LANG_Website ${LANG_GERMAN} "Website"
 	LangString LANG_Settings ${LANG_GERMAN} "Einstellungen"
-	LicenseLangString license ${LANG_GERMAN} "${PATH_RES}\license\license.txt"
+	LicenseLangString license ${LANG_GERMAN} "${PATH_RES}\license\gpl-3.0.txt"
 
 ;--------------------------------
 ; General
@@ -101,7 +105,7 @@
 
 	# Default installation folder
 	InstallDir "$PROGRAMFILES\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}"
-	
+
 	# Registry install key
 	InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 
@@ -110,16 +114,16 @@
 
 	# Do not show the NSIS message at the bottom
 	BrandingText "${PRODUCT_PUBLISHER}"
-	
+
 	# Don't auto-close the window when install finishes
 	AutoCloseWindow false
-	
+
 	# Show the language selection dialog
 	Function .onInit
 		!insertmacro MUI_LANGDLL_DISPLAY
 		Exec "$INSTDIR\uninstall.exe"
 	FunctionEnd
-	
+
 	# Make sure to show the installer in the proper language
 	Function un.onInit
 		!insertmacro MUI_UNGETLANGUAGE
@@ -147,11 +151,15 @@
 		SetOutPath "$INSTDIR"
 		File "${APP_BIN}\silverlock.exe"
 		File "${APP_BIN}\silverlocklib1.dll"
+		File "${APP_BIN}\liel1.dll"
 		File "${APP_BIN}\Botan.dll"
+		File "${APP_BIN}\QtSolutions_SingleApplication-2.6.dll"
 		File "${QT_BIN}\mingwm10.dll"
 		File "${QT_BIN}\libgcc_s_dw2-1.dll"
 		File "${QT_BIN}\QtCore4.dll"
 		File "${QT_BIN}\QtGui4.dll"
+		File "${QT_BIN}\QtNetwork4.dll"
+		File "${QT_BIN}\QtSvg4.dll"
 		File "${QT_BIN}\QtXml4.dll"
 		File "D:\Development\Web\PetroulesEnterprisesWebsite\PetroulesEnterprisesWebsite\favicon.ico"
 		CreateDirectory "$INSTDIR\iconengines\"
@@ -161,18 +169,18 @@
 		SetOutPath "$INSTDIR\imageformats"
 		File "${QT_PLUGINS}\imageformats\qico4.dll"
 		File "${QT_PLUGINS}\imageformats\qsvg4.dll"
-		
+
 		# Create start menu shortcuts only if the user selected them
 		!insertmacro MUI_STARTMENU_WRITE_BEGIN "${PRODUCT_NAME}"
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LANG_CaptionMainApp).lnk" "$INSTDIR\silverlock.exe" "" "$INSTDIR\silverlock.exe" 0 SW_SHOWNORMAL "" $(LANG_CaptionMainApp)
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LANG_Website).lnk" "${PRODUCT_WEB_SITE}" "" "$INSTDIR\favicon.ico" 0 SW_SHOWNORMAL "" $(LANG_CaptionWebsite)
 		!insertmacro MUI_STARTMENU_WRITE_END
-		
+
 		# Create file associations
 		${registerExtension} "$INSTDIR\silverlock.exe" ".sdbx" "Silverlock Database"
 	SectionEnd
-	
+
 	# Actions performed after the installation has been completed
 	Section -Post
 		WriteUninstaller "$INSTDIR\uninstall.exe" ; Create the uninstaller program
@@ -187,7 +195,7 @@
 		SectionGetSize ${SecCoreFiles} $0
 		WriteRegDWORD ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "EstimatedSize" $0
 	SectionEnd
- 
+
 ;--------------------------------
 ; Uninstaller Section
 
@@ -231,11 +239,11 @@
 		Abort
 	done:
 	!macroend
-	
+
 	# Macro to remove uninstaller only IF all components are gone
 	!macro un.RemoveUninstaller
 		ReadRegStr $StartMenuFolder ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "StartMenuFolder"
-	
+
 		; The way this works, +1 means simply go to the next instruction.
 		; So unless the files DO exist (in which case it jumps to LeaveUninstaller and does nothing),
 		; it continues to next instruction - doing exactly what we want.
@@ -250,19 +258,23 @@
 			DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
 		LeaveUninstaller:
 	!macroend
-	
+
 	# Uninstalls the core files
 	Section "un.${PRODUCT_NAME} ${PRODUCT_VERSION}" UnSecCoreFiles
 		!insertmacro BadPathsCheck ; Make sure the uninstall path isn't dangerous
 		ReadRegStr $StartMenuFolder ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "StartMenuFolder"
-		
+
 		Delete "$INSTDIR\silverlock.exe"
 		Delete "$INSTDIR\silverlocklib1.dll"
+		Delete "$INSTDIR\liel1.dll"
 		Delete "$INSTDIR\Botan.dll"
+		Delete "$INSTDIR\QtSolutions_SingleApplication-2.6.dll"
 		Delete "$INSTDIR\mingwm10.dll"
 		Delete "$INSTDIR\libgcc_s_dw2-1.dll"
 		Delete "$INSTDIR\QtCore4.dll"
 		Delete "$INSTDIR\QtGui4.dll"
+		Delete "$INSTDIR\QtNetwork4.dll"
+		Delete "$INSTDIR\QtSvg4.dll"
 		Delete "$INSTDIR\QtXml4.dll"
 		Delete "$INSTDIR\favicon.ico"
 		# Not removing INSTDIR here because the finalizer does that
@@ -271,16 +283,16 @@
 		Delete "$INSTDIR\imageformats\qico4.dll"
 		Delete "$INSTDIR\imageformats\qsvg4.dll"
 		RMDir "$INSTDIR\imageformats"
-		
+
 		Delete "$SMPROGRAMS\$StartMenuFolder\$(LANG_CaptionMainApp).lnk"
 		# Not removing StartMenuFolder here because the finalizer does that
-		
+
 		# Remove file association
 		${unregisterExtension} ".sdbx" "Silverlock Database"
-		
+
 		!insertmacro un.RemoveUninstaller ; Remove the uninstaller if it should be removed
 	SectionEnd
-	
+
 	# Optionally uninstalls user settings and preferences
 	Section /o "un.${PRODUCT_NAME} $(LANG_Settings)" UnSecSettings ; We have /o here to uncheck this by default
 		DeleteRegKey HKCU "Software\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}"
@@ -294,7 +306,7 @@
 	!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecCoreFiles} $(LANG_SecCoreFiles)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
-	
+
 	# Assign language strings to uninstaller sections
 	!insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
 	!insertmacro MUI_DESCRIPTION_TEXT ${UnSecCoreFiles} $(LANG_UnSecCoreFiles)

@@ -12,8 +12,8 @@ class SILVERLOCKLIBSHARED_EXPORT DatabaseWriter : public QObject
     Q_OBJECT
 
 public:
-    explicit DatabaseWriter(QObject *parent = 0);
-    bool write(const Database *const database, QIODevice &device) const;
+    explicit DatabaseWriter(QObject *parent = NULL);
+    bool write(const Database *const database, QIODevice &device, bool encrypt = true) const;
 
 private:
     void append(QDomDocument &document, QDomNode &element, const Group *const group) const;

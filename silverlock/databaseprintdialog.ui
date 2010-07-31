@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DatabasePrintDialog</class>
+ <widget class="QDialog" name="DatabasePrintDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>991</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Print</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="1" rowspan="2">
+    <widget class="QTextBrowser" name="textBrowser"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="searchInGroupBox">
+     <property name="title">
+      <string>Include fields</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="titleCheckBox">
+        <property name="text">
+         <string>Title</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="urlCheckBox">
+        <property name="text">
+         <string>URL</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QCheckBox" name="usernameCheckBox">
+        <property name="text">
+         <string>Username</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QCheckBox" name="passwordCheckBox">
+        <property name="text">
+         <string>Password</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="notesCheckBox">
+        <property name="text">
+         <string>Notes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QCheckBox" name="recoveryInfoCheckBox">
+        <property name="text">
+         <string>Recovery questions &amp;&amp; answers</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QCheckBox" name="customFieldsCheckBox">
+        <property name="text">
+         <string>Custom fields</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QCheckBox" name="creationTimeCheckBox">
+        <property name="text">
+         <string>Creation time</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QCheckBox" name="accessTimeCheckBox">
+        <property name="text">
+         <string>Last access time</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QCheckBox" name="modificationTimeCheckBox">
+        <property name="text">
+         <string>Last modification time</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="4">
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="selectionLabel">
+        <property name="text">
+         <string>&lt;a href=&quot;#select-all&quot;&gt;Select All&lt;/a&gt; &amp;bull; &lt;a href=&quot;#clear-all&quot;&gt;Clear All&lt;/a&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="uuidCheckBox">
+        <property name="text">
+         <string>UUID</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="1">
+    <widget class="QCheckBox" name="showActualCheckBox">
+     <property name="text">
+      <string>Show my database contents</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="printPushButton">
+       <property name="text">
+        <string>Print</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelPushButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>titleCheckBox</tabstop>
+  <tabstop>urlCheckBox</tabstop>
+  <tabstop>usernameCheckBox</tabstop>
+  <tabstop>passwordCheckBox</tabstop>
+  <tabstop>notesCheckBox</tabstop>
+  <tabstop>recoveryInfoCheckBox</tabstop>
+  <tabstop>customFieldsCheckBox</tabstop>
+  <tabstop>uuidCheckBox</tabstop>
+  <tabstop>creationTimeCheckBox</tabstop>
+  <tabstop>accessTimeCheckBox</tabstop>
+  <tabstop>modificationTimeCheckBox</tabstop>
+  <tabstop>textBrowser</tabstop>
+  <tabstop>showActualCheckBox</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>selectionLabel</sender>
+   <signal>linkActivated(QString)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>selectionLinkActivated(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>81</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>77</x>
+     <y>575</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>titleCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>57</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>119</x>
+     <y>-57</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>urlCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>138</x>
+     <y>38</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>143</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>usernameCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>255</x>
+     <y>35</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>253</x>
+     <y>-7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>passwordCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>390</x>
+     <y>37</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>388</x>
+     <y>-6</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>notesCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>35</x>
+     <y>61</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-4</x>
+     <y>60</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recoveryInfoCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>60</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-3</x>
+     <y>52</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>customFieldsCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>427</x>
+     <y>64</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>484</x>
+     <y>-10</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>uuidCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>41</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-4</x>
+     <y>89</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>creationTimeCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>41</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-5</x>
+     <y>117</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>accessTimeCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>156</x>
+     <y>116</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-4</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modificationTimeCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>244</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-9</x>
+     <y>185</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>showActualCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>updatePreview()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>492</x>
+     <y>434</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>492</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancelPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>956</x>
+     <y>467</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>958</x>
+     <y>547</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>printPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>DatabasePrintDialog</receiver>
+   <slot>print()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>866</x>
+     <y>462</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>876</x>
+     <y>515</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>selectionLinkActivated(QString)</slot>
+  <slot>updatePreview()</slot>
+  <slot>print()</slot>
+ </slots>
+</ui>

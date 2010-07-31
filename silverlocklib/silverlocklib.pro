@@ -9,7 +9,6 @@ DEFINES += SILVERLOCKLIB_LIBRARY
 SOURCES += database.cpp \
     entry.cpp \
     group.cpp \
-    qversion.cpp \
     databasenode.cpp \
     databasereader.cpp \
     databasewriter.cpp \
@@ -21,19 +20,22 @@ HEADERS += silverlocklib_global.h \
     group.h \
     version.h \
     silverlocklib.h \
-    qversion.h \
     database_keys.h \
     databasenode.h \
     databasereader.h \
     databasewriter.h \
     searchparameters.h \
-    databasecrypto.h
+    databasecrypto.h \
+    stable.h
+PRECOMPILED_HEADER = stable.h
 FORMS +=
 OTHER_FILES += silverlocklib.rc
-win32:INCLUDEPATH += ../botan/build
-win32:debug:LIBS += -L../botan/src/debug -lbotan
-win32:release:LIBS += -L../botan/src/release -lbotan
 DESTDIR = ../bin
+INCLUDEPATH += ../../liel/c++/liel ../botan/build
+LIBS += -L../../liel/liel-build-desktop/bin -L../bin -lBotan
+win32:LIBS += -lliel1
+macx:LIBS += -lliel.1
+linux-g++:LIBS += -lliel
 
 # General information
 VERSION = 1.0

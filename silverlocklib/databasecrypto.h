@@ -54,8 +54,8 @@ public:
 
 private:
     explicit DatabaseCrypto(QObject *parent = 0);
-    static std::string b64_encode(const SecureVector<byte> &in);
-    static SecureVector<byte> b64_decode(const std::string &in);
+    static std::string b64_encode(const SecureVector<Botan::byte> &in);
+    static SecureVector<Botan::byte> b64_decode(const std::string &in);
 };
 
 #endif // DATABASECRYPTO_H

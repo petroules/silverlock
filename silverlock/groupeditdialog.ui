@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>138</height>
+    <height>196</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -60,6 +60,19 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="1">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="advancedTab">
@@ -67,27 +80,69 @@
        <string>Advanced</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="1">
+       <item row="0" column="1" colspan="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>360</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="1" column="0">
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="createdLabel">
+         <property name="text">
+          <string>Created:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLineEdit" name="createdLineEdit">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="accessedLabel">
+         <property name="text">
+          <string>Accessed:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLineEdit" name="accessedLineEdit">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QLabel" name="modifiedLabel">
+         <property name="text">
+          <string>Modified:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLineEdit" name="modifiedLineEdit">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
         <widget class="QLabel" name="uuidLabel">
          <property name="text">
           <string>UUID:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="4" column="2">
         <widget class="QLineEdit" name="uuidLineEdit">
          <property name="readOnly">
           <bool>true</bool>
@@ -110,6 +165,17 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>titleLineEdit</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+  <tabstop>revealToolButton</tabstop>
+  <tabstop>createdLineEdit</tabstop>
+  <tabstop>accessedLineEdit</tabstop>
+  <tabstop>modifiedLineEdit</tabstop>
+  <tabstop>uuidLineEdit</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -119,8 +185,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>186</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -135,8 +201,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>186</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -144,5 +210,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>revealToolButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>GroupEditDialog</receiver>
+   <slot>hidePassword(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>320</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>348</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>hidePassword(bool)</slot>
+ </slots>
 </ui>

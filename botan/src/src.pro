@@ -2,6 +2,7 @@ TEMPLATE = lib
 TARGET = Botan
 
 CONFIG += dll
+DESTDIR = ../../bin
 
 include(../../../../qtcreatorlibrary.pri)
 

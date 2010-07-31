@@ -1,17 +1,25 @@
 #ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 
-#include <QtCore>
 #include <QtGui>
 
-class AboutDialog
+namespace Ui {
+    class AboutDialog;
+}
+
+class AboutDialog : public QDialog
 {
+    Q_OBJECT
+
 public:
-    static void show(QWidget* parent, const QString& title, const QString& description);
+    explicit AboutDialog(QWidget *parent = 0);
+    ~AboutDialog();
+
 private:
-    static QString osString();
-    static QString byteOrder();
-    static int wordSize();
+    Ui::AboutDialog *ui;
+
+private slots:
+    void on_licensePushButton_clicked();
 };
 
 #endif // ABOUTDIALOG_H

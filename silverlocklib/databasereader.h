@@ -17,7 +17,7 @@ public:
     QString errorString();
 
 private:
-    void readGroup(Group *const group, const QDomElement &element, bool &process);
+    void readGroup(Group *const group, const QDomElement &element);
     QString m_errorString;
 };
 

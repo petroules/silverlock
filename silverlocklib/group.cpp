@@ -10,9 +10,8 @@
  */
 
 Group::Group(const QString &title, Group *parent) :
-    DatabaseNode()
+    DatabaseNode(title)
 {
-    this->setTitle(title);
     this->setParentNode(parent);
 }
 
@@ -280,8 +279,7 @@ void Group::detachFromList()
 
 QDomElement Group::toXml(QDomDocument &document) const
 {
-    QDomElement element = document.createElement(XML_GROUP);
-    element.setAttribute(XML_UUID, this->uuid().toString());
-    element.setAttribute(XML_TITLE, this->title());
+    QDomElement element = DatabaseNode::toXml(document);
+    element.setTagName(XML_GROUP);
     return element;
 }

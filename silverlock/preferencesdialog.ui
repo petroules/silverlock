@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>737</width>
+    <height>465</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,37 +15,456 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="currentIndex">
-      <number>0</number>
-     </property>
-     <widget class="QWidget" name="interfaceTab">
-      <attribute name="title">
-       <string>Interface</string>
-      </attribute>
-      <widget class="QCheckBox" name="checkBoxExpandTreeViewNodes">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>205</width>
-         <height>17</height>
-        </rect>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
        </property>
-       <property name="toolTip">
-        <string>Check this box to expand nodes in the left-hand tree view automatically when a database is opened.</string>
-       </property>
-       <property name="text">
-        <string>Expand tree view nodes automatically</string>
-       </property>
+       <widget class="QWidget" name="securityTab">
+        <attribute name="title">
+         <string>Security</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="lockWorkspaceTimeoutCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will cause each open Silverlock window to lock its workspace after you have not interacted with the window (by using the mouse or keyboard in any way while the window is in focus) for the specified amount of time.</string>
+           </property>
+           <property name="text">
+            <string>Automatically lock the interface after the period of inactivity:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="lockWorkspaceTimeoutSpinBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="suffix">
+            <string> seconds</string>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>31536000</number>
+           </property>
+           <property name="value">
+            <number>300</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="autoClearClipboardCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will automatically clear the clipboard the specified amount of time after some text is copied from the entry table. This will not affect copy and paste operations done outside of the entry table or outside of Silverlock.</string>
+           </property>
+           <property name="text">
+            <string>Automatically clear the clipboard after:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QCheckBox" name="autoExitCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will cause Silverlock to automatically exit after you have not interacted with any window (by using the mouse or keyboard in any way while the window is in focus) for the specified amount of time.</string>
+           </property>
+           <property name="text">
+            <string>Automatically exit Silverlock after:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0" colspan="3">
+          <widget class="QCheckBox" name="lockWhenMinimizingCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will automatically lock the interface whenever the window is minimized.</string>
+           </property>
+           <property name="text">
+            <string>Lock interface when minimizing main window</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0" colspan="2">
+          <widget class="QCheckBox" name="clearClipboardWhenClosingCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will cause Silverlock to clear the clipboard each time one of its windows is closed.</string>
+           </property>
+           <property name="text">
+            <string>Clear clipboard when Silverlock is closed</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="autoClearClipboardSpinBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="suffix">
+            <string> seconds</string>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>31536000</number>
+           </property>
+           <property name="value">
+            <number>15</number>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="autoExitSpinBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="suffix">
+            <string> seconds</string>
+           </property>
+           <property name="minimum">
+            <number>60</number>
+           </property>
+           <property name="maximum">
+            <number>31536000</number>
+           </property>
+           <property name="value">
+            <number>900</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="interfaceTab">
+        <attribute name="title">
+         <string>Interface</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QCheckBox" name="minimizeToTrayCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will automatically hide the window when it is minimized. It can be restored again by clicking Silverlock's system tray icon.</string>
+           </property>
+           <property name="text">
+            <string>Minimize to system tray instead of taskbar or dock</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="minimizeAfterClipboardCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will automatically minimize Silverlock whenever data is copied to the clipboard in the entry view. This will not affect clipboard operations outside the entry view or outside of Silverlock.</string>
+           </property>
+           <property name="text">
+            <string>Minimize Silverlock after copying data to the clipboard</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="minimizeAfterLockCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will minimize the Silverlock window whenever the interface is locked.</string>
+           </property>
+           <property name="text">
+            <string>Minimize Silverlock after locking the interface</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="clearRecentFilesListPushButton">
+             <property name="whatsThis">
+              <string>Pressing this button down will clear the list of files recently opened by Silverlock after the OK button is pressed.</string>
+             </property>
+             <property name="text">
+              <string>Clear recent files list</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="clearWindowSettingsPushButton">
+             <property name="whatsThis">
+              <string>Pressing this button down will clear window position and size settings as well as the ordering, visibility and size of columns in the entry view after the OK button is pressed. The action will not take effect until Silverlock is restarted.</string>
+             </property>
+             <property name="text">
+              <string>Clear window settings</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="systemTab">
+        <attribute name="title">
+         <string>System</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QCheckBox" name="runAtStartupCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will cause Silverlock to automatically run whenever the user logs in to Windows.</string>
+           </property>
+           <property name="text">
+            <string>Run Silverlock at startup (Windows only)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="fileAssociationsGroupBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="title">
+            <string>File associations</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="securityWarningLabel">
+              <property name="text">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600; color:#ff0000;&quot;&gt;WARNING:&lt;/span&gt;&lt;span style=&quot; font-size:8pt; color:#ff0000;&quot;&gt; Changing file association settings will take effect immediately and will not be restored by clicking the Cancel button.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt; color:#ff0000;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="fileAssociationsLabel">
+              <property name="text">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;On Windows, SDBX files can be associated with Silverlock. When you double-click an SDBX file in Windows Explorer, it will open in Silverlock if this option is set.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QPushButton" name="createAssocPushButton">
+                <property name="whatsThis">
+                 <string>Clicking this button will immediately set SDBX files to be associated with Silverlock in Windows Explorer.</string>
+                </property>
+                <property name="text">
+                 <string>Create Association</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="removeAssocPushButton">
+                <property name="whatsThis">
+                 <string>Clicking this button will immediately remove the SDBX file association from Windows Explorer.</string>
+                </property>
+                <property name="text">
+                 <string>Remove association</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="fileAssociationStatusLabel">
+              <property name="text">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;SDBX file associations are currently &lt;span style=&quot; font-weight:600;&quot;&gt;%1&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="fileAssociationsMoreLabel">
+              <property name="text">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;On Mac OS X, file associations are assigned using Silverlock's application bundle and cannot be modified.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;File associations are not currently supported on Linux systems.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>147</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="advancedTab">
+        <attribute name="title">
+         <string>Advanced</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QCheckBox" name="openLastDatabaseCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will cause the file most recently opened by Silverlock to be opened automatically when Silverlock starts.</string>
+           </property>
+           <property name="text">
+            <string>Automatically open the last used database on startup</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="updateOnStartupCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will cause Silverlock to check for updates in the background each time the application is run. It is strongly recommended that you do not disable this option.</string>
+           </property>
+           <property name="text">
+            <string>Check for updates when Silverlock is started</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="autoSaveOnCloseCheckBox">
+           <property name="whatsThis">
+            <string>Checking this option will attempt to automatically save unsaved chanages to a database when the window is closed or the interface is locked. However, if the database does not have a file name set (e.g. you created a new file but have not yet saved it) the user still still be prompted.</string>
+           </property>
+           <property name="text">
+            <string>Automatically save changes to the database when the window is closed or the interface is locked</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>302</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
       </widget>
-     </widget>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>Tab 2</string>
-      </attribute>
-     </widget>
-    </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -59,6 +478,29 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>lockWorkspaceTimeoutCheckBox</tabstop>
+  <tabstop>lockWorkspaceTimeoutSpinBox</tabstop>
+  <tabstop>autoClearClipboardCheckBox</tabstop>
+  <tabstop>autoClearClipboardSpinBox</tabstop>
+  <tabstop>autoExitCheckBox</tabstop>
+  <tabstop>autoExitSpinBox</tabstop>
+  <tabstop>lockWhenMinimizingCheckBox</tabstop>
+  <tabstop>clearClipboardWhenClosingCheckBox</tabstop>
+  <tabstop>minimizeToTrayCheckBox</tabstop>
+  <tabstop>minimizeAfterClipboardCheckBox</tabstop>
+  <tabstop>minimizeAfterLockCheckBox</tabstop>
+  <tabstop>clearRecentFilesListPushButton</tabstop>
+  <tabstop>clearWindowSettingsPushButton</tabstop>
+  <tabstop>runAtStartupCheckBox</tabstop>
+  <tabstop>createAssocPushButton</tabstop>
+  <tabstop>removeAssocPushButton</tabstop>
+  <tabstop>openLastDatabaseCheckBox</tabstop>
+  <tabstop>updateOnStartupCheckBox</tabstop>
+  <tabstop>autoSaveOnCloseCheckBox</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -68,8 +510,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>455</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -84,12 +526,60 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>455</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lockWorkspaceTimeoutCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>lockWorkspaceTimeoutSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>240</x>
+     <y>48</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>382</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>autoClearClipboardCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>autoClearClipboardSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>244</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>386</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>autoExitCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>autoExitSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>251</x>
+     <y>105</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>102</y>
     </hint>
    </hints>
   </connection>

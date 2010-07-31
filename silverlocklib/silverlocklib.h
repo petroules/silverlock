@@ -11,7 +11,4 @@
 #include "databasewriter.h"
 #include "databasecrypto.h"
 
-// This should be moved to LIEL
-#include "qversion.h"
-
 #endif // SILVERLOCKLIB_H

@@ -3,7 +3,7 @@
 
 DocumentState::DocumentState(QObject *parent) :
     QObject(parent), m_database(NULL), m_currentFile(NULL),
-    m_isUntitled(true)
+    m_isUntitled(true), m_isLocked(false)
 {
 }
 
@@ -53,8 +53,13 @@ bool DocumentState::hasDocument() const
 void DocumentState::load(Database *database)
 {
     this->close();
-    this->m_database = database;
-    QObject::connect(this->m_database, SIGNAL(modified()), this, SIGNAL(modified()));
+
+    // Store the database reference and check if it's not NULL
+    if ((this->m_database = database))
+    {
+        QObject::connect(this->m_database, SIGNAL(modified()), this, SIGNAL(modified()));
+    }
+
     emit this->stateChanged();
 }
 
@@ -69,4 +74,27 @@ void DocumentState::close()
 
     this->setCurrentFile(QString());
     this->setUntitled(true);
+}
+
+bool DocumentState::isLocked() const
+{
+    return this->m_isLocked;
+}
+
+void DocumentState::lock()
+{
+    if (!this->m_isLocked)
+    {
+        this->m_isLocked = true;
+        emit this->stateChanged();
+    }
+}
+
+void DocumentState::unlock()
+{
+    if (this->m_isLocked)
+    {
+        this->m_isLocked = false;
+        emit this->stateChanged();
+    }
 }

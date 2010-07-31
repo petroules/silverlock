@@ -1,7 +1,7 @@
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
-#include <QtGui>
+#include "guardeddialog.h"
 
 class SilverlockPreferences;
 
@@ -9,28 +9,30 @@ namespace Ui {
     class PreferencesDialog;
 }
 
-class PreferencesDialog : public QDialog
+class PreferencesDialog : public GuardedDialog
 {
     Q_OBJECT
 
 public:
-    explicit PreferencesDialog(SilverlockPreferences *preferences, QWidget *parent = 0);
+    explicit PreferencesDialog(QWidget *parent = NULL);
     ~PreferencesDialog();
-    SilverlockPreferences* preferences() const;
-    void setPreferences(SilverlockPreferences *preferences);
 
-public slots:
-    void accept();
+protected:
+    void load();
+    void save();
+    void getMessages(QStringList &errors, QStringList &warnings, QStringList &information) const;
 
 private:
-    void load();
-    void save() const;
+    void updateFileAssociationState();
+    void load(const SilverlockPreferences &prefs);
     void restoreDefaults();
 
     Ui::PreferencesDialog *ui;
     SilverlockPreferences *m_preferences;
 
 private slots:
+    void on_removeAssocPushButton_clicked();
+    void on_createAssocPushButton_clicked();
     void on_buttonBox_clicked(QAbstractButton* button);
 };
 

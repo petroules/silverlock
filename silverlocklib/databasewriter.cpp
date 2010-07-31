@@ -19,23 +19,28 @@ DatabaseWriter::DatabaseWriter(QObject *parent) :
     to write the database contents to the device with a 4 character tab width. If the
     device is not open or writable, the method immediately returns false.
  */
-bool DatabaseWriter::write(const Database *const database, QIODevice &device) const
+bool DatabaseWriter::write(const Database *const database, QIODevice &device, bool encrypt) const
 {
-    QDomDocument document(XML_DATABASE);
+    QDomDocument document(XML_DOCTYPE);
 
     this->append(document, document, database);
 
     if (device.isOpen() && device.isWritable())
     {
-        DatabaseCrypto::CryptoStatus status;
-        QString encrypted = DatabaseCrypto::encrypt(document.toString(4), database->password(), &status);
-        if (status != DatabaseCrypto::NoError)
+        QString fileDataString = document.toString(4);
+
+        if (encrypt)
         {
-            return false;
+            DatabaseCrypto::CryptoStatus status;
+            fileDataString = DatabaseCrypto::encrypt(fileDataString, database->password(), &status);
+            if (status != DatabaseCrypto::NoError)
+            {
+                return false;
+            }
         }
 
         QTextStream ts(&device);
-        ts << encrypted;
+        ts << fileDataString;
         return true;
     }
 

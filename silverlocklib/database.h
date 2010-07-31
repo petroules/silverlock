@@ -2,19 +2,19 @@
 #define DATABASE_H
 
 #include "silverlocklib_global.h"
-#include "group.h"
-#include "qversion.h"
 #include <QtXml>
+#include <liel.h>
+#include "group.h"
 
 class SILVERLOCKLIBSHARED_EXPORT Database : public Group
 {
     Q_OBJECT
-    Q_PROPERTY(QVersion version READ version)
-    Q_PROPERTY(QString title READ title WRITE setTitle)
     Q_PROPERTY(QString password READ password WRITE setPassword)
 
+    friend class DatabaseReader;
+
 public:
-    Database(const QString &name, const QString &password);
+    Database(const QString &title = QString(), const QString &password = QString());
     ~Database();
     static QVersion version();
     QString password() const;
@@ -25,6 +25,7 @@ public:
 protected:
     void attachToList();
     void detachFromList();
+    void fromXml(const QDomElement &element);
 
 private:
     QString m_password;

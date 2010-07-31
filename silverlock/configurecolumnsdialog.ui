@@ -38,11 +38,6 @@
      </row>
      <row>
       <property name="text">
-       <string>Email address</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
        <string>Notes</string>
       </property>
      </row>
@@ -113,6 +108,10 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tableWidget</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

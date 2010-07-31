@@ -5,5 +5,7 @@
         <file>res/print_preview.png</file>
         <file>res/app.svg</file>
         <file>res/new.png</file>
+        <file>res/iexplore.png</file>
+        <file>res/LaunchAgent.plist</file>
     </qresource>
 </RCC>

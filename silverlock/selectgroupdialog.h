@@ -18,8 +18,6 @@ class SelectGroupDialog : public QDialog
 public:
     explicit SelectGroupDialog(QWidget *parent = 0);
     ~SelectGroupDialog();
-    SilverlockPreferences* preferences() const { return this->ui->groupBrowser->preferences(); }
-    void setPreferences(SilverlockPreferences *preferences) { this->ui->groupBrowser->setPreferences(preferences); }
     QUuid selectedUuid() const { return this->ui->groupBrowser->selectedUuid(); }
     QList<QUuid> selectedUuids() const { return this->ui->groupBrowser->selectedUuids(); }
     void populate(Database *const database) { this->ui->groupBrowser->populate(database); }

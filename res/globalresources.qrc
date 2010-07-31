@@ -1,7 +1,9 @@
 <RCC>
     <qresource prefix="/main">
         <file>license/botan.txt</file>
-        <file>license/license.html</file>
-        <file>license/license.txt</file>
+        <file>license/gpl-3.0.txt</file>
+        <file>license/lgpl-2.1.txt</file>
+        <file>license/qsa-exception.txt</file>
+        <file>license/qt-exception.txt</file>
     </qresource>
 </RCC>

@@ -5,9 +5,11 @@
 
 GroupBrowserWidget::GroupBrowserWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::GroupBrowserWidget), m_preferences(NULL)
+    ui(new Ui::GroupBrowserWidget)
 {
     this->ui->setupUi(this);
+    this->ui->treeBrowser->sortByColumn(0, Qt::AscendingOrder);
+
     QObject::connect(this->ui->treeBrowser, SIGNAL(itemSelectionChanged()), SIGNAL(itemSelectionChanged()));
     QObject::connect(this->ui->treeBrowser, SIGNAL(customContextMenuRequested(QPoint)), SIGNAL(customContextMenuRequested(QPoint)));
 }
@@ -15,16 +17,6 @@ GroupBrowserWidget::GroupBrowserWidget(QWidget *parent) :
 GroupBrowserWidget::~GroupBrowserWidget()
 {
     delete this->ui;
-}
-
-SilverlockPreferences* GroupBrowserWidget::preferences() const
-{
-    return this->m_preferences;
-}
-
-void GroupBrowserWidget::setPreferences(SilverlockPreferences *preferences)
-{
-    this->m_preferences = preferences;
 }
 
 bool GroupBrowserWidget::multiselect() const
@@ -100,10 +92,7 @@ void GroupBrowserWidget::populate(Database *const database)
     this->populate(parentItem, database);
 
     // Then expand all the nodes
-    if (this->m_preferences->expandTreeViewNodes())
-    {
-        this->ui->treeBrowser->expandAll();
-    }
+    this->ui->treeBrowser->expandAll();
 }
 
 /*!

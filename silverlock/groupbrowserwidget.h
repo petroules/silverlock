@@ -20,8 +20,6 @@ class GroupBrowserWidget : public QWidget
 public:
     explicit GroupBrowserWidget(QWidget *parent = 0);
     ~GroupBrowserWidget();
-    SilverlockPreferences* preferences() const;
-    void setPreferences(SilverlockPreferences *preferences);
     bool multiselect() const;
     void setMultiselect(bool on);
     QUuid selectedUuid() const;

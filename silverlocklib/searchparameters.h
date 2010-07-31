@@ -26,9 +26,9 @@ public:
     bool searchUrl;
     bool searchUsername;
     bool searchPassword;
-    bool searchEmailAddress;
     bool searchNotes;
     bool searchRecovery;
+    bool searchCustomFields;
     bool searchGroupTitle;
     bool searchUuid;
 

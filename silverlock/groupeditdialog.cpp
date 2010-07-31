@@ -16,14 +16,13 @@
     \param parent The parent widget of the dialog.
  */
 GroupEditDialog::GroupEditDialog(Group *group, QWidget *parent) :
-    QDialog(parent),
+    GuardedDialog(parent),
     ui(new Ui::GroupEditDialog), m_group(group)
 {
     this->ui->setupUi(this);
-    this->read();
+    this->load();
 
-    // Connect our show/hide password button and hide the password by default
-    QObject::connect(this->ui->revealToolButton, SIGNAL(toggled(bool)), this, SLOT(hidePassword(bool)));
+    // Hide the password by default
     this->ui->revealToolButton->setChecked(true);
 }
 
@@ -65,21 +64,24 @@ Group* GroupEditDialog::group() const
 void GroupEditDialog::setGroup(Group *group)
 {
     this->m_group = group;
-    this->read();
+    this->load();
 }
 
 /*!
     Populates the dialog fields with data from the group instance.
  */
-void GroupEditDialog::read()
+void GroupEditDialog::load()
 {
     if (this->m_group)
     {
         // Basic information
         this->ui->titleLineEdit->setText(this->m_group->title());
 
-        // UUID
+        // Read-only info
         this->ui->uuidLineEdit->setText(this->m_group->uuid().toString());
+        this->ui->createdLineEdit->setText(this->m_group->created().toLocalTime().toString(Qt::SystemLocaleLongDate));
+        this->ui->accessedLineEdit->setText(this->m_group->accessed().toLocalTime().toString(Qt::SystemLocaleLongDate));
+        this->ui->modifiedLineEdit->setText(this->m_group->modifiedTime().toLocalTime().toString(Qt::SystemLocaleLongDate));
 
         Database *db = dynamic_cast<Database*>(this->m_group);
         if (db)
@@ -97,7 +99,7 @@ void GroupEditDialog::read()
 /*!
     Updates the group with data from the dialog fields.
  */
-void GroupEditDialog::write() const
+void GroupEditDialog::save()
 {
     if (this->m_group)
     {
@@ -112,37 +114,16 @@ void GroupEditDialog::write() const
     }
 }
 
-/*!
-    Closes the dialog and saves any changes if there are no input errors,
-    or displays an error message if there are input errors.
- */
-void GroupEditDialog::accept()
+void GroupEditDialog::getMessages(QStringList &errors, QStringList &warnings, QStringList &information) const
 {
-    QString errorString = this->inputErrorString();
-    if (errorString.isEmpty())
-    {
-        this->write();
-        QDialog::accept();
-    }
-    else
-    {
-        QMessageBox::critical(this, tr("Error"), tr("The following input errors have occurred:") + errorString);
-    }
-}
+    Q_UNUSED(errors);
+    Q_UNUSED(information);
 
-/*!
-    Gets an HTML-formatted string containing the list of input errors, or an empty string if there are no errors.
- */
-QString GroupEditDialog::inputErrorString() const
-{
-    QString errorString;
-
-    if (!errorString.isEmpty())
+    // If we're editing a database and the password box is empty...
+    if (this->m_group && dynamic_cast<Database*>(this->m_group) && this->ui->passwordLineEdit->text().isEmpty())
     {
-        return "<ul>" + errorString + "</ul>";
+        warnings.append(tr("For security purposes, it is not recommended to use a blank password. Using a blank password is the same as using no password at all."));
     }
-
-    return errorString;
 }
 
 /*!

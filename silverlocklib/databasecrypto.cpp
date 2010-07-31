@@ -85,7 +85,7 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, Cr
     }
     catch (std::exception &e)
     {
-        std::cout << "Exception caught: " << e.what() << std::endl;
+        std::cout << __FUNCTION__ << e.what() << std::endl;
         if (error)
         {
             *error = UnknownError;
@@ -179,7 +179,7 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
     }
     catch (std::exception &e)
     {
-        std::cout << "Exception caught: " << e.what() << std::endl;
+        std::cout << __FUNCTION__ << e.what() << std::endl;
         if (error)
         {
             *error = UnknownError;
@@ -194,7 +194,7 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
 
     \param in The byte array to encode.
  */
-std::string DatabaseCrypto::b64_encode(const SecureVector<byte> &in)
+std::string DatabaseCrypto::b64_encode(const SecureVector<Botan::byte> &in)
 {
     Pipe pipe(new Base64_Encoder);
     pipe.process_msg(in);
@@ -206,7 +206,7 @@ std::string DatabaseCrypto::b64_encode(const SecureVector<byte> &in)
 
     \param in The base 64 string to decode.
  */
-SecureVector<byte> DatabaseCrypto::b64_decode(const std::string &in)
+SecureVector<Botan::byte> DatabaseCrypto::b64_decode(const std::string &in)
 {
     Pipe pipe(new Base64_Decoder);
     pipe.process_msg(in);

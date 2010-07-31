@@ -1,4 +1,5 @@
 IDI_ICON1   ICON    DISCARDABLE "res/app.ico"
+1           24      DISCARDABLE "silverlock.manifest"
 
 #include <windows.h>
 #include "version.h"

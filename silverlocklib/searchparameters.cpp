@@ -32,9 +32,9 @@ void SearchParameters::setDefaults()
     this->searchUrl = true;
     this->searchUsername = true;
     this->searchPassword = false;
-    this->searchEmailAddress = false;
     this->searchNotes = true;
     this->searchRecovery = false;
+    this->searchCustomFields = true;
     this->searchGroupTitle = false;
     this->searchUuid = false;
     this->useRegex = false;
@@ -56,8 +56,8 @@ Qt::CaseSensitivity SearchParameters::caseSensitiveEnum() const
 bool SearchParameters::fieldsSelected() const
 {
     return this->searchTitle || this->searchUrl || this->searchUsername ||
-        this->searchPassword || this->searchEmailAddress || this->searchNotes ||
-        this->searchRecovery || this->searchGroupTitle || this->searchUuid;
+        this->searchPassword || this->searchNotes || this->searchRecovery ||
+        this->searchCustomFields || this->searchGroupTitle || this->searchUuid;
 }
 
 /*!
@@ -90,11 +90,6 @@ QList<QString> SearchParameters::getDataList(const Entry &entry) const
         dataItems.append(entry.password());
     }
 
-    if (this->searchEmailAddress)
-    {
-        dataItems.append(entry.emailAddress());
-    }
-
     if (this->searchNotes)
     {
         dataItems.append(entry.notes());
@@ -102,7 +97,18 @@ QList<QString> SearchParameters::getDataList(const Entry &entry) const
 
     if (this->searchRecovery)
     {
-        QHashIterator<QString, QString> i(entry.recoveryInfo());
+        QMapIterator<QString, QString> i(entry.recoveryInfo());
+        while (i.hasNext())
+        {
+            i.next();
+            dataItems.append(i.key());
+            dataItems.append(i.value());
+        }
+    }
+
+    if (this->searchCustomFields)
+    {
+        QMapIterator<QString, QString> i(entry.customFields());
         while (i.hasNext())
         {
             i.next();
