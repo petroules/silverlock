@@ -78,8 +78,8 @@ Contact: Petroules Enterprises (&lt;a href=&quot;mailto:support@petroules.com&qu
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>622</width>
-        <height>413</height>
+        <width>319</width>
+        <height>274</height>
        </rect>
       </property>
       <attribute name="label">
@@ -202,6 +202,16 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
        </item>
        <item>
         <widget class="QTextBrowser" name="botanLicense"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="botanAdditionalLabel">
+         <property name="text">
+          <string>The version of Botan used by Silverlock is taken from the Nokia Qt Creator 2.0 sources because it contains several additional files making it easier to integrate Botan with Qt's build system.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

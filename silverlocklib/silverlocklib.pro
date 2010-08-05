@@ -1,6 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2010-04-08T15:35:27
 # -------------------------------------------------
+include(../common.pri)
 QT += network \
     xml
 TARGET = silverlocklib
@@ -33,8 +34,8 @@ TRANSLATIONS += tr/silverlocklib_de.ts \
     tr/silverlocklib_fr.ts
 OTHER_FILES += silverlocklib.rc
 DESTDIR = ../bin
-INCLUDEPATH += ../../liel/c++/liel ../../3rdparty/botan/build
-LIBS += -L../../liel/liel-build-desktop/bin -L../bin -lBotan
+INCLUDEPATH += $$LIEL_HEADERS $$BOTAN_HEADERS
+LIBS += -L$$LIEL_BUILD -L$$BOTAN_BUILD -lBotan
 win32:LIBS += -lliel1
 macx:LIBS += -lliel.1
 linux-g++:LIBS += -lliel
