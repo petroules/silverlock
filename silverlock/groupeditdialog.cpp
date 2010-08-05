@@ -5,8 +5,8 @@
 /*!
     \class GroupEditDialog
 
-    The GroupEditDialog class represents a dialog that
-    allows the user to edit the properties of a Group.
+    The GroupEditDialog class provides a dialog allowing the user to modify the properties of a
+    Group.
  */
 
 /*!
@@ -32,22 +32,6 @@ GroupEditDialog::GroupEditDialog(Group *group, QWidget *parent) :
 GroupEditDialog::~GroupEditDialog()
 {
     delete this->ui;
-}
-
-/*!
-    \internal
- */
-void GroupEditDialog::changeEvent(QEvent *e)
-{
-    QDialog::changeEvent(e);
-    switch (e->type())
-    {
-        case QEvent::LanguageChange:
-            this->ui->retranslateUi(this);
-            break;
-        default:
-            break;
-    }
 }
 
 /*!
@@ -81,7 +65,7 @@ void GroupEditDialog::load()
         this->ui->uuidLineEdit->setText(this->m_group->uuid().toString());
         this->ui->createdLineEdit->setText(this->m_group->created().toLocalTime().toString(Qt::SystemLocaleLongDate));
         this->ui->accessedLineEdit->setText(this->m_group->accessed().toLocalTime().toString(Qt::SystemLocaleLongDate));
-        this->ui->modifiedLineEdit->setText(this->m_group->modifiedTime().toLocalTime().toString(Qt::SystemLocaleLongDate));
+        this->ui->modifiedLineEdit->setText(this->m_group->modified().toLocalTime().toString(Qt::SystemLocaleLongDate));
 
         Database *db = dynamic_cast<Database*>(this->m_group);
         if (db)

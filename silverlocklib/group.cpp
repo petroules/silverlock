@@ -3,12 +3,18 @@
 
 /*!
     \class Group
-    Represents a group of password entries in a database.
 
-    The parent of a group cannot be \c NULL and an assertion failure will
-    result if a \c NULL pointer is passed to any of the constructors.
+    The Group class represents a group of password entries in a Database.
+
+    \sa DatabaseNode, Database, Entry
  */
 
+/*!
+    Constructs a new Group with the specified title and parent.
+
+    \param title The title, or name, of the group.
+    \param parent The parent group node to which this group will belong.
+ */
 Group::Group(const QString &title, Group *parent) :
     DatabaseNode(title)
 {
@@ -37,11 +43,17 @@ Group::~Group()
     }
 }
 
+/*!
+    Gets an immutable reference to the list of this group's child groups.
+ */
 const QList<Group*>& Group::groups() const
 {
     return this->m_groups;
 }
 
+/*!
+    Gets an immutable reference to the list of this group's child entries.
+ */
 const QList<Entry*>& Group::entries() const
 {
     return this->m_entries;
@@ -52,7 +64,7 @@ const QList<Entry*>& Group::entries() const
 
     This method recursively queries each group for its number of subgroups, starting with but not
     counting the current group. If you want to get the number of groups in the current group only
-    (non-recursive), call \link groups().count() \endlink.
+    (non-recursive), call the \c count() method of groups().
 
     \sa countEntries()
  */
@@ -73,7 +85,7 @@ int Group::countGroups() const
 
     This method recursively queries each group for its number of entries, starting with but not
     counting the current group. If you want to get the number of entries in the current group only
-    (non-recursive), call \link entries().count() \endlink.
+    (non-recursive), call the \c count() method of entries().
 
     \sa countGroups()
  */
@@ -133,14 +145,27 @@ bool Group::isEntry(const QUuid &uuid) const
 /*!
     Retrieves a pointer to the group contained in this group node with the specified UUID.
 
-    The recursive search starts from the group specified by \a startingGroup. If \a startingGroup
-    is not contained within this database, a \c NULL pointer is returned.
-
     If no group identified by \a uuid exists, a \c NULL pointer is returned.
 
     \param uuid The UUID to search for.
     \param includeThis Whether to include this group node in the search. If \a uuid is equal to
-    the UUID of this group node, the group node itself will be returned. Otherwise TODO TODO
+    the UUID of this group node, the group node itself will be returned. Otherwise only children
+    and descendants can possibly be returned.
+ */
+const Group* Group::findGroup(const QUuid &uuid, bool includeThis) const
+{
+    if (includeThis && this->uuid() == uuid)
+    {
+        return this;
+    }
+    else
+    {
+        return this->findGroupInternal(uuid);
+    }
+}
+
+/*!
+    \overload Group::findGroup(const QUuid&, bool) const
  */
 Group* Group::findGroup(const QUuid &uuid, bool includeThis)
 {
@@ -154,18 +179,9 @@ Group* Group::findGroup(const QUuid &uuid, bool includeThis)
     }
 }
 
-const Group* Group::findGroup(const QUuid &uuid, bool includeThis) const
-{
-    if (includeThis && this->uuid() == uuid)
-    {
-        return this;
-    }
-    else
-    {
-        return this->findGroupInternal(uuid);
-    }
-}
-
+/*!
+    \internal
+ */
 Group* Group::findGroupInternal(const QUuid &uuid) const
 {
     foreach (Group *group, this->groups())
@@ -191,9 +207,6 @@ Group* Group::findGroupInternal(const QUuid &uuid) const
 
 /*!
     Retrieves a pointer to the entry contained in this group node with the specified UUID.
-
-    The recursive search starts from the group specified by \a startingGroup. If \a startingGroup
-    is not contained within this database, a \c NULL pointer is returned.
 
     If no entry identified by \a uuid exists, a \c NULL pointer is returned.
 
@@ -221,6 +234,11 @@ Entry* Group::findEntry(const QUuid &uuid) const
     return NULL;
 }
 
+/*!
+    Returns a list of entries matching the specified search parameters.
+
+    \param params The search parameters to follow.
+ */
 QList<Entry*> Group::findEntries(const SearchParameters &params) const
 {
     if (!params.fieldsSelected())

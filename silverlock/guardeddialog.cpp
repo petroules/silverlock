@@ -1,10 +1,34 @@
 #include "guardeddialog.h"
 
+/*!
+    \class GuardedDialog
+
+    The GuardedDialog class provides a base for other dialogs which load and save data and may
+    need to display errors or warnings which must be handled by the user before the dialog is
+    accepted.
+ */
+
+/*!
+    Constructs a new GuardedDialog.
+
+    \param parent The parent widget of the dialog.
+ */
 GuardedDialog::GuardedDialog(QWidget *parent) :
     QDialog(parent)
 {
 }
 
+/*!
+    Destroys the dialog.
+ */
+GuardedDialog::~GuardedDialog()
+{
+}
+
+/*!
+    Reimplemented from QDialog::accept() to display error messages, warnings and information
+    before saving information to external objects.
+ */
 void GuardedDialog::accept()
 {
     // Initialize a few string lists to hold messages given by subclasses

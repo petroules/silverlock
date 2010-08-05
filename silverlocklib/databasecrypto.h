@@ -51,6 +51,7 @@ public:
 
     static QString encrypt(const QString &file, const QString &password, CryptoStatus *error = NULL);
     static QString decrypt(const QString &file, const QString &password, CryptoStatus *error = NULL);
+    static QString statusMessage(CryptoStatus status);
 
 private:
     explicit DatabaseCrypto(QObject *parent = 0);

@@ -1,8 +1,26 @@
 #include "configurecolumnsdialog.h"
 #include "ui_configurecolumnsdialog.h"
-#include "entryviewindexes.h"
 #include "entrytablewidget.h"
+#include "entryviewindexes.h"
 
+/*!
+    \class ConfigureColumnsDialog
+
+    The ConfigureColumnsDialog class provides a dialog allowing the user to modify the properties
+    of columns in the main window entry table.
+
+    Users may use the dialog to show or hide columns, or obscure or reveal their contents in the
+    entry table.
+ */
+
+/*!
+    Constructs a new ConfigureColumnsDialog to modify the columns of \a entryTable.
+
+    The dialog does not take ownership of \a entryTable.
+
+    \param entryTable The EntryTableWidget whose columns can be edited by the dialog.
+    \param parent The parent widget of the dialog.
+ */
 ConfigureColumnsDialog::ConfigureColumnsDialog(EntryTableWidget *entryTable, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ConfigureColumnsDialog), m_entryTable(entryTable)
@@ -25,14 +43,27 @@ ConfigureColumnsDialog::ConfigureColumnsDialog(EntryTableWidget *entryTable, QWi
             this->ui->tableWidget->setItem(i, 1, item2);
         }
     }
+    else
+    {
+        qWarning() << __FUNCTION__ << " given NULL EntryTableWidget";
+    }
 }
 
+/*!
+    Destroys the dialog.
+ */
 ConfigureColumnsDialog::~ConfigureColumnsDialog()
 {
     delete this->ui;
 }
 
-void ConfigureColumnsDialog::on_tableWidget_itemChanged(QTableWidgetItem* item)
+/*!
+    Shows or hides the corresponding column of, or obscures or reveals the text of the corresponding
+    column of, \a item.
+
+    \param item The checkbox item that was clicked.
+ */
+void ConfigureColumnsDialog::tableItemChanged(QTableWidgetItem *item)
 {
     if (!this->m_entryTable)
     {

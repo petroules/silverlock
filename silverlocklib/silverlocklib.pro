@@ -29,9 +29,11 @@ HEADERS += silverlocklib_global.h \
     stable.h
 PRECOMPILED_HEADER = stable.h
 FORMS +=
+TRANSLATIONS += tr/silverlocklib_de.ts \
+    tr/silverlocklib_fr.ts
 OTHER_FILES += silverlocklib.rc
 DESTDIR = ../bin
-INCLUDEPATH += ../../liel/c++/liel ../botan/build
+INCLUDEPATH += ../../liel/c++/liel ../../3rdparty/botan/build
 LIBS += -L../../liel/liel-build-desktop/bin -L../bin -lBotan
 win32:LIBS += -lliel1
 macx:LIBS += -lliel.1

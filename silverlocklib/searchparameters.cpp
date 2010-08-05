@@ -8,10 +8,11 @@
     for an search within a password database.
 
     Among the options encapsulated are the fields to be searched, which can be individually set to
-    true or false. The fields that can be searched are: title, URL, username, password, email
-    address, notes, recovery question/answer, group title, and UUID.
+    \c true or \c false. The fields that can be searched are: title, URL, username, password, notes,
+    recovery question/answer, custom fields, group title, and UUID.
 
-    Options to use regular expressions and whether to perform a case-sensitive search are also included.
+    Options to use regular expressions and whether to perform a case-sensitive search are also
+    included.
  */
 
 /*!
@@ -61,10 +62,12 @@ bool SearchParameters::fieldsSelected() const
 }
 
 /*!
-    Gets a list of strings representing the data in a password database entry.
+    Gets a list of strings representing the data in a password entry.
 
     This method is used to search entries by iterating through the list and
     checking whether any of the items match the desired search pattern.
+
+    \param entry The password entry to get the data from.
  */
 QList<QString> SearchParameters::getDataList(const Entry &entry) const
 {

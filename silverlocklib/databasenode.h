@@ -10,6 +10,9 @@ class Group;
 class SILVERLOCKLIBSHARED_EXPORT DatabaseNode : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QDateTime created READ created)
+    Q_PROPERTY(QDateTime accessed READ accessed)
+    Q_PROPERTY(QDateTime modified READ modified)
     Q_PROPERTY(QUuid uuid READ uuid WRITE setUuid)
     Q_PROPERTY(QString title READ title WRITE setTitle)
 
@@ -20,7 +23,7 @@ public:
     QDateTime created() const;
     QDateTime accessed() const;
     void setAccessed();
-    QDateTime modifiedTime() const;
+    QDateTime modified() const;
     QUuid uuid() const;
     QString title() const;
     void setTitle(const QString &title);
@@ -28,22 +31,22 @@ public:
     virtual void setParentNode(Group *node);
     Group* rootNode() const;
     bool hasDatabase() const;
+    virtual QDomElement toXml(QDomDocument &document) const;
 
     /*!
-        Returns whether the item is attached to a parent node.
+        Returns a value indicating whether the item has a parent node.
      */
     inline bool isAttached() const { return this->parentNode(); }
-    virtual QDomElement toXml(QDomDocument &document) const;
 
 signals:
     /*!
         Emitted when the database node or any node in its tree is modified.
 
-        \note Implementation note: when the database tree needs to be notified of modification,
+        \note Implementation note: when the database tree only needs to be notified of modification,
         emit this signal, however when the node data itself has been modified, instead use the
-        \a setModified method. It will emit the \a modified() signal.
+        \a setModified() method. It will emit the \a treeModified() signal.
      */
-    void modified();
+    void treeModified();
 
 protected:
     explicit DatabaseNode(const QString &title = QString());
@@ -51,9 +54,21 @@ protected:
     void setModified();
     void setModified(const QDateTime &modified);
     void detach();
-    virtual void attachToList() = 0;
-    virtual void detachFromList() = 0;
     virtual void fromXml(const QDomElement &element);
+
+    /*!
+        Adds the node to its parent's list of child nodes.
+     */
+    virtual void attachToList() = 0;
+
+    /*!
+        Removes the node from its parent's list of child nodes.
+     */
+    virtual void detachFromList() = 0;
+
+    /*!
+        See parentNode().
+     */
     Group *m_parent;
 
 private:

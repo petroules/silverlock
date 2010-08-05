@@ -3,25 +3,24 @@
 
 #include "guardeddialog.h"
 
-class Entry;
-
 namespace Ui
 {
     class EntryEditDialog;
 }
+
+class Entry;
 
 class EntryEditDialog : public GuardedDialog
 {
     Q_OBJECT
 
 public:
-    EntryEditDialog(Entry *account, QWidget *parent = 0);
+    EntryEditDialog(Entry *account, QWidget *parent = NULL);
     ~EntryEditDialog();
     Entry* entry() const;
     void setEntry(Entry *account);
 
 protected:
-    void changeEvent(QEvent *e);
     void load();
     void save();
     void getMessages(QStringList &errors, QStringList &warnings, QStringList &information) const;
@@ -42,7 +41,7 @@ private:
     bool checkCustomFieldsModified() const;
     bool checkMapModified(QTableWidget *table, const QMap<QString, QString> &map) const;
     void addMapEntry(QTableWidget *table);
-    void removeMapEntrry(QTableWidget *table);
+    void removeMapEntry(QTableWidget *table);
 
 private slots:
     void hidePassword(bool checked);

@@ -3,11 +3,12 @@
 
 #include "guardeddialog.h"
 
-class SilverlockPreferences;
-
-namespace Ui {
+namespace Ui
+{
     class PreferencesDialog;
 }
+
+class SilverlockPreferences;
 
 class PreferencesDialog : public GuardedDialog
 {

@@ -1,6 +1,19 @@
 #include "searchdatabasedialog.h"
 #include "ui_searchdatabasedialog.h"
 
+/*!
+    \class SearchDatabaseDialog
+
+    The SearchDatabaseDialog class provides a dialog allowing the user to search a Database or
+    Group for entries matching a specified criteria.
+ */
+
+/*!
+    Constructs a new SearchDatabaseDialog.
+
+    \param group The group or database to search.
+    \param parent The parent widget of the dialog.
+ */
 SearchDatabaseDialog::SearchDatabaseDialog(const Group *const group, QWidget *parent) :
     GuardedDialog(parent),
     ui(new Ui::SearchDatabaseDialog), m_group(group), m_searchParameters(NULL)
@@ -12,21 +25,33 @@ SearchDatabaseDialog::SearchDatabaseDialog(const Group *const group, QWidget *pa
     this->setSearchParameters(new SearchParameters(this));
 }
 
+/*!
+    Destroys the dialog.
+ */
 SearchDatabaseDialog::~SearchDatabaseDialog()
 {
     delete this->ui;
 }
 
+/*!
+    Gets a pointer to the group being searched.
+ */
 const Group *const SearchDatabaseDialog::group() const
 {
     return this->m_group;
 }
 
+/*!
+    Sets the group to be searched.
+ */
 void SearchDatabaseDialog::setGroup(const Group *const group)
 {
     this->m_group = group;
 }
 
+/*!
+    Retrieves a pointer to the current set of search parameters.
+ */
 SearchParameters* SearchDatabaseDialog::searchParameters() const
 {
     return this->m_searchParameters;
@@ -49,11 +74,17 @@ void SearchDatabaseDialog::setSearchParameters(SearchParameters *searchParameter
     this->updateWidgets();
 }
 
+/*!
+    Returns the list of entries found by the search.
+ */
 const QList<Entry*>& SearchDatabaseDialog::entriesFound() const
 {
     return this->m_entries;
 }
 
+/*!
+    Performs the search and populates the list of entries found.
+ */
 void SearchDatabaseDialog::save()
 {
     if (this->m_group)
@@ -78,6 +109,9 @@ void SearchDatabaseDialog::getMessages(QStringList &errors, QStringList &warning
     }
 }
 
+/*!
+    Updates the GUI widgets per the state of the search parameters.
+ */
 void SearchDatabaseDialog::updateWidgets()
 {
     this->ui->searchLineEdit->setText(this->m_searchParameters->searchPattern);
@@ -94,6 +128,9 @@ void SearchDatabaseDialog::updateWidgets()
     this->ui->caseSensitiveCheckBox->setChecked(this->m_searchParameters->caseSensitive);
 }
 
+/*!
+    Updates the search parameters per the state of the GUI widgets.
+ */
 void SearchDatabaseDialog::updateSearchParameters()
 {
     this->m_searchParameters->searchPattern = this->ui->searchLineEdit->text();

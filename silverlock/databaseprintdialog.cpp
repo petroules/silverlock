@@ -2,6 +2,19 @@
 #include "ui_databaseprintdialog.h"
 #include <silverlocklib.h>
 
+/*!
+    \class DatabasePrintDialog
+
+    The DatabasePrintDialog class provides a dialog allowing the user to configure print options
+    for the database.
+ */
+
+/*!
+    Constructs a new DatabasePrintDialog using the information in \a database to generate a preview.
+
+    \param database The database to preview.
+    \param parent The parent widget of the dialog.
+ */
 DatabasePrintDialog::DatabasePrintDialog(Database *database, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DatabasePrintDialog)
@@ -11,11 +24,18 @@ DatabasePrintDialog::DatabasePrintDialog(Database *database, QWidget *parent) :
     this->updatePreview();
 }
 
+/*!
+    Destroys the dialog.
+ */
 DatabasePrintDialog::~DatabasePrintDialog()
 {
     delete this->ui;
 }
 
+/*!
+    Displays a print dialog (QPrintDialog) allowing the user to print the database, hiding the
+    DatabasePrintDialog in the process.
+ */
 void DatabasePrintDialog::print()
 {
     QPrinter printer;
@@ -28,6 +48,13 @@ void DatabasePrintDialog::print()
     dialog.exec();
 }
 
+/*!
+    Selects or deselects all field checkboxes depending on the anchor specified by \a link.
+
+    \param link The anchor determining whether to select or deselect the checkboxes. #select-all
+    will cause all checkboxes to be selected; #clear-all will cause all the checkbox selections
+    to be cleared. Any other value will do nothing.
+ */
 void DatabasePrintDialog::selectionLinkActivated(const QString &link)
 {
     if (link == "#select-all")
@@ -40,6 +67,12 @@ void DatabasePrintDialog::selectionLinkActivated(const QString &link)
     }
 }
 
+/*!
+    Selects or deselects all checkboxes.
+
+    \param select If this parameter is \c true, all checkboxes will be selected. If it is \c false,
+    all checkbox selections will be cleared.
+ */
 void DatabasePrintDialog::selectAll(bool select)
 {
     this->ui->titleCheckBox->setChecked(select);
@@ -55,6 +88,9 @@ void DatabasePrintDialog::selectAll(bool select)
     this->ui->modificationTimeCheckBox->setChecked(select);
 }
 
+/*!
+    Updates the database print preview.
+ */
 void DatabasePrintDialog::updatePreview()
 {
     QString preview;
@@ -81,6 +117,11 @@ void DatabasePrintDialog::updatePreview()
     this->ui->textBrowser->setHtml(preview);
 }
 
+/*!
+    Gets an HTML-encoded string representing \a group and its child nodes (both groups and entries).
+
+    \param group The group to get an HTML representation of.
+ */
 QString DatabasePrintDialog::groupText(const Group *group) const
 {
     if (!group)
@@ -107,6 +148,11 @@ QString DatabasePrintDialog::groupText(const Group *group) const
     return preview;
 }
 
+/*!
+    Gets an HTML-encoded string representing \a entry.
+
+    \param entry The entry to get an HTML representation of.
+ */
 QString DatabasePrintDialog::entryText(const Entry *entry) const
 {
     if (!entry)
@@ -185,7 +231,7 @@ QString DatabasePrintDialog::entryText(const Entry *entry) const
 
     if (this->ui->modificationTimeCheckBox->isChecked())
     {
-        preview += QString("<b>Modified</b>: %1").arg(Qt::escape(entry->modifiedTime().toLocalTime().toString(Qt::SystemLocaleLongDate))) + "<br />";
+        preview += QString("<b>Modified</b>: %1").arg(Qt::escape(entry->modified().toLocalTime().toString(Qt::SystemLocaleLongDate))) + "<br />";
     }
 
     return preview;

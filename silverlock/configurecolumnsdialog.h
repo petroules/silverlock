@@ -3,19 +3,19 @@
 
 #include <QtGui>
 
-class EntryTableWidget;
-
 namespace Ui
 {
     class ConfigureColumnsDialog;
 }
+
+class EntryTableWidget;
 
 class ConfigureColumnsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ConfigureColumnsDialog(EntryTableWidget *entryTable, QWidget *parent = 0);
+    explicit ConfigureColumnsDialog(EntryTableWidget *entryTable, QWidget *parent = NULL);
     ~ConfigureColumnsDialog();
 
 private:
@@ -23,7 +23,7 @@ private:
     EntryTableWidget *m_entryTable;
 
 private slots:
-    void on_tableWidget_itemChanged(QTableWidgetItem* item);
+    void tableItemChanged(QTableWidgetItem *item);
 };
 
 #endif // CONFIGURECOLUMNSDIALOG_H

@@ -3,14 +3,13 @@
 
 #include <QtGui>
 
-class Entry;
-class Group;
-class SilverlockPreferences;
-
 namespace Ui
 {
     class EntryTableWidget;
 }
+
+class Entry;
+class Group;
 
 class EntryTableWidget : public QWidget
 {
@@ -40,7 +39,7 @@ signals:
     void itemSelectionChanged();
 
     /*!
-        Emitted before the entry table is populated with a group's contents.
+        Emitted before the entry table is populated with a list of entries or a group's contents.
      */
     void populating();
 

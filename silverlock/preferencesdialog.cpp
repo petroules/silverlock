@@ -2,6 +2,18 @@
 #include "ui_preferencesdialog.h"
 #include "silverlockpreferences.h"
 
+/*!
+    \class PreferencesDialog
+
+    The PreferencesDialog class provides a dialog allowing the user to access and modify application
+    preferences.
+ */
+
+/*!
+    Constructs a new PreferencesDialog.
+
+    \param parent The parent widget of the dialog.
+ */
 PreferencesDialog::PreferencesDialog(QWidget *parent) :
     GuardedDialog(parent),
     ui(new Ui::PreferencesDialog)
@@ -9,15 +21,23 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     this->ui->setupUi(this);
     this->load();
 
-    // To be restored in a future version, SL 1.2?
+    // TODO: To be restored in a future version (perhaps Silverlock 1.2?)
     this->ui->fileAssociationsGroupBox->setVisible(false);
 }
 
+/*!
+    Destroys the dialog.
+ */
 PreferencesDialog::~PreferencesDialog()
 {
     delete this->ui;
 }
 
+/*!
+    Updates the state of the file associations group box.
+
+    \todo For a future Silverlock release...
+ */
 void PreferencesDialog::updateFileAssociationState()
 {
     bool set = this->m_preferences->isFileAssociationSet();
@@ -27,11 +47,17 @@ void PreferencesDialog::updateFileAssociationState()
     this->ui->fileAssociationStatusLabel->setStyleSheet(QString("color: %1;").arg(set ? "green" : "red"));
 }
 
+/*!
+    Initializes the dialog with the current preferences.
+ */
 void PreferencesDialog::load()
 {
     this->load(SilverlockPreferences::instance());
 }
 
+/*!
+    Initializes the dialog with the specified set of preferences.
+ */
 void PreferencesDialog::load(const SilverlockPreferences &prefs)
 {
     this->ui->lockWorkspaceTimeoutCheckBox->setChecked(prefs.lockWorkspaceTimeoutEnabled());
@@ -61,6 +87,9 @@ void PreferencesDialog::load(const SilverlockPreferences &prefs)
 #endif
 }
 
+/*!
+    Updates the preferences per the options selected in the dialog.
+ */
 void PreferencesDialog::save()
 {
     SilverlockPreferences &prefs = SilverlockPreferences::instance();
@@ -92,6 +121,11 @@ void PreferencesDialog::save()
     }
 }
 
+/*!
+    Updates the dialog state to reflect all default settings.
+
+    save() must still be called to commit the changes.
+ */
 void PreferencesDialog::restoreDefaults()
 {
     this->load(SilverlockPreferences::defaults());
@@ -108,6 +142,9 @@ void PreferencesDialog::getMessages(QStringList &errors, QStringList &warnings, 
     }
 }
 
+/*!
+    Performs actions for different buttons in the button box.
+ */
 void PreferencesDialog::on_buttonBox_clicked(QAbstractButton* button)
 {
     if (this->m_preferences && this->ui->buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole)
@@ -119,12 +156,22 @@ void PreferencesDialog::on_buttonBox_clicked(QAbstractButton* button)
     }
 }
 
+/*!
+    Creates file associations in Windows Explorer.
+
+    \todo For a future Silverlock release...
+ */
 void PreferencesDialog::on_createAssocPushButton_clicked()
 {
     this->m_preferences->setFileAssociationActive(true);
     this->updateFileAssociationState();
 }
 
+/*!
+    Removes file associations in Windows Explorer.
+
+    \todo For a future Silverlock release...
+ */
 void PreferencesDialog::on_removeAssocPushButton_clicked()
 {
     this->m_preferences->setFileAssociationActive(false);

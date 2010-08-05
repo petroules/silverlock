@@ -25,6 +25,9 @@
 
 /*!
     Constructs a new MainWindow.
+
+    \param filter The event filter used to detect user idle.
+    \param parent The parent widget of the dialog.
  */
 MainWindow::MainWindow(InactivityEventFilter *filter, QWidget *parent) :
     QMainWindow(parent),
@@ -182,7 +185,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 void MainWindow::setupSignals()
 {
     QObject::connect(&this->m_documentState, SIGNAL(stateChanged()), SLOT(updateInterfaceState()));
-    QObject::connect(&this->m_documentState, SIGNAL(modified()), SLOT(databaseWasModified()));
+    QObject::connect(&this->m_documentState, SIGNAL(treeModified()), SLOT(databaseWasModified()));
 
     // Hide the password by default
     this->ui->unlockWorkspaceRevealToolButton->setChecked(true);
@@ -1208,12 +1211,10 @@ void MainWindow::setNodeCount(Group *group)
     if (group)
     {
         // Display the number of groups and entries in the selected group, in the status bar
-        QString nodeCount = QString("<b>%1:</b> %2 %3 / %4, %5 %6 / %7")
+        QString nodeCount = tr("<b>%1:</b> Group(s): %2 / %3, Entry(-ies): %4 / %5")
             .arg(group->title())
-            .arg(tr("Groups:"))
             .arg(group->groups().count())
             .arg(group->countGroups())
-            .arg(tr("Entries:"))
             .arg(group->entries().count())
             .arg(group->countEntries());
         this->m_nodeCountStatusLabel->setText(nodeCount);
@@ -1227,7 +1228,7 @@ void MainWindow::setNodeCount(Group *group)
 void MainWindow::populateWithSearchResults(const QList<Entry*> &entries, const QString &keywords)
 {
     this->ui->entryTable->populate(entries);
-    this->m_nodeCountStatusLabel->setText(QString(tr("<b>Search results:</b> (\"%1\"), %2 entries found")).arg(keywords).arg(entries.count()));
+    this->m_nodeCountStatusLabel->setText(tr("<b>Search results:</b> (\"%1\"), %n entry(-ies) found", "", entries.count()).arg(keywords));
 }
 
 void MainWindow::populateEntryTable(Group *const group)
@@ -1254,27 +1255,27 @@ void MainWindow::populateInfoView(Entry *const entry)
         QStringList pairs;
         if (entry->parentNode() && !entry->parentNode()->title().isEmpty())
         {
-            pairs.append(QString(tr("<b>Group:</b> %1")).arg(Qt::escape(entry->parentNode()->title())));
+            pairs.append(tr("<b>Group:</b> %1").arg(Qt::escape(entry->parentNode()->title())));
         }
 
         if (!entry->title().isEmpty())
         {
-            pairs.append(QString(tr("<b>Title:</b> %1")).arg(Qt::escape(entry->title())));
+            pairs.append(tr("<b>Title:</b> %1").arg(Qt::escape(entry->title())));
         }
 
         if (!entry->url().isEmpty())
         {
-            pairs.append(QString("<b>URL:</b> <a href=\"%1\">%1</a>").arg(Qt::escape(entry->url().toString())));
+            pairs.append(tr("<b>URL:</b> <a href=\"%1\">%1</a>").arg(Qt::escape(entry->url().toString())));
         }
 
         if (!entry->username().isEmpty())
         {
-            pairs.append(QString(tr("<b>Username:</b> %1")).arg(Qt::escape(entry->username())));
+            pairs.append(tr("<b>Username:</b> %1").arg(Qt::escape(entry->username())));
         }
 
         if (!entry->password().isEmpty())
         {
-            pairs.append(QString(tr("<b>Password:</b> %1")).arg(Qt::escape(entry->password())));
+            pairs.append(tr("<b>Password:</b> %1").arg(Qt::escape(entry->password())));
         }
 
         // Custom fields go after the primary data but before the unmodifiable details
@@ -1282,14 +1283,14 @@ void MainWindow::populateInfoView(Entry *const entry)
         while (j.hasNext())
         {
             j.next();
-            pairs.append(QString("<b>%1:</b> %2").arg(Qt::escape(j.key())).arg(Qt::escape(j.value())));
+            pairs.append(tr("<b>%1:</b> %2").arg(Qt::escape(j.key())).arg(Qt::escape(j.value())));
         }
 
         // We'll always have a UUID, and the created/accessed/modified times
-        pairs.append(QString("<b>UUID:</b> %1").arg(Qt::escape(entry->uuid().toString())));
-        pairs.append(QString(tr("<b>Created:</b> %1")).arg(Qt::escape(entry->created().toLocalTime().toString(Qt::SystemLocaleLongDate))));
-        pairs.append(QString(tr("<b>Accessed:</b> %1")).arg(Qt::escape(entry->accessed().toLocalTime().toString(Qt::SystemLocaleLongDate))));
-        pairs.append(QString(tr("<b>Modified:</b> %1")).arg(Qt::escape(entry->modifiedTime().toLocalTime().toString(Qt::SystemLocaleLongDate))));
+        pairs.append(tr("<b>UUID:</b> %1").arg(Qt::escape(entry->uuid().toString())));
+        pairs.append(tr("<b>Created:</b> %1").arg(Qt::escape(entry->created().toLocalTime().toString(Qt::SystemLocaleLongDate))));
+        pairs.append(tr("<b>Accessed:</b> %1").arg(Qt::escape(entry->accessed().toLocalTime().toString(Qt::SystemLocaleLongDate))));
+        pairs.append(tr("<b>Modified:</b> %1").arg(Qt::escape(entry->modified().toLocalTime().toString(Qt::SystemLocaleLongDate))));
 
         // Last accessed... NOW!
         entry->setAccessed();
@@ -1300,10 +1301,10 @@ void MainWindow::populateInfoView(Entry *const entry)
         while (i.hasNext())
         {
             i.next();
-            recoveryString += QString("<li><b>%1</b>: %2</li>").arg(Qt::escape(i.key())).arg(Qt::escape(i.value()));
+            recoveryString += tr("<li><b>%1</b>: %2</li>").arg(Qt::escape(i.key())).arg(Qt::escape(i.value()));
         }
 
-        QString info = QString("<p>%1</p> <ul>%2</ul> <hr /> <p>%3</p>")
+        QString info = tr("<p>%1</p> <ul>%2</ul> <hr /> <p>%3</p>")
             .arg(pairs.join(", "))
             .arg(recoveryString)
             .arg(Qt::escape(entry->notes()).replace(QRegExp("((?:https?|ftp)://\\S+)"), "<a href=\"\\1\">\\1</a>").replace("\n", "<br />"));
@@ -1517,7 +1518,7 @@ void MainWindow::setCurrentFile(const QString &fileName)
         this->m_documentState.setCurrentFile(QFileInfo(fileName).canonicalFilePath());
 
         // Add this file to the recent files list
-        SilverlockPreferences::instance().pushRecentFile(fileName);
+        SilverlockPreferences::instance().addRecentFile(fileName);
 
         this->updateRecentFileActionsAll();
     }

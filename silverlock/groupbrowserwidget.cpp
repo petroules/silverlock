@@ -3,6 +3,18 @@
 #include "silverlockpreferences.h"
 #include <silverlocklib.h>
 
+/*!
+    \class GroupBrowserWidget
+
+    The GroupBrowserWidget class provides a widget allowing the user to view and manipulate a tree
+    of groups.
+
+    \sa Group
+ */
+
+/*!
+    Constructs a new GroupBrowserWidget.
+ */
 GroupBrowserWidget::GroupBrowserWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GroupBrowserWidget)
@@ -14,10 +26,20 @@ GroupBrowserWidget::GroupBrowserWidget(QWidget *parent) :
     QObject::connect(this->ui->treeBrowser, SIGNAL(customContextMenuRequested(QPoint)), SIGNAL(customContextMenuRequested(QPoint)));
 }
 
+/*!
+    Destroys the widget.
+ */
 GroupBrowserWidget::~GroupBrowserWidget()
 {
     delete this->ui;
 }
+
+/*!
+    \property GroupBrowserWidget::multiselect
+
+    This property holds a value indicating whether the user is allowed to select multiple groups
+    simultaneously.
+ */
 
 bool GroupBrowserWidget::multiselect() const
 {
@@ -37,7 +59,7 @@ void GroupBrowserWidget::setMultiselect(bool on)
 }
 
 /*!
-    Gets the UUID of the group selected in the left-hand tree browser.
+    Gets the UUID of the group selected in the tree browser.
 
     This method returns empty UUID if no group or more than one group is selected.
  */
@@ -54,7 +76,7 @@ QUuid GroupBrowserWidget::selectedUuid() const
 }
 
 /*!
-    Gets a list of the UUIDs of the groups selected in the left-hand tree browser.
+    Gets a list of the UUIDs of the groups selected in the tree browser.
  */
 QList<QUuid> GroupBrowserWidget::selectedUuids() const
 {
@@ -72,7 +94,7 @@ QList<QUuid> GroupBrowserWidget::selectedUuids() const
 }
 
 /*!
-    Populates the left-hand tree view with the specified account database.
+    Populates the tree view with the specified account database.
  */
 void GroupBrowserWidget::populate(Database *const database)
 {
@@ -96,7 +118,7 @@ void GroupBrowserWidget::populate(Database *const database)
 }
 
 /*!
-    Populates the left-hand tree view item with the specified group and its children.
+    Populates the tree view item with the specified group and its children.
  */
 void GroupBrowserWidget::populate(QTreeWidgetItem *parentItem, Group *const group)
 {
@@ -136,11 +158,17 @@ void GroupBrowserWidget::populate(QTreeWidgetItem *parentItem, Group *const grou
     }
 }
 
+/*!
+    Clears all data from the tree view.
+ */
 void GroupBrowserWidget::clear()
 {
     this->ui->treeBrowser->clear();
 }
 
+/*!
+    Selects all groups in the tree view.
+ */
 void GroupBrowserWidget::selectAll()
 {
     this->ui->treeBrowser->selectAll();

@@ -11,6 +11,7 @@ namespace Ui
 class DatabaseAuthenticationDialog : public GuardedDialog
 {
     Q_OBJECT
+    Q_PROPERTY(QString password READ password WRITE setPassword)
 
 public:
     explicit DatabaseAuthenticationDialog(QWidget *parent = NULL);

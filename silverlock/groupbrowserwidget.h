@@ -3,22 +3,21 @@
 
 #include <QtGui>
 
-class Database;
-class Group;
-class Group;
-class SilverlockPreferences;
-
 namespace Ui
 {
     class GroupBrowserWidget;
 }
 
+class Database;
+class Group;
+
 class GroupBrowserWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(bool multiselect READ multiselect WRITE setMultiselect)
 
 public:
-    explicit GroupBrowserWidget(QWidget *parent = 0);
+    explicit GroupBrowserWidget(QWidget *parent = NULL);
     ~GroupBrowserWidget();
     bool multiselect() const;
     void setMultiselect(bool on);
@@ -41,7 +40,6 @@ signals:
 private:
     void populate(QTreeWidgetItem *item, Group *const group);
     Ui::GroupBrowserWidget *ui;
-    SilverlockPreferences *m_preferences;
 };
 
 #endif // GROUPBROWSERWIDGET_H

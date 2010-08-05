@@ -49,7 +49,7 @@ public:
     void setAutoSaveOnClose(bool save);
     const QStringList recentFileList() const;
     void clearRecentFiles();
-    void pushRecentFile(const QString &fileName);
+    void addRecentFile(const QString &fileName);
     int maxRecentFiles() const;
     void saveWindowSettings(MainWindow *mainWindow);
     void restoreWindowSettings(MainWindow *mainWindow);

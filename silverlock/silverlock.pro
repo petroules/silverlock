@@ -69,6 +69,8 @@ FORMS += mainwindow.ui \
     databaseprintdialog.ui
 RESOURCES += resources.qrc \
     ../res/globalresources.qrc
+TRANSLATIONS += tr/silverlock_de.ts \
+    tr/silverlock_fr.ts
 DESTDIR = ../bin
 INCLUDEPATH += ../silverlocklib ../../liel/c++/liel ../qtsingleapplication/src
 LIBS += -L../bin -L../../liel/liel-build-desktop/bin -lQtSolutions_SingleApplication-2.6

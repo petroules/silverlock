@@ -3,6 +3,7 @@
 
 /*!
     \file database_keys.h
+
     This file contains XML tag and attribute names for the database file format used by the
     DatabaseReader, DatabaseWriter, DatabaseNode and subclasses.
  */

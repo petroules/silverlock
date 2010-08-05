@@ -8,6 +8,8 @@ class Database;
 class DocumentState : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile)
+    Q_PROPERTY(bool untitled READ isUntitled WRITE setUntitled)
 
 public:
     explicit DocumentState(QObject *parent = NULL);
@@ -25,12 +27,16 @@ public:
     void unlock();
 
 signals:
+    /*!
+        Emitted when a database is loaded or closed, the workspace is locked or unlocked, or any
+        other property is changed.
+     */
     void stateChanged();
 
     /*!
         Emitted when the database is modified.
      */
-    void modified();
+    void treeModified();
 
 private:
     Database *m_database;

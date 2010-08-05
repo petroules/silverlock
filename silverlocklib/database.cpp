@@ -4,30 +4,19 @@
 /*!
     \class Database
 
-    The Database class is used as the root node of a tree structure in which
-    groups and password entries are stored.
+    The Database class is used as the root node of a tree structure in which groups and password
+    entries are stored. See DatabaseNode for more information.
 
-    Each Database or Group instance can contain 0 or more entries (see \link Entry \endlink)
-    and 0 or more groups, which can each contain additional groups and entries, and so on.
-    A Database can never have a parent node.
+    \note Please refer to the documentation for version() for information regarding versioning.
 
-    Each database node is assigned a UUID upon construction to ensure that there is a way to
-    uniquely reference any node in the database tree. Uniquity is shared between all nodes
-    in a database - no node will have the same UUID as another node in the same database,
-    and due to the nature of UUIDs it is extremely unlikely that there will be a collision
-    even across separate databases, however this cannot be gauranteed.
-
-    \note Please refer to the documentation for \link version() \endlink for important
-    information regarding versioning.
-
-    \sa version(), Group, Entry
+    \sa version(), DatabaseNode, Group, Entry
  */
 
 /*!
     Constructs a new Database with the specified title and password.
 
     \param title The title, or name, of the database.
-    \param password The database password. See \link password() \endlink.
+    \param password The database password. See \a password.
  */
 Database::Database(const QString &title, const QString &password)
     : Group(title), m_password(password)
@@ -48,12 +37,10 @@ Database::~Database()
     Gets the version of the Silverlock database XML format this class supports writing to.
 
     All versions of silverlocklib support reading from any version including and previous to the
-    one it explicitly supports, for maximum backward compatibility. Minor changes in database format
-    are implemented using simple conditionals; in the case of a more extensive change to the format,
-    internal classes will be created that will be called as per the version of the database that
-    needs to be read. The Database class will always write to the latest format it supports by
-    default. Currently there is no functionality available nor planned to support writing of old
-    formats, to encourage users to stay up to date with the latest technology available.
+    one it explicitly supports, for maximum backward compatibility. The Database class will always
+    write to the latest format it supports by default. Currently there is no functionality available
+    nor planned to support writing of old formats, to encourage users to stay up to date with the
+    latest technology available.
 
     This decision is subject to change.
  */
@@ -71,17 +58,11 @@ QVersion Database::version()
     when it is written to a file or other storage mechanism.
  */
 
-/*!
-    \internal
- */
 QString Database::password() const
 {
     return this->m_password;
 }
 
-/*!
-    \internal
- */
 void Database::setPassword(const QString &password)
 {
     if (this->m_password != password)

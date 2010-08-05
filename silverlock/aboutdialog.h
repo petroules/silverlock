@@ -3,7 +3,8 @@
 
 #include <QtGui>
 
-namespace Ui {
+namespace Ui
+{
     class AboutDialog;
 }
 
@@ -12,14 +13,14 @@ class AboutDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AboutDialog(QWidget *parent = 0);
+    explicit AboutDialog(QWidget *parent = NULL);
     ~AboutDialog();
 
 private:
     Ui::AboutDialog *ui;
 
 private slots:
-    void on_licensePushButton_clicked();
+    void displayLicenseDialog();
 };
 
 #endif // ABOUTDIALOG_H

@@ -30,8 +30,8 @@ public:
     void setNotes(const QString &notes);
     const QMap<QString, QString>& recoveryInfo() const;
     const QMap<QString, QString>& customFields() const;
-    void insertRecoveryInfo(const QString &key, const QString &value);
-    int removeRecoveryInfo(const QString &key);
+    void insertRecoveryInfo(const QString &question, const QString &answer);
+    int removeRecoveryInfo(const QString &question);
     void clearRecoveryInfo();
     void insertCustomField(const QString &key, const QString &value);
     int removeCustomField(const QString &key);

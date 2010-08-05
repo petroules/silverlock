@@ -1,25 +1,49 @@
 #include "databasecrypto.h"
+#include <botan/botan.h>
+#include <cstring>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <vector>
-#include <cstring>
-#include <memory>
-#include <botan/botan.h>
-#if defined(BOTAN_HAS_COMPRESSOR_ZLIB)
-#include <botan/zlib.h>
-#endif
 
 #define ALGO "AES"
 #define HEADER "-------- SILVERLOCK DATABASE FILE --------"
 
 using namespace Botan;
 
+/*!
+    \class DatabaseCrypto
+
+    The DatabaseCrypto class provides methods for encrypting and decrypting strings using a
+    string passphrase.
+
+    It is intended for use by DatabaseReader and DatabaseWriter to encrypt and decrypt Silverlock
+    database files.
+
+    Data is encrypted using the AES (Rijndael) algorithm and the format uses a MAC to verify
+    integrity when decrypting an encrypted string.
+ */
+
+/*!
+    Constructs a new DatabaseCrypto.
+ */
 DatabaseCrypto::DatabaseCrypto(QObject *parent) :
     QObject(parent)
 {
 }
 
+/*!
+    Encrypts \a data using \a password as the passphrase.
+
+    \param data The data to encrypt.
+    \param password The passphrase used to encrypt \a data.
+    \param error If this parameter is non-\c NULL, it will be set to DatabaseCrypto::NoError if the
+    encryption process succeeded, or one of the other DatabaseCrypto::CryptoStatus enumeration
+    constants if an error occurred.
+
+    \return The encrypted data encoded in base 64, or an empty string if an error occurred.
+ */
 QString DatabaseCrypto::encrypt(const QString &data, const QString &password, CryptoStatus *error)
 {
     const std::string algo = ALGO;
@@ -95,6 +119,17 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, Cr
     }
 }
 
+/*!
+    Decrypts \a data using \a password as the passphrase.
+
+    \param data The data to decrypt, encoded in base 64.
+    \param password The passphrase used to decrypt \a data.
+    \param error If this parameter is non-\c NULL, it will be set to DatabaseCrypto::NoError if the
+    decryption process succeeded, or one of the other DatabaseCrypto::CryptoStatus enumeration
+    constants if an error occurred.
+
+    \return The decrypted data, or an empty string if an error occurred.
+ */
 QString DatabaseCrypto::decrypt(const QString &data, const QString &password, CryptoStatus *error)
 {
     const std::string algo = ALGO;
@@ -140,7 +175,8 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
         InitializationVector iv = s2k->derive_key(iv_len, "IVL" + passphrase);
         SymmetricKey mac_key = s2k->derive_key(16, "MAC" + passphrase);
 
-        Pipe pipe(new Base64_Decoder, get_cipher(algo + "/CBC", bc_key, iv, DECRYPTION), /*new Zlib_Decompression,*/
+        Pipe pipe(new Base64_Decoder, get_cipher(algo + "/CBC", bc_key, iv, DECRYPTION),
+            /*new Zlib_Decompression,*/
             new Fork(0, new Chain(new MAC_Filter("HMAC(SHA-1)", mac_key), new Base64_Encoder)));
 
         // Read all our data into the pipe for decryption
@@ -190,9 +226,9 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
 }
 
 /*!
-    Encodes the byte array \a in as a base 64 string.
+    Encodes the Botan byte array \a in as a base 64 string.
 
-    \param in The byte array to encode.
+    \param in The Botan byte array to encode.
  */
 std::string DatabaseCrypto::b64_encode(const SecureVector<Botan::byte> &in)
 {
@@ -202,7 +238,7 @@ std::string DatabaseCrypto::b64_encode(const SecureVector<Botan::byte> &in)
 }
 
 /*!
-    Decodes the base 64 string \a in to a byte array.
+    Decodes the base 64 string \a in to a Botan byte array.
 
     \param in The base 64 string to decode.
  */
@@ -211,4 +247,29 @@ SecureVector<Botan::byte> DatabaseCrypto::b64_decode(const std::string &in)
     Pipe pipe(new Base64_Decoder);
     pipe.process_msg(in);
     return pipe.read_all();
+}
+
+/*!
+    Returns a status message corresponding to \a status.
+
+    \param status The status enumeration constant to get the message for.
+
+    \return A localized status message corresponding to \a status; an empty string if \a status is
+    DatabaseCrypto::NoError or an unknown value.
+ */
+QString DatabaseCrypto::statusMessage(CryptoStatus status)
+{
+    switch (status)
+    {
+        case MissingHeader:
+            return tr("The file was missing its standard header.");
+        case VerificationFailed:
+            return tr("The message authentication codes were mismatched. The file may have been corrupted or tampered with.");
+        case DecodingError:
+            return tr("There was a problem decoding the file; either the password was invalid or the file may be corrupt.");
+        case UnknownError:
+            return tr("An unknown error occurred while decoding the file.");
+        default:
+            return QString();
+    }
 }

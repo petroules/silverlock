@@ -1,6 +1,18 @@
 #include "licensedialog.h"
 #include "ui_licensedialog.h"
 
+/*!
+    \class LicenseDialog
+
+    The LicenseDialog class provides a dialog that displays licenses for the various software
+    components that make up the application.
+ */
+
+/*!
+    Constructs a new LicenseDialog.
+
+    \param parent The parent widget of the dialog.
+ */
 LicenseDialog::LicenseDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LicenseDialog)
@@ -16,11 +28,17 @@ LicenseDialog::LicenseDialog(QWidget *parent) :
     this->ui->qsaAdditionalLabel->setText(getLicense("qsa-exception"));
 }
 
+/*!
+    Destroys the LicenseDialog.
+ */
 LicenseDialog::~LicenseDialog()
 {
     delete this->ui;
 }
 
+/*!
+    Gets the text of the license file specified by the license name \a license.
+ */
 QString LicenseDialog::getLicense(const QString &license)
 {
     QFile file(QString(":/main/license/%1.txt").arg(license));

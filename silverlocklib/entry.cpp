@@ -4,19 +4,17 @@
 
 /*!
     \class Entry
-    The Entry class represents a password entry in a database.
 
-    The parent of an entry cannot be \c NULL and an assertion failure will
-    result if a \c NULL pointer is passed to any of the constructors.
+    The Entry class represents a password entry in a Database.
 
-    \sa Database, Group
+    \sa DatabaseNode, Database, Group
  */
 
 /*!
-    Constructs a new entry with the specified title and belonging to the specified group.
+    Constructs a new Entry with the specified title and parent.
 
-    \param title The title of the entry.
-    \param parent The group to which this entry will belong.
+    \param title The title, or name, of the entry.
+    \param parent The parent group node to which this entry will belong.
  */
 Entry::Entry(const QString &title, Group *parent) :
     DatabaseNode(title)
@@ -32,15 +30,11 @@ Entry::~Entry()
     this->detach();
 }
 
-void Entry::attachToList()
-{
-    this->parentNode()->m_entries.append(this);
-}
+/*!
+    \property Entry::url
 
-void Entry::detachFromList()
-{
-    this->parentNode()->m_entries.removeAll(this);
-}
+    This property holds the URL field of the entry.
+ */
 
 QUrl Entry::url() const
 {
@@ -56,6 +50,12 @@ void Entry::setUrl(const QUrl &url)
     }
 }
 
+/*!
+    \property Entry::username
+
+    This property holds the username field of the entry.
+ */
+
 QString Entry::username() const
 {
     return this->m_username;
@@ -69,6 +69,12 @@ void Entry::setUsername(const QString &username)
         this->setModified();
     }
 }
+
+/*!
+    \property Entry::password
+
+    This property holds the password field of the entry.
+ */
 
 QString Entry::password() const
 {
@@ -84,6 +90,12 @@ void Entry::setPassword(const QString &password)
     }
 }
 
+/*!
+    \property Entry::notes
+
+    This property holds the notes field of the entry.
+ */
+
 QString Entry::notes() const
 {
     return this->m_notes;
@@ -98,31 +110,53 @@ void Entry::setNotes(const QString &notes)
     }
 }
 
+/*!
+    Gets an immutable reference to the list of recovery questions and answers within the entry.
+ */
 const QMap<QString, QString>& Entry::recoveryInfo() const
 {
     return this->m_recoveryInfo;
 }
 
+/*!
+    Gets an immutable reference to the list of custom field names and values within the entry.
+ */
 const QMap<QString, QString>& Entry::customFields() const
 {
     return this->m_customFields;
 }
 
-void Entry::insertRecoveryInfo(const QString &key, const QString &value)
+/*!
+    Adds a recovery question and answer pair to the entry.
+
+    \param question The question to add.
+    \param answer The answer to add.
+
+    If \a question is an empty string or a question and answer pair with the question text
+    \a question already exists in the list, nothing is inserted and no modified signal is emitted.
+ */
+void Entry::insertRecoveryInfo(const QString &question, const QString &answer)
 {
     // Blank questions are not accepted!
-    if (key.isEmpty())
+    if (question.isEmpty() || this->m_recoveryInfo.contains(question))
     {
         return;
     }
 
-    this->m_recoveryInfo.insert(key, value);
+    this->m_recoveryInfo.insert(question, answer);
     this->setModified();
 }
 
-int Entry::removeRecoveryInfo(const QString &key)
+/*!
+    Removes the recovery question and answer pair with the specified question text from the entry.
+
+    The \a treeModified() signal is only emitted if at least one item was actually removed.
+
+    \param question The question text of the question and answer pair to remove.
+ */
+int Entry::removeRecoveryInfo(const QString &question)
 {
-    int code = this->m_recoveryInfo.remove(key);
+    int code = this->m_recoveryInfo.remove(question);
 
     // If at least one item was actually removed...
     if (code > 0)
@@ -133,6 +167,11 @@ int Entry::removeRecoveryInfo(const QString &key)
     return code;
 }
 
+/*!
+    Clears all recovery question and answer pairs from the entry.
+
+    The \a treeModified() signal is only emitted if at least one item was actually removed.
+ */
 void Entry::clearRecoveryInfo()
 {
     if (this->m_recoveryInfo.count() > 0)
@@ -142,12 +181,34 @@ void Entry::clearRecoveryInfo()
     }
 }
 
+/*!
+    Adds a custom field entry to the entry.
+
+    \param key The name of the custom field.
+    \param value The value of the custom field.
+
+    If \a key is an empty string or a custom field entry with the field name \a key already
+    exists in the list, nothing is inserted and no modified signal is emitted.
+ */
 void Entry::insertCustomField(const QString &key, const QString &value)
 {
+    // Blank keys are not accepted!
+    if (key.isEmpty() || this->m_recoveryInfo.contains(key))
+    {
+        return;
+    }
+
     this->m_customFields.insert(key, value);
     this->setModified();
 }
 
+/*!
+    Removes the custom field entry with the specified field name from the entry.
+
+    The \a treeModified() signal is only emitted if at least one item was actually removed.
+
+    \param key The field name of the custom field entry to remove.
+ */
 int Entry::removeCustomField(const QString &key)
 {
     int code = this->m_customFields.remove(key);
@@ -161,6 +222,11 @@ int Entry::removeCustomField(const QString &key)
     return code;
 }
 
+/*!
+    Clears all custom fields from the entry.
+
+    The \a treeModified() signal is only emitted if at least one item was actually removed.
+ */
 void Entry::clearCustomFields()
 {
     if (this->m_customFields.count() > 0)
@@ -168,6 +234,16 @@ void Entry::clearCustomFields()
         this->m_customFields.clear();
         this->setModified();
     }
+}
+
+void Entry::attachToList()
+{
+    this->parentNode()->m_entries.append(this);
+}
+
+void Entry::detachFromList()
+{
+    this->parentNode()->m_entries.removeAll(this);
 }
 
 void Entry::fromXml(const QDomElement &element)
@@ -244,10 +320,12 @@ QDomElement Entry::toXml(QDomDocument &document) const
 /*!
     Creates a deep copy of the entry.
 
-    The copy will not have all the same properties as the original.
-    Specifically, a new UUID will be generated and the copy will be
-    initialized without a parent node. The creation, access and modification
-    dates will also be regenerated.
+    The copy will not have all the same properties as the original. Specifically:
+
+    \li A new UUID will be generated.
+    \li The copy will be initialized without a parent node.
+    \li The creation, access and modification dates will be
+    left at their defaults (current UTC date and time).
  */
 Entry* Entry::createCopy() const
 {

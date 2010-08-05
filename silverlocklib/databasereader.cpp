@@ -1,19 +1,30 @@
 #include "databasereader.h"
 #include "database.h"
 #include "database_keys.h"
+#include "databasecrypto.h"
 #include "entry.h"
 #include "group.h"
-#include "databasecrypto.h"
 #include <liel.h>
 
+/*!
+    \class DatabaseReader
+
+    Provides a simple interface to read Silverlock database files from a QIODevice.
+
+    \sa DatabaseWriter
+ */
+
+/*!
+    Constructs a new DatabaseReader.
+ */
 DatabaseReader::DatabaseReader(QObject *parent) :
     QObject(parent)
 {
 }
 
 /*!
-    Reads a database from the specified QIODevice and returns a pointer to a Database,
-    using \a password as the key to decrypt the contents.
+    Reads a database from the specified QIODevice and returns a pointer to a Database, using
+    \a password as the key to decrypt the contents.
 
     Databases are encrypted using 256-bit AES.
 
@@ -22,7 +33,10 @@ DatabaseReader::DatabaseReader(QObject *parent) :
     into a Database object. If the device is not open or readable, the decryption
     fails, or there is a versioning problem, the method returns a \c NULL pointer.
 
-    For error information, see \link lastReadError() \endlink.
+    For error information, see \link errorString() \endlink.
+
+    \param device The device to read the database from.
+    \param password The passphrase used to decrypt the database.
  */
 Database* DatabaseReader::read(QIODevice &device, const QString &password)
 {
@@ -48,23 +62,7 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
         fileDataString = DatabaseCrypto::decrypt(fileDataString, password, &status);
         if (status != DatabaseCrypto::NoError)
         {
-            if (status == DatabaseCrypto::MissingHeader)
-            {
-                this->m_errorString = tr("The file was missing its standard header.");
-            }
-            else if (status == DatabaseCrypto::VerificationFailed)
-            {
-                this->m_errorString = tr("The message authentication codes were mismatched. The file may have been corrupted or tampered with.");
-            }
-            else if (status == DatabaseCrypto::DecodingError)
-            {
-                this->m_errorString = tr("There was a problem decoding the file; either the password was invalid or the file may be corrupt.");
-            }
-            else if (status == DatabaseCrypto::UnknownError)
-            {
-                this->m_errorString = tr("An unknown error occurred while decoding the file.");
-            }
-
+            this->m_errorString = DatabaseCrypto::statusMessage(status);
             return NULL;
         }
     }
@@ -105,11 +103,9 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
 /*!
     Reads nodes in \a element as children of \a group.
 
-    \param db The database to which nodes belong.
     \param group The group node to which nodes read in this method should be added to.
-    If this parameter is \c NULL, a group node read replace the database's root node.
+    If this parameter is \c NULL, the method returns immediately.
     \param element The element whose child nodes are being read.
-    \param process Whether to continue processing. This is used to avoid overwriting an error state.
  */
 void DatabaseReader::readGroup(Group *const group, const QDomElement &element)
 {

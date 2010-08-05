@@ -3,6 +3,18 @@
 #include "silverlockpreferences.h"
 #include <QtXml>
 
+/*!
+    \class UpdateDialog
+
+    The UpdateDialog class provides a dialog allowing the user to check for, download, and install
+    updated versions of the application.
+ */
+
+/*!
+    Constructs a new UpdateDialog.
+
+    \param parent The parent widget of the dialog.
+ */
 UpdateDialog::UpdateDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::UpdateDialog), m_network(new QNetworkAccessManager(this))
@@ -14,12 +26,10 @@ UpdateDialog::UpdateDialog(QWidget *parent) :
     QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(checkError(QNetworkReply::NetworkError)));
 }
 
+/*!
+    Destroys the dialog.
+ */
 UpdateDialog::~UpdateDialog()
-{
-    delete this->ui;
-}
-
-void UpdateDialog::closeEvent(QCloseEvent *event)
 {
     if (this->m_network)
     {
@@ -27,7 +37,7 @@ void UpdateDialog::closeEvent(QCloseEvent *event)
         this->m_network = NULL;
     }
 
-    event->accept();
+    delete this->ui;
 }
 
 void UpdateDialog::checkReplyFinished(QNetworkReply *reply)

@@ -3,25 +3,24 @@
 
 #include "guardeddialog.h"
 
-class Group;
-
 namespace Ui
 {
     class GroupEditDialog;
 }
+
+class Group;
 
 class GroupEditDialog : public GuardedDialog
 {
     Q_OBJECT
 
 public:
-    GroupEditDialog(Group *group, QWidget *parent = 0);
+    GroupEditDialog(Group *group, QWidget *parent = NULL);
     ~GroupEditDialog();
     Group* group() const;
     void setGroup(Group *group);
 
 protected:
-    void changeEvent(QEvent *e);
     void load();
     void save();
     void getMessages(QStringList &errors, QStringList &warnings, QStringList &information) const;

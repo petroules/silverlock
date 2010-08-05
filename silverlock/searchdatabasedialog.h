@@ -4,7 +4,8 @@
 #include "guardeddialog.h"
 #include <silverlocklib.h>
 
-namespace Ui {
+namespace Ui
+{
     class SearchDatabaseDialog;
 }
 

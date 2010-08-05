@@ -2,9 +2,9 @@
 #define DATABASE_H
 
 #include "silverlocklib_global.h"
-#include <QtXml>
-#include <liel.h>
 #include "group.h"
+#include <liel.h>
+#include <QtXml>
 
 class SILVERLOCKLIBSHARED_EXPORT Database : public Group
 {

@@ -24,8 +24,8 @@ public:
     bool containsUuid(const QUuid &uuid) const;
     bool isGroup(const QUuid &uuid) const;
     bool isEntry(const QUuid &uuid) const;
-    Group* findGroup(const QUuid &uuid, bool includeThis = false);
     const Group* findGroup(const QUuid &uuid, bool includeThis = false) const;
+    Group* findGroup(const QUuid &uuid, bool includeThis = false);
     Entry* findEntry(const QUuid &uuid) const;
     QList<Entry*> findEntries(const SearchParameters &params) const;
     QDomElement toXml(QDomDocument &document) const;

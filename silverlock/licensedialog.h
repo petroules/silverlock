@@ -3,7 +3,8 @@
 
 #include <QtGui>
 
-namespace Ui {
+namespace Ui
+{
     class LicenseDialog;
 }
 
@@ -12,7 +13,7 @@ class LicenseDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit LicenseDialog(QWidget *parent = 0);
+    explicit LicenseDialog(QWidget *parent = NULL);
     ~LicenseDialog();
 
 private:

@@ -5,8 +5,8 @@
 /*!
     \class EntryEditDialog
 
-    The EntryEditDialog class represents a dialog that
-    allows the user to edit the properties of a Entry.
+    The EntryEditDialog class provides a dialog allowing the user to modify the properties of an
+    Entry.
  */
 
 /*!
@@ -27,27 +27,11 @@ EntryEditDialog::EntryEditDialog(Entry *entry, QWidget *parent) :
 }
 
 /*!
-    Destroys the EntryEditDialog.
+    Destroys the dialog.
  */
 EntryEditDialog::~EntryEditDialog()
 {
     delete this->ui;
-}
-
-/*!
-    \internal
- */
-void EntryEditDialog::changeEvent(QEvent *e)
-{
-    QDialog::changeEvent(e);
-    switch (e->type())
-    {
-        case QEvent::LanguageChange:
-            this->ui->retranslateUi(this);
-            break;
-        default:
-            break;
-    }
 }
 
 /*!
@@ -60,6 +44,8 @@ Entry* EntryEditDialog::entry() const
 
 /*!
     Sets the entry to be edited by this dialog.
+
+    \param entry The entry to begin editing.
  */
 void EntryEditDialog::setEntry(Entry *entry)
 {
@@ -87,7 +73,7 @@ void EntryEditDialog::load()
         this->ui->uuidLineEdit->setText(this->m_entry->uuid().toString());
         this->ui->createdLineEdit->setText(this->m_entry->created().toLocalTime().toString(Qt::SystemLocaleLongDate));
         this->ui->accessedLineEdit->setText(this->m_entry->accessed().toLocalTime().toString(Qt::SystemLocaleLongDate));
-        this->ui->modifiedLineEdit->setText(this->m_entry->modifiedTime().toLocalTime().toString(Qt::SystemLocaleLongDate));
+        this->ui->modifiedLineEdit->setText(this->m_entry->modified().toLocalTime().toString(Qt::SystemLocaleLongDate));
     }
 }
 

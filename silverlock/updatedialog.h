@@ -1,11 +1,12 @@
 #ifndef UPDATEDIALOG_H
 #define UPDATEDIALOG_H
 
+#include <liel.h>
 #include <QtGui>
 #include <QtNetwork>
-#include <liel.h>
 
-namespace Ui {
+namespace Ui
+{
     class UpdateDialog;
 }
 
@@ -14,11 +15,8 @@ class UpdateDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit UpdateDialog(QWidget *parent = 0);
+    explicit UpdateDialog(QWidget *parent = NULL);
     ~UpdateDialog();
-
-protected:
-    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::UpdateDialog *ui;

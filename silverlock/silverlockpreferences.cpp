@@ -17,22 +17,28 @@ SilverlockPreferences* SilverlockPreferences::m_defaults = NULL;
     constructed, any existing settings are loaded; any non-existing settings will be set to
     their default values.
 
-    Only one instance of this class will be created - the constructor is private. Use
-    \a getInstance() to retrieve a reference to the instance (which will be lazily initialized
-    if the instance does not yet exist) and call \a destroy() when the application exits.
-    \a destroyInstance() will save the preferences to persistent storage, also use the \a save()
-    method for that.
+    Only one instance of this class will be created - the constructor is private. Use \a instance()
+    to retrieve a reference to the instance (which will be lazily initialized if the instance does
+    not yet exist) and call \a destroy() when the application exits. \a destroy() will save the
+    preferences to persistent storage, also use the \a save() method for that.
 
     Default settings can be persisted by calling \link restoreDefaults() \endlink and
     \link save() \endlink in succession.
  */
 
+/*!
+    Constructs a new SilverlockPreferences.
+ */
 SilverlockPreferences::SilverlockPreferences()
     : m_windowSettingsCleared(false)
 {
     this->load();
 }
 
+/*!
+    Gets a reference to the SilverlockPreferences instance, constructing one if it has not yet been
+    created.
+ */
 SilverlockPreferences& SilverlockPreferences::instance()
 {
     if (!SilverlockPreferences::m_instance)
@@ -44,7 +50,7 @@ SilverlockPreferences& SilverlockPreferences::instance()
 }
 
 /*!
-    Returns an immutable instance with all values set to default.
+    Returns an immutable instance of SilverlockPreferences with all values set to default.
  */
 const SilverlockPreferences& SilverlockPreferences::defaults()
 {
@@ -59,6 +65,9 @@ const SilverlockPreferences& SilverlockPreferences::defaults()
     return *SilverlockPreferences::m_defaults;
 }
 
+/*!
+    Destroys the preferences instance, first saving all the settings.
+ */
 void SilverlockPreferences::destroy()
 {
     if (SilverlockPreferences::m_instance)
@@ -76,6 +85,9 @@ void SilverlockPreferences::destroy()
     }
 }
 
+/*!
+    Loads all preferences from persistent storage.
+ */
 void SilverlockPreferences::load()
 {
     // Restoring the defaults allows us to determine the default values when
@@ -103,14 +115,14 @@ void SilverlockPreferences::load()
     QStringList list = settings.value(KEY_RECENT_FILES, QStringList()).toStringList();
     for (int i = qMin(list.count(), this->maxRecentFiles()) - 1; i >= 0; i--)
     {
-        this->pushRecentFile(list.at(i));
+        this->addRecentFile(list.at(i));
     }
 
     this->setUpdateInstallerPath(settings.value(KEY_UPDATE_INSTALLER_PATH, this->m_updateInstallerPath).toString());
 }
 
 /*!
-
+    Saves all preferences to persistent storage.
 
     \note Regarding implementation: this method does not modify the class but is not marked const as
     this would allow the instance returned by \a defaults() to persist the settings, which should
@@ -140,12 +152,11 @@ void SilverlockPreferences::save()
 /*!
     Restores all preferences to their original values.
 
-    \note The recent file list will NOT be affected by this method;
-    that can be cleared with the \a clearRecentFiles() method.
+    \note The recent file list will NOT be affected by this method; that can be cleared with the
+    \a clearRecentFiles() method.
 
-    \note File associations will NOT be affected by this method;
-    those settings can be adjusted by \a isFileAssociationSet and
-    \a setFileAssociationActive.
+    \note File associations will NOT be affected by this method; those settings can be adjusted by
+    \a isFileAssociationSet and \a setFileAssociationActive.
  */
 void SilverlockPreferences::restoreDefaults()
 {
@@ -293,12 +304,19 @@ void SilverlockPreferences::setMinimizeAfterLock(bool minimize)
 }
 
 #ifdef Q_OS_WIN
+/*!
+    Gets the path of the running application with native separators and enclosed in quotes, suitable
+    for entry into the Windows registry.
+ */
 QString SilverlockPreferences::applicationPathForRegistry() const
 {
     return QString("\"%1\"").arg(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
 }
 #endif
 
+/*!
+    Gets a value indicating whether run-at-startup is supported on this platform.
+ */
 bool SilverlockPreferences::runAtStartupSupported() const
 {
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(Q_OS_LINUX)
@@ -400,11 +418,19 @@ void SilverlockPreferences::setRunAtStartup(bool run)
 #endif
 }
 
+/*!
+    \todo For a future Silverlock release...
+ */
 bool SilverlockPreferences::isFileAssociationSet() const
 {
     return false;
 }
 
+/*!
+    \todo For a future Silverlock release...
+
+    \param active \c true to create file associations; \c false to remove them.
+ */
 void SilverlockPreferences::setFileAssociationActive(bool active)
 {
     Q_UNUSED(active);
@@ -450,7 +476,7 @@ void SilverlockPreferences::clearRecentFiles()
     this->m_recentFiles.clear();
 }
 
-void SilverlockPreferences::pushRecentFile(const QString &fileName)
+void SilverlockPreferences::addRecentFile(const QString &fileName)
 {
     // No empty file names, please...
     if (fileName.isEmpty())
@@ -483,6 +509,7 @@ void SilverlockPreferences::pushRecentFile(const QString &fileName)
 
 /*!
     Returns the maximum number of paths stored in the recent files list.
+
     The maximum is currently a fixed 5.
  */
 int SilverlockPreferences::maxRecentFiles() const

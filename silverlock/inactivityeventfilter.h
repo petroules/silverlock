@@ -10,6 +10,11 @@ public:
     explicit InactivityEventFilter(QObject *parent = NULL);
 
 signals:
+    /*!
+        Emitted when a mouse or key event occurs.
+
+        \param object The object that generated the event.
+     */
     void resetIdleTimer(QObject *object);
 
 protected:
