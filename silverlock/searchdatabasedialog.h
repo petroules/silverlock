@@ -16,8 +16,8 @@ class SearchDatabaseDialog : public GuardedDialog
 public:
     explicit SearchDatabaseDialog(const Group *const group, QWidget *parent = NULL);
     ~SearchDatabaseDialog();
-    const Group *const group() const;
-    void setGroup(const Group *const group);
+    const Group* group() const;
+    void setGroup(const Group *group);
     SearchParameters* searchParameters() const;
     void setSearchParameters(SearchParameters *searchParameters);
     const QList<Entry*>& entriesFound() const;

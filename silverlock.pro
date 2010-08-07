@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS += qtsingleapplication silverlocklib silverlock
+SUBDIRS += silverlocklib silverlock

@@ -1,6 +1,7 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 #include "licensedialog.h"
+#include "applicationinfo.h"
 
 /*!
     \class AboutDialog
@@ -27,8 +28,8 @@ AboutDialog::AboutDialog(QWidget *parent) :
         .arg(QApplication::applicationName())
         .arg(QApplication::applicationVersion()));
     this->ui->labelInfo->setText(this->ui->labelInfo->text()
-        .arg(QApplication::organizationName())
-        .arg(QApplication::organizationDomain())
+        .arg(ApplicationInfo::copyrightLink())
+        .arg(ApplicationInfo::trademarks())
         .arg(QApplication::applicationName()));
 }
 

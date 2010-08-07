@@ -2,13 +2,13 @@
 # Project created by QtCreator 2010-04-08T06:08:50
 # -------------------------------------------------
 include(../common.pri)
+include(version.pri)
+
 QT += network \
     svg \
     xml
-TARGET = silverlock
+TARGET = $$APP_UNIXNAME
 TEMPLATE = app
-# We want Windows methods from at least Windows 2000 (NT 5.0)
-DEFINES += WINVER=0x0500
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
@@ -29,10 +29,10 @@ SOURCES += \
     guardeddialog.cpp \
     inactivityeventfilter.cpp \
     entryeditdialog_helper.cpp \
-    databaseprintdialog.cpp
+    databaseprintdialog.cpp \
+    applicationinfo.cpp
 HEADERS += \
     mainwindow.h \
-    version.h \
     entryeditdialog.h \
     groupeditdialog.h \
     preferencesdialog.h \
@@ -52,7 +52,9 @@ HEADERS += \
     guardeddialog.h \
     stable.h \
     inactivityeventfilter.h \
-    databaseprintdialog.h
+    databaseprintdialog.h \
+    version.h \
+    applicationinfo.h
 PRECOMPILED_HEADER = stable.h
 FORMS += mainwindow.ui \
     entryeditdialog.ui \
@@ -73,19 +75,43 @@ RESOURCES += resources.qrc \
 TRANSLATIONS += tr/silverlock_de.ts \
     tr/silverlock_fr.ts
 DESTDIR = ../bin
-INCLUDEPATH += ../silverlocklib ../../liel/c++/liel ../qtsingleapplication/src
-LIBS += -L../bin -L../../liel/liel-build-desktop/bin -lQtSolutions_SingleApplication-2.6
-win32:LIBS += -lsilverlocklib1 -lliel1
-macx:LIBS += -lsilverlocklib.1 -lliel.1
-linux-g++:LIBS += -lsilverlocklib -lliel
-OTHER_FILES += botan.txt silverlock.rc \
-    silverlock.manifest
+INCLUDEPATH += ../silverlocklib $$LIEL_HEADERS $$QSA_HEADERS
+LIBS += -L../bin -l$$platformversion(silverlocklib, 1) -L$$LIEL_BUILD -l$$platformversion($$LIEL_LIB, $$LIEL_VERSION) -L$$QSA_BUILD -l$$QSA_LIB
+OTHER_FILES += silverlock.rc \
+    silverlock.manifest \
+    Info.plist \
+    version.pri
 
-# General information
-VERSION = 1.0
+# Copy over dependent libraries
+QMAKE_POST_LINK += $$COPY_CMD \"$$nativeseps($${LIEL_BUILD}/$$platformversion($$LIEL_LIB, $$LIEL_VERSION)*)\" \"$$nativeseps($${OUT_PWD}/$${DESTDIR}/*)\" &
+QMAKE_POST_LINK += $$COPY_CMD \"$$nativeseps($$QSA_BUILD/$$QSA_LIB*)\" \"$$nativeseps($${OUT_PWD}/$${DESTDIR}/*)\" &
 
-# Resource file for Windows
-RC_FILE = silverlock.rc
+win32 {
+    RC_FILE = silverlock.rc
+}
 
-# Icon for Mac OS X application bundle
-ICON = res/app.icns
+macx {
+    ICON = res/app.icns
+
+    QMAKE_INFO_PLIST = Info.plist
+
+    PLISTDIR = $${OUT_PWD}/$${DESTDIR}/$${TARGET}.app/Contents
+    PLISTFILE = $$quote($$PLISTDIR/Info.plist)
+    PLISTFILE_BAK = $$quote($$PLISTDIR/Info.plist-bak)
+
+    # EXECUTABLE and ICON will be taken care of by QMake
+    QMAKE_POST_LINK += $$COPY_CMD $$PLISTFILE $$PLISTFILE_BAK &
+    QMAKE_POST_LINK += sed \
+                        -e \"s,@DISPLAY_NAME@,$${APP_DISPLAYNAME},g\" \
+                        -e \"s,@BUNDLE_IDENTIFIER@,com.petroules.$${TARGET},g\" \
+                        -e \"s,@VERSION@,$${VER_FILEVERSION_STR},g\" \
+                        -e \"s,@SHORT_VERSION@,$${VER_PRODUCTVERSION_STR},g\" \
+                        -e \"s,@COPYRIGHT@,$${VER_LEGALCOPYRIGHT_STR},g\" \
+                        $$PLISTFILE_BAK > $$PLISTFILE &
+    QMAKE_POST_LINK += $$DELETE_CMD $$PLISTFILE_BAK &
+}
+
+linux-g++ {
+    QMAKE_POST_LINK += $$COPY_CMD \"$${PWD}/../deploy/linux/launcher.sh\" \"$$nativeseps($${OUT_PWD}/$${DESTDIR}/$${TARGET}.sh)\" &
+    QMAKE_POST_LINK += chmod +x \"$$nativeseps($${OUT_PWD}/$${DESTDIR}/$${TARGET}.sh)\"
+}

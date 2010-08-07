@@ -1,7 +1,6 @@
 #include "silverlockpreferences.h"
 #include "silverlockpreferences_keys.h"
 #include "mainwindow.h"
-#include "version.h"
 #include <liel.h>
 
 SilverlockPreferences* SilverlockPreferences::m_instance = NULL;

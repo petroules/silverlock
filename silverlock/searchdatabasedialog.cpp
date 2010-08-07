@@ -36,7 +36,7 @@ SearchDatabaseDialog::~SearchDatabaseDialog()
 /*!
     Gets a pointer to the group being searched.
  */
-const Group *const SearchDatabaseDialog::group() const
+const Group* SearchDatabaseDialog::group() const
 {
     return this->m_group;
 }
@@ -44,7 +44,7 @@ const Group *const SearchDatabaseDialog::group() const
 /*!
     Sets the group to be searched.
  */
-void SearchDatabaseDialog::setGroup(const Group *const group)
+void SearchDatabaseDialog::setGroup(const Group *group)
 {
     this->m_group = group;
 }

@@ -27,17 +27,17 @@
 <context>
     <name>DatabaseReader</name>
     <message>
-        <location filename="../databasereader.cpp" line="72"/>
+        <location filename="../databasereader.cpp" line="75"/>
         <source>Missing root XML element.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databasereader.cpp" line="79"/>
+        <location filename="../databasereader.cpp" line="82"/>
         <source>Unsupported database version: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databasereader.cpp" line="93"/>
+        <location filename="../databasereader.cpp" line="96"/>
         <source>Unable to parse the XML tree.</source>
         <translation type="unfinished"></translation>
     </message>

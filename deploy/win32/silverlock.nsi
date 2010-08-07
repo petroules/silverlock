@@ -27,9 +27,9 @@ SetCompressorDictSize 64
 	# Paths for files and resources
 	!define QT_BIN "C:\Qt\2010.04\qt\bin"
 	!define QT_PLUGINS "${QT_BIN}\..\plugins"
-	!define APP_BIN "..\..\${PRODUCT_UNIXNAME}-build-desktop\bin"
-	!define PATH_RES "..\res"
-	!define PATH_APPRES "..\silverlock\res"
+	!define APP_BIN "..\..\..\${PRODUCT_UNIXNAME}-build-desktop\bin"
+	!define PATH_RES "..\..\res"
+	!define PATH_APPRES "..\..\silverlock\res"
 
 	# Warn the user if they try to close the installer
 	!define MUI_ABORTWARNING

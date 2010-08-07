@@ -1,20 +1,22 @@
 #include <QtGui>
 #include <QtSingleApplication>
-#include "version.h"
 #include "mainwindow.h"
 #include "silverlockpreferences.h"
 #include "updatedialog.h"
 #include "inactivityeventfilter.h"
+#include "applicationinfo.h"
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
 
 int main(int argc, char *argv[])
 {
-    QtSingleApplication instance(QString("%1 %2 %3")
-        .arg(VER_COMPANYNAME_STR).arg(VER_PRODUCTNAME_STR).arg(VER_PRODUCTVERSION_STR), argc, argv);
+    QtSingleApplication instance("{CA3E50C3-460E-4E12-9EFB-34030DC15306}", argc, argv);
+    ApplicationInfo::initialize(instance);
+
     Q_INIT_RESOURCE(globalresources);
     Q_INIT_RESOURCE(resources);
+
     InactivityEventFilter filter;
     instance.installEventFilter(&filter);
 
@@ -32,12 +34,6 @@ int main(int argc, char *argv[])
     {
         return 0;
     }
-
-    // Set the application information
-    instance.setOrganizationName(VER_COMPANYNAME_STR);
-    instance.setOrganizationDomain(VER_COMPANYDOMAIN_STR);
-    instance.setApplicationName(VER_PRODUCTNAME_STR);
-    instance.setApplicationVersion(VER_PRODUCTVERSION_STR);
 
     // Create a new main window
     MainWindow *mw = new MainWindow(&filter);

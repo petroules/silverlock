@@ -9,7 +9,6 @@
 #include "searchdatabasedialog.h"
 #include "selectgroupdialog.h"
 #include "silverlockpreferences.h"
-#include "version.h"
 #include "configurecolumnsdialog.h"
 #include "databaseauthenticationdialog.h"
 #include "updatedialog.h"
@@ -1531,7 +1530,7 @@ void MainWindow::setCurrentFile(const QString &fileName)
 void MainWindow::clearCurrentFile()
 {
     this->m_documentState.close();
-    this->setWindowTitle(VER_PRODUCTNAME_STR);
+    this->setWindowTitle(QCoreApplication::applicationName());
     this->setWindowModified(false);
     this->setWindowFilePath(this->m_documentState.currentFile());
 }

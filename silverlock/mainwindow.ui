@@ -536,6 +536,9 @@
    <property name="statusTip">
     <string>Configure the columns shown in the entry table</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
   </action>
   <action name="actionShowEntryView">
    <property name="checkable">

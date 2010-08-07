@@ -103,7 +103,7 @@ To sort entries by a particular column, click the corresponding column in the ma
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseauthenticationdialog.cpp" line="55"/>
+        <location filename="../databaseauthenticationdialog.cpp" line="57"/>
         <source>You have not entered a password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -192,54 +192,54 @@ To sort entries by a particular column, click the corresponding column in the ma
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseprintdialog.cpp" line="100"/>
+        <location filename="../databaseprintdialog.cpp" line="103"/>
         <source>My Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseprintdialog.cpp" line="106"/>
+        <location filename="../databaseprintdialog.cpp" line="109"/>
         <source>This is my Google account!
 
 I created it on 2008-09-19 &amp; have been using it since.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseprintdialog.cpp" line="107"/>
+        <location filename="../databaseprintdialog.cpp" line="110"/>
         <source>What is your mother&apos;s maiden name?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseprintdialog.cpp" line="108"/>
+        <location filename="../databaseprintdialog.cpp" line="111"/>
         <source>What is your favourite colour?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseprintdialog.cpp" line="163"/>
+        <location filename="../databaseprintdialog.cpp" line="166"/>
         <source>&lt;b&gt;Title:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseprintdialog.cpp" line="173"/>
+        <location filename="../databaseprintdialog.cpp" line="176"/>
         <source>&lt;b&gt;Username:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseprintdialog.cpp" line="178"/>
+        <location filename="../databaseprintdialog.cpp" line="181"/>
         <source>&lt;b&gt;Password:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseprintdialog.cpp" line="183"/>
+        <location filename="../databaseprintdialog.cpp" line="186"/>
         <source>&lt;b&gt;Notes:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseprintdialog.cpp" line="198"/>
+        <location filename="../databaseprintdialog.cpp" line="201"/>
         <source>&lt;b&gt;Recovery info:&lt;/b&gt;&lt;br /&gt;%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../databaseprintdialog.cpp" line="211"/>
+        <location filename="../databaseprintdialog.cpp" line="214"/>
         <source>&lt;b&gt;Custom fields:&lt;/b&gt;&lt;br /&gt;%1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -480,22 +480,22 @@ I created it on 2008-09-19 &amp; have been using it since.</source>
 <context>
     <name>GuardedDialog</name>
     <message>
-        <location filename="../guardeddialog.cpp" line="40"/>
+        <location filename="../guardeddialog.cpp" line="42"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../guardeddialog.cpp" line="47"/>
+        <location filename="../guardeddialog.cpp" line="49"/>
         <source>Are you sure you wish to continue anyways?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../guardeddialog.cpp" line="49"/>
+        <location filename="../guardeddialog.cpp" line="51"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../guardeddialog.cpp" line="58"/>
+        <location filename="../guardeddialog.cpp" line="60"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -564,6 +564,11 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
         <location filename="../licensedialog.ui" line="189"/>
         <source>Copyright &amp;copy; 1999-2009 Jack Lloyd, 2001 Peter J Jones, 2004-2007 Justin Karneges, 2005 Matthew Gregan, 2005-2006 Matt Johnston, 2006 Luca Piccarreta, 2007 Yves Jerschow, 2007-2008 FlexSecure GmbH, 2007-2008 Technische Universitat Darmstadt, 2007-2008 Falko Strenzke, 2007-2008 Martin Doering, 2007 Manuel Hartl, 2007 Christoph Ludwig, 2007 Patrick Sona, All Rights Reserved&lt;br /&gt;
 &lt;a href=&quot;http://botan.randombit.net/&quot;&gt;http://botan.randombit.net/&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../licensedialog.ui" line="209"/>
+        <source>The version of Botan used by Silverlock is taken from the Nokia Qt Creator 2.0 sources because it contains several additional files making it easier to integrate Botan with Qt&apos;s build system.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1029,214 +1034,215 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="199"/>
+        <location filename="../mainwindow.cpp" line="202"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="221"/>
+        <location filename="../mainwindow.cpp" line="224"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="397"/>
+        <location filename="../mainwindow.cpp" line="400"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="397"/>
+        <location filename="../mainwindow.cpp" line="400"/>
         <source>Silverlock databases (*.sdbx)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="436"/>
+        <location filename="../mainwindow.cpp" line="439"/>
         <source>Save As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="437"/>
+        <location filename="../mainwindow.cpp" line="440"/>
         <source>Silverlock databases (*.sdbx);;XML documents (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="447"/>
+        <location filename="../mainwindow.cpp" line="450"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="447"/>
+        <location filename="../mainwindow.cpp" line="450"/>
         <source>&lt;p&gt;&lt;b&gt;It is recommended that only advanced users select this option.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;If you save the database in XML format, the contents will not be encrypted and any user with access to the file will be able to view the information in your database. It is strongly recommended that you save your files in Silverlock&apos;s SDBX format instead.&lt;/p&gt;&lt;p&gt;Are you sure you want save in the XML format?&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="557"/>
-        <location filename="../mainwindow.cpp" line="845"/>
-        <location filename="../mainwindow.cpp" line="854"/>
-        <location filename="../mainwindow.cpp" line="1404"/>
-        <location filename="../mainwindow.cpp" line="1427"/>
-        <location filename="../mainwindow.cpp" line="1446"/>
-        <location filename="../mainwindow.cpp" line="1471"/>
-        <location filename="../mainwindow.cpp" line="1617"/>
+        <location filename="../mainwindow.cpp" line="560"/>
+        <location filename="../mainwindow.cpp" line="848"/>
+        <location filename="../mainwindow.cpp" line="857"/>
+        <location filename="../mainwindow.cpp" line="1407"/>
+        <location filename="../mainwindow.cpp" line="1430"/>
+        <location filename="../mainwindow.cpp" line="1449"/>
+        <location filename="../mainwindow.cpp" line="1474"/>
+        <location filename="../mainwindow.cpp" line="1620"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="557"/>
+        <location filename="../mainwindow.cpp" line="560"/>
         <source>You have not entered a search pattern.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="702"/>
+        <location filename="../mainwindow.cpp" line="705"/>
         <source> - Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="742"/>
+        <location filename="../mainwindow.cpp" line="745"/>
         <source>Delete Entries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="743"/>
+        <location filename="../mainwindow.cpp" line="746"/>
         <source>Are you sure you want to delete the selected entries?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="845"/>
+        <location filename="../mainwindow.cpp" line="848"/>
         <source>A group cannot be moved to itself or one of its subgroups.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="854"/>
+        <location filename="../mainwindow.cpp" line="857"/>
         <source>The source and destination group are the same.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="900"/>
+        <location filename="../mainwindow.cpp" line="903"/>
         <source>Delete Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="901"/>
+        <location filename="../mainwindow.cpp" line="904"/>
         <source>Are you sure you want to delete the selected groups?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1211"/>
+        <location filename="../mainwindow.cpp" line="1214"/>
         <source>&lt;b&gt;%1:&lt;/b&gt; Group(s): %2 / %3, Entry(-ies): %4 / %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="1228"/>
+        <location filename="../mainwindow.cpp" line="1231"/>
         <source>&lt;b&gt;Search results:&lt;/b&gt; (&quot;%1&quot;), %n entry(-ies) found</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1255"/>
+        <location filename="../mainwindow.cpp" line="1258"/>
         <source>&lt;b&gt;Group:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1260"/>
+        <location filename="../mainwindow.cpp" line="1263"/>
         <source>&lt;b&gt;Title:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1265"/>
+        <location filename="../mainwindow.cpp" line="1268"/>
         <source>&lt;b&gt;URL:&lt;/b&gt; &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1270"/>
+        <location filename="../mainwindow.cpp" line="1273"/>
         <source>&lt;b&gt;Username:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1275"/>
+        <location filename="../mainwindow.cpp" line="1278"/>
         <source>&lt;b&gt;Password:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1283"/>
+        <location filename="../mainwindow.cpp" line="1286"/>
         <source>&lt;b&gt;%1:&lt;/b&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1287"/>
+        <location filename="../mainwindow.cpp" line="1290"/>
         <source>&lt;b&gt;UUID:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1288"/>
+        <location filename="../mainwindow.cpp" line="1291"/>
         <source>&lt;b&gt;Created:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1289"/>
+        <location filename="../mainwindow.cpp" line="1292"/>
         <source>&lt;b&gt;Accessed:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1290"/>
+        <location filename="../mainwindow.cpp" line="1293"/>
         <source>&lt;b&gt;Modified:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1301"/>
+        <location filename="../mainwindow.cpp" line="1304"/>
         <source>&lt;li&gt;&lt;b&gt;%1&lt;/b&gt;: %2&lt;/li&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1304"/>
+        <location filename="../mainwindow.cpp" line="1307"/>
         <source>&lt;p&gt;%1&lt;/p&gt; &lt;ul&gt;%2&lt;/ul&gt; &lt;hr /&gt; &lt;p&gt;%3&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1341"/>
+        <location filename="../mainwindow.cpp" line="1344"/>
         <source>Save Changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1342"/>
+        <location filename="../mainwindow.cpp" line="1345"/>
         <source>The database has been modified.
 Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1404"/>
+        <location filename="../mainwindow.cpp" line="1407"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1422"/>
+        <location filename="../mainwindow.cpp" line="1425"/>
         <source>File loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1446"/>
+        <location filename="../mainwindow.cpp" line="1449"/>
         <source>Cannot write file %1:
 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1464"/>
+        <location filename="../mainwindow.cpp" line="1467"/>
         <source>File saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1471"/>
+        <location filename="../mainwindow.cpp" line="1474"/>
         <source>Cannot write file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1511"/>
+        <location filename="../mainwindow.cpp" line="1514"/>
         <source>Untitled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1617"/>
+        <location filename="../mainwindow.cpp" line="1620"/>
         <source>The password you entered is incorrect. Please verify that you have entered it correctly.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1462,17 +1468,17 @@ Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.cpp" line="139"/>
+        <location filename="../preferencesdialog.cpp" line="141"/>
         <source>Clearing the window settings will take effect when you next restart the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.cpp" line="150"/>
+        <location filename="../preferencesdialog.cpp" line="152"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.cpp" line="150"/>
+        <location filename="../preferencesdialog.cpp" line="152"/>
         <source>Are you sure you wish to reset all preferences to their default settings?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1555,12 +1561,12 @@ Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../searchdatabasedialog.cpp" line="100"/>
+        <location filename="../searchdatabasedialog.cpp" line="103"/>
         <source>You have not selected any fields to search in. Please select at least one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../searchdatabasedialog.cpp" line="105"/>
+        <location filename="../searchdatabasedialog.cpp" line="108"/>
         <source>You have not entered a search pattern.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1593,7 +1599,7 @@ Do you want to save your changes?</source>
     </message>
     <message>
         <location filename="../updatedialog.ui" line="93"/>
-        <location filename="../updatedialog.cpp" line="109"/>
+        <location filename="../updatedialog.cpp" line="111"/>
         <source>Congratulations, you are running the latest version of Silverlock (&lt;b&gt;%1&lt;/b&gt;)! There is no need to update.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1605,7 +1611,7 @@ Do you want to save your changes?</source>
     </message>
     <message>
         <location filename="../updatedialog.ui" line="153"/>
-        <location filename="../updatedialog.cpp" line="118"/>
+        <location filename="../updatedialog.cpp" line="120"/>
         <source>An update to version &lt;b&gt;%1&lt;/b&gt; is available! You are running version &lt;b&gt;%2&lt;/b&gt;. It is strongly recommended that you upgrade now. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1621,7 +1627,7 @@ Do you want to save your changes?</source>
     </message>
     <message>
         <location filename="../updatedialog.ui" line="224"/>
-        <location filename="../updatedialog.cpp" line="142"/>
+        <location filename="../updatedialog.cpp" line="144"/>
         <source>Contacting download server...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1646,54 +1652,54 @@ Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../updatedialog.cpp" line="83"/>
+        <location filename="../updatedialog.cpp" line="85"/>
         <source>Your version of Silverlock appears to be newer than the latest available version. Please contact Petroules Enterprises for further assistance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../updatedialog.cpp" line="88"/>
+        <location filename="../updatedialog.cpp" line="90"/>
         <source>Unable to determine the latest version of Silverlock.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../updatedialog.cpp" line="94"/>
+        <location filename="../updatedialog.cpp" line="96"/>
         <source>A network error was encountered when attempting to determine the latest version of Silverlock. The error returned was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../updatedialog.cpp" line="103"/>
+        <location filename="../updatedialog.cpp" line="105"/>
         <source>An error occurred during the update process:
 
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../updatedialog.cpp" line="154"/>
+        <location filename="../updatedialog.cpp" line="156"/>
         <source>Downloading Silverlock version &lt;b&gt;%1&lt;/b&gt; from %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../updatedialog.cpp" line="180"/>
+        <location filename="../updatedialog.cpp" line="182"/>
         <source>Failed to verify file integrity; data may have been corrupted during the download process.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../updatedialog.cpp" line="185"/>
+        <location filename="../updatedialog.cpp" line="187"/>
         <source>Failed to open temporary file to download installer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../updatedialog.cpp" line="191"/>
+        <location filename="../updatedialog.cpp" line="193"/>
         <source>A network error was encountered when downloading the latest version of Silverlock. The error returned was: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../updatedialog.cpp" line="242"/>
+        <location filename="../updatedialog.cpp" line="244"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../updatedialog.cpp" line="242"/>
+        <location filename="../updatedialog.cpp" line="244"/>
         <source>Failed to start the installer process. The error returned was: %1</source>
         <translation type="unfinished"></translation>
     </message>
