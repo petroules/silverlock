@@ -40,7 +40,7 @@ INCLUDEPATH += $$LIEL_HEADERS $$BOTAN_HEADERS
 LIBS += -L$$LIEL_BUILD -l$$platformversion($$LIEL_LIB, $$LIEL_VERSION) -L$$BOTAN_BUILD -l$$BOTAN_LIB
 
 # Copy over dependent libraries
-QMAKE_POST_LINK += $$COPY_CMD \"$$nativeseps($$BOTAN_BUILD/$$BOTAN_LIB*)\" \"$$nativeseps($${OUT_PWD}/$${DESTDIR}/*)\" &
+QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$BOTAN_BUILD/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
 
 win32 {
     RC_FILE = silverlocklib.rc

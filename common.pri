@@ -46,21 +46,28 @@ defineReplace(platformversion) {
     }
 }
 
-defineReplace(nativeseps) {
+defineReplace(formatpath) {
     path = $$1
 
     win32 {
-        return($$replace(path, "/", "\\"))
+        return(\"$$replace(path, "/", "\\")\")
     } else:unix {
-        return($${path})
+        return($$replace(path, " ", "\\ "))
     } else {
-        error("Unknown platform in nativeseps!")
+        error("Unknown platform in formatpath!")
     }
 }
 
 # Define commands for each platform
 win32:COPY_CMD = copy
-unix:COPY_CMD = cp
+unix:COPY_CMD = cp -P
 
 win32:DELETE_CMD = del
 unix:DELETE_CMD = rm
+
+win32:CMD_SEP = "&"
+unix:CMD_SEP = ";"
+
+win32:LIB_EXT = dll
+unix:LIB_EXT = so
+macx:LIB_EXT = dylib

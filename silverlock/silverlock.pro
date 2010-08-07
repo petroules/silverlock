@@ -83,8 +83,8 @@ OTHER_FILES += silverlock.rc \
     version.pri
 
 # Copy over dependent libraries
-QMAKE_POST_LINK += $$COPY_CMD \"$$nativeseps($${LIEL_BUILD}/$$platformversion($$LIEL_LIB, $$LIEL_VERSION)*)\" \"$$nativeseps($${OUT_PWD}/$${DESTDIR}/*)\" &
-QMAKE_POST_LINK += $$COPY_CMD \"$$nativeseps($$QSA_BUILD/$$QSA_LIB*)\" \"$$nativeseps($${OUT_PWD}/$${DESTDIR}/*)\" &
+QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$LIEL_BUILD/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
+QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$QSA_BUILD/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
 
 win32 {
     RC_FILE = silverlock.rc
@@ -95,23 +95,23 @@ macx {
 
     QMAKE_INFO_PLIST = Info.plist
 
-    PLISTDIR = $${OUT_PWD}/$${DESTDIR}/$${TARGET}.app/Contents
-    PLISTFILE = $$quote($$PLISTDIR/Info.plist)
-    PLISTFILE_BAK = $$quote($$PLISTDIR/Info.plist-bak)
+    PLISTDIR = $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents
+    PLISTFILE = \"$$PLISTDIR/Info.plist\"
+    PLISTFILE_BAK = \"$$PLISTDIR/Info.plist-bak\"
 
     # EXECUTABLE and ICON will be taken care of by QMake
-    QMAKE_POST_LINK += $$COPY_CMD $$PLISTFILE $$PLISTFILE_BAK &
+    QMAKE_POST_LINK += $$COPY_CMD $$PLISTFILE $$PLISTFILE_BAK $$CMD_SEP
     QMAKE_POST_LINK += sed \
                         -e \"s,@DISPLAY_NAME@,$${APP_DISPLAYNAME},g\" \
-                        -e \"s,@BUNDLE_IDENTIFIER@,com.petroules.$${TARGET},g\" \
+                        -e \"s,@BUNDLE_IDENTIFIER@,com.petroules.$${APP_UNIXNAME},g\" \
                         -e \"s,@VERSION@,$${VER_FILEVERSION_STR},g\" \
                         -e \"s,@SHORT_VERSION@,$${VER_PRODUCTVERSION_STR},g\" \
                         -e \"s,@COPYRIGHT@,$${VER_LEGALCOPYRIGHT_STR},g\" \
-                        $$PLISTFILE_BAK > $$PLISTFILE &
-    QMAKE_POST_LINK += $$DELETE_CMD $$PLISTFILE_BAK &
+                        $$PLISTFILE_BAK > $$PLISTFILE $$CMD_SEP
+    QMAKE_POST_LINK += $$DELETE_CMD $$PLISTFILE_BAK $$CMD_SEP
 }
 
 linux-g++ {
-    QMAKE_POST_LINK += $$COPY_CMD \"$${PWD}/../deploy/linux/launcher.sh\" \"$$nativeseps($${OUT_PWD}/$${DESTDIR}/$${TARGET}.sh)\" &
-    QMAKE_POST_LINK += chmod +x \"$$nativeseps($${OUT_PWD}/$${DESTDIR}/$${TARGET}.sh)\"
+    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$PWD/../deploy/linux/launcher.sh) $$formatpath($$OUT_PWD/$$DESTDIR/$${TARGET}.sh) $$CMD_SEP
+    QMAKE_POST_LINK += chmod +x $$formatpath($${OUT_PWD}/$${DESTDIR}/$${TARGET}.sh) $$CMD_SEP
 }
