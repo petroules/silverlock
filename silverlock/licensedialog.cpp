@@ -20,6 +20,7 @@ LicenseDialog::LicenseDialog(QWidget *parent) :
     this->ui->setupUi(this);
 
     this->ui->silverlockLicense->setText(getLicense("gpl-3.0"));
+    this->ui->lielLicense->setText(getLicense("lgpl-2.1"));
     this->ui->qtLicense->setText(getLicense("lgpl-2.1"));
     this->ui->qsaLicense->setText(getLicense("lgpl-2.1"));
     this->ui->botanLicense->setText(getLicense("botan"));

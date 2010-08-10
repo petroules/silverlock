@@ -4,3 +4,4 @@ VER_PRODUCTVERSION_STR  = $${VERSION}
 
 APP_DISPLAYNAME         = "Silverlock"
 APP_UNIXNAME            = silverlock
+APP_BUNDLEID            = "com.petroules.silverlock"

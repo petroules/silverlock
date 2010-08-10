@@ -4,18 +4,33 @@
 #include "silverlockpreferences.h"
 #include "updatedialog.h"
 #include "inactivityeventfilter.h"
-#include "applicationinfo.h"
+#include "version.h"
+#include <liel.h>
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
 
+void setAppInfo()
+{
+    ApplicationInfo::setOrganizationName(VER_COMPANYNAME_STR);
+    ApplicationInfo::setOrganizationDomain(VER_COMPANYDOMAIN_STR);
+    ApplicationInfo::setApplicationName(APP_DISPLAYNAME);
+    ApplicationInfo::setUnixName(APP_UNIXNAME);
+    ApplicationInfo::setBundleId(APP_BUNDLEID);
+    ApplicationInfo::setApplicationVersion(QVersion(VER_PRODUCTVERSION_STR));
+    ApplicationInfo::setFileVersion(QVersion(VER_FILEVERSION_STR));
+    ApplicationInfo::setCopyright(VER_LEGALCOPYRIGHT_STR);
+    ApplicationInfo::setTrademarks(VER_LEGALTRADEMARKS1_STR);
+}
+
 int main(int argc, char *argv[])
 {
     QtSingleApplication instance("{CA3E50C3-460E-4E12-9EFB-34030DC15306}", argc, argv);
-    ApplicationInfo::initialize(instance);
-
     Q_INIT_RESOURCE(globalresources);
     Q_INIT_RESOURCE(resources);
+
+    setAppInfo();
+    ApplicationInfo::initialize(instance);
 
     InactivityEventFilter filter;
     instance.installEventFilter(&filter);

@@ -39,7 +39,7 @@ Herein are the licenses for Silverlock and each of the projects it is linked wit
         <x>0</x>
         <y>0</y>
         <width>622</width>
-        <height>413</height>
+        <height>386</height>
        </rect>
       </property>
       <attribute name="label">
@@ -63,6 +63,46 @@ Contact: Petroules Enterprises (&lt;a href=&quot;mailto:support@petroules.com&qu
        </item>
        <item>
         <widget class="QTextBrowser" name="silverlockLicense">
+         <property name="openExternalLinks">
+          <bool>true</bool>
+         </property>
+         <property name="openLinks">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="lielPage">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>310</width>
+        <height>134</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>LIEL - Language Independent Extension Library</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QLabel" name="lielLabel">
+         <property name="text">
+          <string>Copyright &amp;copy; 2010 Petroules Enterprises, All Rights Reserved&lt;br /&gt;
+Contact: Petroules Enterprises (&lt;a href=&quot;mailto:support@petroules.com&quot;&gt;support@petroules.com&lt;/a&gt;)&lt;br /&gt;
+&lt;a href=&quot;http://www.petroules.com/products/liel/&quot;&gt;http://www.petroules.com/products/liel/&lt;/a&gt;</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
+         </property>
+         <property name="openExternalLinks">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextBrowser" name="lielLicense">
          <property name="openExternalLinks">
           <bool>true</bool>
          </property>
@@ -129,7 +169,7 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
         <x>0</x>
         <y>0</y>
         <width>622</width>
-        <height>413</height>
+        <height>386</height>
        </rect>
       </property>
       <attribute name="label">
@@ -168,6 +208,18 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="qsaAdditionalPetroulesLabel">
+         <property name="text">
+          <string>The distribution of QtSingleApplication used has a small modification to the code to support opening files on Mac OS X using the Finder. See our QtSingleApplication source package for details.
+
+See above to view the LGPL 2.1 license under which Nokia's version of QtSingleApplication, and our derivative, are licensed.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="botanPage">
@@ -176,7 +228,7 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
         <x>0</x>
         <y>0</y>
         <width>622</width>
-        <height>413</height>
+        <height>386</height>
        </rect>
       </property>
       <attribute name="label">
@@ -206,7 +258,9 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
        <item>
         <widget class="QLabel" name="botanAdditionalLabel">
          <property name="text">
-          <string>The version of Botan used by Silverlock is taken from the Nokia Qt Creator 2.0 sources because it contains several additional files making it easier to integrate Botan with Qt's build system.</string>
+          <string>The distribution of Botan used is Nokia's version of Botan 1.8.8 found in the Qt Creator 2.0 sources (LGPL 2.1) with a very small modification to the build file (but not the Botan code itself). See our Botan source package for details.
+
+Click the 'Qt' tab to view the LGPL 2.1 license under which Nokia's version of Botan, and our derivative, are licensed.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>

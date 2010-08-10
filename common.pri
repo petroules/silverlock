@@ -11,13 +11,12 @@ win32:DEFINES += WINVER=0x0500
 # -------------------------------------------------
 
 LIEL_HEADERS = $$PWD$$/../liel/c++/liel
-LIEL_BUILD = $$PWD$$/../liel/liel-build-desktop/bin
+LIEL_BUILD = $$PWD$$/../liel/liel-build-desktop/lib
 LIEL_LIB = liel
 LIEL_VERSION = 1
 
 BOTAN_HEADERS = $$PWD$$/../3rdparty/botan/build
-BOTAN_BUILD = $$PWD$$/../3rdparty/botan-build-desktop/src
-win32:BOTAN_BUILD = $$BOTAN_BUILD/release
+BOTAN_BUILD = $$PWD$$/../3rdparty/botan-build-desktop/lib
 BOTAN_LIB = Botan
 
 QSA_HEADERS = $$PWD$$/../3rdparty/qtsingleapplication/src
@@ -61,13 +60,14 @@ defineReplace(formatpath) {
 # Define commands for each platform
 win32:COPY_CMD = copy
 unix:COPY_CMD = cp -P
+macx:COPY_CMD = cp -R
 
 win32:DELETE_CMD = del
 unix:DELETE_CMD = rm
 
-win32:CMD_SEP = "&"
+win32:CMD_SEP = $$escape_expand(\n\t)
 unix:CMD_SEP = ";"
 
 win32:LIB_EXT = dll
-unix:LIB_EXT = so
+unix:LIB_EXT = so*
 macx:LIB_EXT = dylib

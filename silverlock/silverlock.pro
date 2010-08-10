@@ -29,8 +29,7 @@ SOURCES += \
     guardeddialog.cpp \
     inactivityeventfilter.cpp \
     entryeditdialog_helper.cpp \
-    databaseprintdialog.cpp \
-    applicationinfo.cpp
+    databaseprintdialog.cpp
 HEADERS += \
     mainwindow.h \
     entryeditdialog.h \
@@ -53,8 +52,7 @@ HEADERS += \
     stable.h \
     inactivityeventfilter.h \
     databaseprintdialog.h \
-    version.h \
-    applicationinfo.h
+    version.h
 PRECOMPILED_HEADER = stable.h
 FORMS += mainwindow.ui \
     entryeditdialog.ui \
@@ -76,15 +74,19 @@ TRANSLATIONS += tr/silverlock_de.ts \
     tr/silverlock_fr.ts
 DESTDIR = ../bin
 INCLUDEPATH += ../silverlocklib $$LIEL_HEADERS $$QSA_HEADERS
-LIBS += -L../bin -l$$platformversion(silverlocklib, 1) -L$$LIEL_BUILD -l$$platformversion($$LIEL_LIB, $$LIEL_VERSION) -L$$QSA_BUILD -l$$QSA_LIB
+LIBS += -L../lib -l$$platformversion(silverlocklib, 1) -L$$LIEL_BUILD -l$$platformversion($$LIEL_LIB, $$LIEL_VERSION) -L$$QSA_BUILD -l$$QSA_LIB
 OTHER_FILES += silverlock.rc \
     silverlock.manifest \
     Info.plist \
     version.pri
 
-# Copy over dependent libraries
-QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$LIEL_BUILD/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
-QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$QSA_BUILD/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
+# Copy over dependent libraries - not necessary on Mac OS X as macdeployqt will take care of it...
+!macx {
+    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$OUT_PWD/../lib/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
+    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$LIEL_BUILD/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
+    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$BOTAN_BUILD/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
+    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$QSA_BUILD/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
+}
 
 win32 {
     RC_FILE = silverlock.rc
@@ -103,12 +105,14 @@ macx {
     QMAKE_POST_LINK += $$COPY_CMD $$PLISTFILE $$PLISTFILE_BAK $$CMD_SEP
     QMAKE_POST_LINK += sed \
                         -e \"s,@DISPLAY_NAME@,$${APP_DISPLAYNAME},g\" \
-                        -e \"s,@BUNDLE_IDENTIFIER@,com.petroules.$${APP_UNIXNAME},g\" \
+                        -e \"s,@BUNDLE_IDENTIFIER@,$${APP_BUNDLEID},g\" \
                         -e \"s,@VERSION@,$${VER_FILEVERSION_STR},g\" \
                         -e \"s,@SHORT_VERSION@,$${VER_PRODUCTVERSION_STR},g\" \
                         -e \"s,@COPYRIGHT@,$${VER_LEGALCOPYRIGHT_STR},g\" \
                         $$PLISTFILE_BAK > $$PLISTFILE $$CMD_SEP
     QMAKE_POST_LINK += $$DELETE_CMD $$PLISTFILE_BAK $$CMD_SEP
+
+    QMAKE_POST_LINK += macdeployqt $$formatpath($$OUT_PWD/$$DESTDIR/$${TARGET}.app) $$CMD_SEP
 }
 
 linux-g++ {

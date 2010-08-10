@@ -334,7 +334,7 @@ bool SilverlockPreferences::runAtStartup() const
     QSettings reg(KEY_WIN_STARTUP_PATH, QSettings::NativeFormat);
     return reg.contains(KEY_WIN_STARTUP_NAME) && reg.value(KEY_WIN_STARTUP_NAME).toString().compare(path, Qt::CaseInsensitive) == 0;
 #elif defined(Q_OS_MAC)
-    QFile file(QString("~/Library/LaunchAgents/%1.plist").arg(MACOSX_PROGID));
+    QFile file(QString("~/Library/LaunchAgents/%1.plist").arg(ApplicationInfo::bundleId()));
     if (file.open(QIODevice::ReadOnly))
     {
         return file.exists();
@@ -362,14 +362,14 @@ void SilverlockPreferences::setRunAtStartup(bool run)
         settings.remove(KEY_WIN_STARTUP_NAME);
     }
 #elif defined(Q_OS_MAC)
-    QFile file(QString("~/Library/LaunchAgents/%1.plist").arg(MACOSX_PROGID));
+    QFile file(QString("~/Library/LaunchAgents/%1.plist").arg(ApplicationInfo::bundleId()));
     if (run)
     {
         QFile plistFile(":/main/res/LaunchAgent.plist");
         if (file.open(QIODevice::WriteOnly) && plistFile.open(QIODevice::ReadOnly))
         {
             QTextStream out(&file);
-            out << QString(plistFile.readAll()).arg(MACOSX_PROGID).arg(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
+            out << QString(plistFile.readAll()).arg(ApplicationInfo::bundleId()).arg(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
         }
     }
     else

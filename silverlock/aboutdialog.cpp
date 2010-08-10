@@ -1,7 +1,7 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 #include "licensedialog.h"
-#include "applicationinfo.h"
+#include <liel.h>
 
 /*!
     \class AboutDialog

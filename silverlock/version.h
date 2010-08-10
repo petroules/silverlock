@@ -11,6 +11,7 @@
 
 #define APP_DISPLAYNAME             "Silverlock"
 #define APP_UNIXNAME                "silverlock"
+#define APP_BUNDLEID                "com.petroules.silverlock"
 #define VER_FILEDESCRIPTION_STR     APP_DISPLAYNAME
 #define VER_INTERNALNAME_STR        APP_DISPLAYNAME
 #define VER_PRODUCTNAME_STR         APP_DISPLAYNAME

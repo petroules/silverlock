@@ -1592,6 +1592,12 @@ MainWindow* MainWindow::findMainWindow(const QString &fileName)
 {
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
+    // This could happen if the file didn't exist - otherwise we could get a false positive!
+    if (canonicalFilePath.isEmpty())
+    {
+        return NULL;
+    }
+
     foreach (QWidget *widget, qApp->topLevelWidgets())
     {
         MainWindow *mainWin = qobject_cast<MainWindow*>(widget);
