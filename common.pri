@@ -21,7 +21,7 @@ BOTAN_LIB = Botan
 
 QSA_HEADERS = $$PWD$$/../3rdparty/qtsingleapplication/src
 QSA_BUILD = $$PWD$$/../3rdparty/qtsingleapplication/lib
-QSA_LIB = QtSolutions_SingleApplication-2.6
+QSA_LIB = qsa-2.6
 
 # -------------------------------------------------
 # Useful things; move elsewhere in future

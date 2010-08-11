@@ -78,8 +78,8 @@ Contact: Petroules Enterprises (&lt;a href=&quot;mailto:support@petroules.com&qu
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>310</width>
-        <height>134</height>
+        <width>622</width>
+        <height>386</height>
        </rect>
       </property>
       <attribute name="label">
@@ -168,8 +168,8 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>622</width>
-        <height>386</height>
+        <width>465</width>
+        <height>380</height>
        </rect>
       </property>
       <attribute name="label">
@@ -209,9 +209,16 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
         </widget>
        </item>
        <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="qsaAdditionalPetroulesLabel">
          <property name="text">
-          <string>The distribution of QtSingleApplication used has a small modification to the code to support opening files on Mac OS X using the Finder. See our QtSingleApplication source package for details.
+          <string>The distribution of QtSingleApplication used has two small modifications from Nokia's original version 2.6, to support opening files on Mac OS X using the Finder, and a shorter library name to avoid a conflict when using macdeployqt. See our QtSingleApplication source package for details.
 
 See above to view the LGPL 2.1 license under which Nokia's version of QtSingleApplication, and our derivative, are licensed.</string>
          </property>
@@ -227,8 +234,8 @@ See above to view the LGPL 2.1 license under which Nokia's version of QtSingleAp
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>622</width>
-        <height>386</height>
+        <width>154</width>
+        <height>651</height>
        </rect>
       </property>
       <attribute name="label">
