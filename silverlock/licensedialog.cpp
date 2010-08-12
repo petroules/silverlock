@@ -24,6 +24,7 @@ LicenseDialog::LicenseDialog(QWidget *parent) :
     this->ui->qtLicense->setText(getLicense("lgpl-2.1"));
     this->ui->qsaLicense->setText(getLicense("lgpl-2.1"));
     this->ui->botanLicense->setText(getLicense("botan"));
+    this->ui->sparkleLicense->setText(getLicense("sparkle"));
 
     this->ui->qtAdditionalLabel->setText(getLicense("qt-exception"));
     this->ui->qsaAdditionalLabel->setText(getLicense("qsa-exception"));

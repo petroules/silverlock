@@ -15,6 +15,9 @@
 #include "inactivityeventfilter.h"
 #include "databaseprintdialog.h"
 #include <QtSingleApplication>
+#ifdef Q_WS_MAC
+#include "sparkleautoupdater.h"
+#endif
 
 /*!
     \class MainWindow
@@ -163,7 +166,12 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     {
         case QSystemTrayIcon::Trigger:
             {
+#ifndef Q_OS_MAC
+                // We don't want this to happen in Mac OS X since the Dock already has a "hide"
+                // option which does pretty much the same thing, plus tray icons in Mac show the
+                // context menu whether they are left or right clicked, so it makes no sense to have
                 this->setVisible(!this->isVisible());
+#endif
                 if (this->isVisible())
                 {
                     this->setWindowState(this->windowState() & ~Qt::WindowMinimized);
@@ -985,23 +993,28 @@ void MainWindow::on_actionPreferences_triggered()
 
 void MainWindow::on_actionHelpContents_triggered()
 {
-
+    QDesktopServices::openUrl(ApplicationInfo::url(ApplicationInfo::ApplicationHelp));
 }
 
 void MainWindow::on_actionWebsite_triggered()
 {
-    QDesktopServices::openUrl(QUrl("http://www.petroules.com/products/silverlock/"));
+    QDesktopServices::openUrl(ApplicationInfo::url(ApplicationInfo::ApplicationHomePage));
 }
 
 void MainWindow::on_actionDonate_triggered()
 {
-    QDesktopServices::openUrl(QUrl("http://www.petroules.com/donate/"));
+    QDesktopServices::openUrl(ApplicationInfo::url(ApplicationInfo::OrganizationDonations));
 }
 
 void MainWindow::on_actionCheckForUpdates_triggered()
 {
+#ifdef Q_WS_MAC
+    AutoUpdater *updater = new SparkleAutoUpdater(ApplicationInfo::url(ApplicationInfo::ApplicationUpdate));
+    updater->checkForUpdates(false);
+#else
     UpdateDialog dialog(this);
     dialog.exec();
+#endif
 }
 
 void MainWindow::on_actionAboutSilverlock_triggered()

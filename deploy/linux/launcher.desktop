@@ -1,0 +1,11 @@
+[Desktop Entry]
+Comment=Silverlock Password Manager Application
+Exec=$(dirname %k)/silverlock.sh
+Icon=app.svg
+Name=Silverlock
+Path=$(dirname %k)
+StartupNotify=false
+Terminal=false
+Type=Application
+X-KDE-SubstituteUID=false
+X-SuSE-translate=true

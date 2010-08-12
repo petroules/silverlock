@@ -1,7 +1,6 @@
 #include "silverlockpreferences.h"
 #include "silverlockpreferences_keys.h"
 #include "mainwindow.h"
-#include <liel.h>
 
 SilverlockPreferences* SilverlockPreferences::m_instance = NULL;
 SilverlockPreferences* SilverlockPreferences::m_defaults = NULL;
@@ -302,24 +301,15 @@ void SilverlockPreferences::setMinimizeAfterLock(bool minimize)
     this->m_minimizeAfterLock = minimize;
 }
 
+/*!
+    Gets a value indicating whether run-at-startup is supported on this platform and configuration.
+ */
+bool SilverlockPreferences::runAtStartupSupported()
+{
 #ifdef Q_OS_WIN
-/*!
-    Gets the path of the running application with native separators and enclosed in quotes, suitable
-    for entry into the Windows registry.
- */
-QString SilverlockPreferences::applicationPathForRegistry() const
-{
-    return QString("\"%1\"").arg(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
-}
-#endif
-
-/*!
-    Gets a value indicating whether run-at-startup is supported on this platform.
- */
-bool SilverlockPreferences::runAtStartupSupported() const
-{
-#if defined(Q_OS_WIN) || defined(Q_OS_MAC) || defined(Q_OS_LINUX)
     return true;
+#elif defined(Q_OS_LINUX)
+    return !SilverlockPreferences::startupFile().isEmpty();
 #else
     return false;
 #endif
@@ -327,30 +317,32 @@ bool SilverlockPreferences::runAtStartupSupported() const
 
 bool SilverlockPreferences::runAtStartup() const
 {
+    if (!SilverlockPreferences::runAtStartupSupported())
+    {
+        qWarning() << "Run at startup is not supported on this platform and configuration.";
+        return false;
+    }
+
 #ifdef Q_OS_WIN
     QString path = this->applicationPathForRegistry();
 
     // If we're running on Windows, set the check box if the registry contains the correct key set to the running application's path
     QSettings reg(KEY_WIN_STARTUP_PATH, QSettings::NativeFormat);
     return reg.contains(KEY_WIN_STARTUP_NAME) && reg.value(KEY_WIN_STARTUP_NAME).toString().compare(path, Qt::CaseInsensitive) == 0;
-#elif defined(Q_OS_MAC)
-    QFile file(QString("~/Library/LaunchAgents/%1.plist").arg(ApplicationInfo::bundleId()));
-    if (file.open(QIODevice::ReadOnly))
-    {
-        return file.exists();
-    }
-
-    return false;
 #elif defined(Q_OS_LINUX)
-    return QFile::exists("~/config/autostart/Silverlock.desktop") || QFile::exists("~/.kde/Autostart/silverlock");
-#else
-    qWarning() << "Run at startup is not supported on this platform.";
-    return false;
+    return QFile::exists(SilverlockPreferences::startupFile());
 #endif
 }
 
 void SilverlockPreferences::setRunAtStartup(bool run)
 {
+    if (!SilverlockPreferences::runAtStartupSupported())
+    {
+        Q_UNUSED(run);
+        qWarning() << "Run at startup is not supported on this platform and configuration.";
+        return;
+    }
+
 #ifdef Q_OS_WIN
     QSettings settings(KEY_WIN_STARTUP_PATH, QSettings::NativeFormat);
     if (run)
@@ -361,59 +353,49 @@ void SilverlockPreferences::setRunAtStartup(bool run)
     {
         settings.remove(KEY_WIN_STARTUP_NAME);
     }
-#elif defined(Q_OS_MAC)
-    QFile file(QString("~/Library/LaunchAgents/%1.plist").arg(ApplicationInfo::bundleId()));
-    if (run)
-    {
-        QFile plistFile(":/main/res/LaunchAgent.plist");
-        if (file.open(QIODevice::WriteOnly) && plistFile.open(QIODevice::ReadOnly))
-        {
-            QTextStream out(&file);
-            out << QString(plistFile.readAll()).arg(ApplicationInfo::bundleId()).arg(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
-        }
-    }
-    else
-    {
-        file.remove();
-    }
 #elif defined(Q_OS_LINUX)
-    /*
-    // For GNOME
-    if (run)
+    switch (LinuxSystemInfo::desktopEnvironment())
     {
-        QFile file("~/config/autostart/Silverlock.desktop");
-        if (file.open(QFile::WriteOnly | QFile::Truncate))
+        case LinuxSystemInfo::GNOME:
         {
-            file.setPermissions(file.permissions() | QFile::ExeOwner | QFile::ExeGroup);
+            if (run)
+            {
+                QFile file(SilverlockPreferences::startupFile());
+                if (file.open(QFile::WriteOnly | QFile::Truncate))
+                {
+                    file.setPermissions(file.permissions() | QFile::ExeOwner | QFile::ExeGroup);
 
-            QTextStream out(&file);
-            out << "[Desktop Entry]\n";
-            out << "Type=Application\n";
-            out << "Exec=silverlock\n";
-            out << "Hidden=false\n";
-            out << "NoDisplay=false\n";
-            out << "X-GNOME-Autostart-enabled=true\n";
-            out << "Name=Silverlock\n";
+                    QTextStream out(&file);
+                    out << "[Desktop Entry]\n";
+                    out << "Type=Application\n";
+                    out << QString("Exec=%1.desktop\n").arg(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
+                    out << "Hidden=false\n";
+                    out << "NoDisplay=false\n";
+                    out << "X-GNOME-Autostart-enabled=true\n";
+                    out << "Name=Silverlock\n";
+                }
+            }
+            else
+            {
+                QFile::remove(SilverlockPreferences::startupFile());
+            }
         }
-    }
-    else
-    {
-        QFile::remove("~/config/autostart/Silverlock.desktop");
-    }
 
-    // FOR KDE
-    if (run)
-    {
-        QFile::link(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()), "~/.kde/Autostart/silverlock");
+        case LinuxSystemInfo::KDE:
+        {
+            if (run)
+            {
+                QFile::link(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()), SilverlockPreferences::startupFile());
+            }
+            else
+            {
+                QFile::remove(SilverlockPreferences::startupFile());
+            }
+        }
+
+        default:
+            return;
     }
-    else
-    {
-        QFile::remove("~/.kde/Autostart/silverlock");
-    }
-    */
-#else
-    Q_UNUSED(run);
-    qWarning() << "Run at startup is not supported on this platform.";
 #endif
 }
 
@@ -477,14 +459,17 @@ void SilverlockPreferences::clearRecentFiles()
 
 void SilverlockPreferences::addRecentFile(const QString &fileName)
 {
+    // Get the absolute path with no symlinks or "." or ".." elements
+    QString canonicalPath = QDir(fileName).canonicalPath();
+
     // No empty file names, please...
-    if (fileName.isEmpty())
+    if (canonicalPath.isEmpty())
     {
         return;
     }
 
     // If we get a fatal or unspecified error opening the file, something probably very bad
-    QFile file(fileName);
+    QFile file(canonicalPath);
     if (!file.open(QIODevice::ReadOnly))
     {
         if (file.error() == QFile::FatalError || file.error() == QFile::UnspecifiedError)
@@ -494,10 +479,10 @@ void SilverlockPreferences::addRecentFile(const QString &fileName)
     }
 
     // Remove all instances of this file previously appearing in the list
-    this->m_recentFiles.removeAll(fileName);
+    this->m_recentFiles.removeAll(canonicalPath);
 
     // Add it to the front of the list
-    this->m_recentFiles.prepend(fileName);
+    this->m_recentFiles.prepend(canonicalPath);
 
     // Remove all files after
     while (this->m_recentFiles.size() > this->maxRecentFiles())
@@ -555,3 +540,43 @@ void SilverlockPreferences::setUpdateInstallerPath(const QString &path)
 {
     this->m_updateInstallerPath = path;
 }
+
+// Platform-specific methods...
+#ifdef Q_OS_WIN
+/*!
+    Gets the path of the running application with native separators and enclosed in quotes, suitable
+    for entry into the Windows registry.
+ */
+QString SilverlockPreferences::applicationPathForRegistry()
+{
+    return QString("\"%1\"").arg(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
+}
+#elif defined(Q_OS_LINUX)
+/*!
+    Gets the absolute path of the run-at-startup file for the current desktop environment.
+
+    Returns an empty string if the desktop environment is not supported.
+ */
+QString SilverlockPreferences::startupFile()
+{
+    return SilverlockPreferences::startupFileFor(LinuxSystemInfo::desktopEnvironment());
+}
+
+/*!
+    Gets the absolute path of the run-at-startup file for the specified desktop environment.
+
+    Returns an empty string if the desktop environment is not supported.
+ */
+QString SilverlockPreferences::startupFileFor(LinuxSystemInfo::DesktopEnvironment desktopEnvironment)
+{
+    switch (desktopEnvironment)
+    {
+        case LinuxSystemInfo::GNOME:
+            return QString("%1/config/autostart/%2.desktop").arg(QDir::homePath()).arg(ApplicationInfo::unixName());
+        case LinuxSystemInfo::KDE:
+            return QString("%1/.kde/Autostart/%2").arg(QDir::homePath()).arg(ApplicationInfo::unixName());
+        default:
+            return QString();
+    }
+}
+#endif

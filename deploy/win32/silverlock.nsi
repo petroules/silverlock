@@ -52,7 +52,7 @@ SetCompressorDictSize 64
 	!insertmacro MUI_PAGE_COMPONENTS
 	!insertmacro MUI_PAGE_DIRECTORY
 	Var StartMenuFolder ; Define variable to hold start menu folder
-	!define MUI_STARTMENUPAGE_DEFAULTFOLDER "${PRODUCT_PUBLISHER}\${PRODUCT_NAME}" ; Set default start menu folder
+	!define MUI_STARTMENUPAGE_DEFAULTFOLDER "${PRODUCT_NAME}" ; Set default start menu folder
 	!insertmacro MUI_PAGE_STARTMENU "${PRODUCT_NAME}" $StartMenuFolder
 	!insertmacro MUI_PAGE_INSTFILES
 	!define MUI_FINISHPAGE_NOAUTOCLOSE ; Don't automatically skip past the install details page when it's done
@@ -83,18 +83,6 @@ SetCompressorDictSize 64
 	LangString LANG_Website ${LANG_ENGLISH} "Website"
 	LangString LANG_Settings ${LANG_ENGLISH} "Settings"
 	LicenseLangString license ${LANG_ENGLISH} "${PATH_RES}\license\gpl-3.0.txt"
-
-	# German
-	LangString LANG_SecCoreFiles ${LANG_GERMAN} "Für ${PRODUCT_NAME} erforderliche Kerndateien, um zu funktionieren." ; Core files section description
-	LangString LANG_UnSecCoreFiles ${LANG_GERMAN} "Entfernt die ${PRODUCT_NAME}-Kerndateien."
-	LangString LANG_UnSecSettings ${LANG_GERMAN} "Entfernt die ${PRODUCT_NAME} Einstellungen und Vorzugsdateien."
-	LangString LANG_CaptionMainApp ${LANG_GERMAN} "${PRODUCT_NAME}"
-	LangString LANG_CaptionUninstall ${LANG_GERMAN} "Deinstallieren Sie ${PRODUCT_NAME}"
-	LangString LANG_CaptionWebsite ${LANG_GERMAN} "Besuchen Sie die ${PRODUCT_NAME} Website"
-	LangString LANG_UninstallError ${LANG_GERMAN} "Es gab einen ernsten Fehler, der ${PRODUCT_NAME} deinstalliert. Besuchen Sie bitte www.petroules.com für die Hilfe."
-	LangString LANG_Website ${LANG_GERMAN} "Website"
-	LangString LANG_Settings ${LANG_GERMAN} "Einstellungen"
-	LicenseLangString license ${LANG_GERMAN} "${PATH_RES}\license\gpl-3.0.txt"
 
 ;--------------------------------
 ; General
@@ -174,7 +162,6 @@ SetCompressorDictSize 64
 		!insertmacro MUI_STARTMENU_WRITE_BEGIN "${PRODUCT_NAME}"
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LANG_CaptionMainApp).lnk" "$INSTDIR\silverlock.exe" "" "$INSTDIR\silverlock.exe" 0 SW_SHOWNORMAL "" $(LANG_CaptionMainApp)
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LANG_Website).lnk" "${PRODUCT_WEB_SITE}" "" "$INSTDIR\favicon.ico" 0 SW_SHOWNORMAL "" $(LANG_CaptionWebsite)
 		!insertmacro MUI_STARTMENU_WRITE_END
 
 		# Create file associations
@@ -251,7 +238,6 @@ SetCompressorDictSize 64
 			Delete "$INSTDIR\uninstall.exe"
 			StrCpy $deleteDir "$INSTDIR"
 			call un.PathDeleteEmptyDirRecurse
-			Delete "$SMPROGRAMS\$StartMenuFolder\$(LANG_Website).lnk"
 			StrCpy $deleteDir "$SMPROGRAMS\$StartMenuFolder"
 			call un.PathDeleteEmptyDirRecurse
 			DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"

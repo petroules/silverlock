@@ -14,9 +14,9 @@
 &lt;span style=&quot;font-size:9pt;&quot;&gt;&lt;b&gt;version %2&lt;/b&gt;&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="../aboutdialog.ui" line="76"/>
-        <source>&lt;p align=&quot;center&quot; style=&quot;font-size:11pt;&quot;&gt;Copyright © 2010 &lt;a href=&quot;http://www.%2/&quot;&gt;%1&lt;/a&gt;, All Rights Reserved&lt;br /&gt;%3 is made possible by &lt;a href=&quot;http://qt.nokia.com/&quot;&gt;Qt&lt;/a&gt; and other open source software (see license).&lt;/p&gt;
+        <source>&lt;p align=&quot;center&quot; style=&quot;font-size:11pt;&quot;&gt;%1, %2&lt;br /&gt;%3 is made possible by &lt;a href=&quot;http://qt.nokia.com/&quot;&gt;Qt&lt;/a&gt; and other open source software (see license).&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;font-size:11pt;&quot;&gt;The padlock icon used in this application is a public domain image. Details can be found &lt;a href=&quot;http://www.openclipart.org/detail/33505&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -527,48 +527,86 @@ Contact: Petroules Enterprises (&lt;a href=&quot;mailto:support@petroules.com&qu
     </message>
     <message>
         <location filename="../licensedialog.ui" line="86"/>
-        <source>Qt</source>
+        <source>LIEL - Language Independent Extension Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../licensedialog.ui" line="92"/>
+        <source>Copyright &amp;copy; 2010 Petroules Enterprises, All Rights Reserved&lt;br /&gt;
+Contact: Petroules Enterprises (&lt;a href=&quot;mailto:support@petroules.com&quot;&gt;support@petroules.com&lt;/a&gt;)&lt;br /&gt;
+&lt;a href=&quot;http://www.petroules.com/products/liel/&quot;&gt;http://www.petroules.com/products/liel/&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../licensedialog.ui" line="126"/>
+        <source>Qt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../licensedialog.ui" line="132"/>
         <source>Copyright &amp;copy; 2010 Nokia Corporation and/or its subsidiary(-ies)&lt;br /&gt;
 Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;qt-info@nokia.com&lt;/a&gt;)&lt;br /&gt;
 &lt;a href=&quot;http://qt.nokia.com/&quot;&gt;http://qt.nokia.com/&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../licensedialog.ui" line="117"/>
-        <location filename="../licensedialog.ui" line="167"/>
+        <location filename="../licensedialog.ui" line="157"/>
+        <location filename="../licensedialog.ui" line="207"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../licensedialog.ui" line="136"/>
+        <location filename="../licensedialog.ui" line="176"/>
         <source>Qt Single Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../licensedialog.ui" line="142"/>
+        <location filename="../licensedialog.ui" line="182"/>
         <source>Copyright &amp;copy; 2010 Nokia Corporation and/or its subsidiary(-ies)&lt;br /&gt;
 Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;qt-info@nokia.com&lt;/a&gt;)&lt;br /&gt;
 &lt;a href=&quot;http://qt.nokia.com/products/appdev/add-on-products/catalog/4/Utilities/qtsingleapplication/&quot;&gt;http://qt.nokia.com/products/appdev/add-on-products/catalog/4/Utilities/qtsingleapplication/&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../licensedialog.ui" line="183"/>
+        <location filename="../licensedialog.ui" line="221"/>
+        <source>The distribution of QtSingleApplication used has two small modifications from Nokia&apos;s original version 2.6, to support opening files on Mac OS X using the Finder, and a shorter library name to avoid a conflict when using macdeployqt. See our QtSingleApplication source package for details.
+
+See above to view the LGPL 2.1 license under which Nokia&apos;s version of QtSingleApplication, and our derivative, are licensed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../licensedialog.ui" line="242"/>
         <source>Botan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../licensedialog.ui" line="189"/>
+        <location filename="../licensedialog.ui" line="248"/>
         <source>Copyright &amp;copy; 1999-2009 Jack Lloyd, 2001 Peter J Jones, 2004-2007 Justin Karneges, 2005 Matthew Gregan, 2005-2006 Matt Johnston, 2006 Luca Piccarreta, 2007 Yves Jerschow, 2007-2008 FlexSecure GmbH, 2007-2008 Technische Universitat Darmstadt, 2007-2008 Falko Strenzke, 2007-2008 Martin Doering, 2007 Manuel Hartl, 2007 Christoph Ludwig, 2007 Patrick Sona, All Rights Reserved&lt;br /&gt;
 &lt;a href=&quot;http://botan.randombit.net/&quot;&gt;http://botan.randombit.net/&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../licensedialog.ui" line="209"/>
-        <source>The version of Botan used by Silverlock is taken from the Nokia Qt Creator 2.0 sources because it contains several additional files making it easier to integrate Botan with Qt&apos;s build system.</source>
+        <location filename="../licensedialog.ui" line="268"/>
+        <source>The distribution of Botan used is Nokia&apos;s version of Botan 1.8.8 found in the Qt Creator 2.0 sources (LGPL 2.1) with a very small modification to the build file (but not the Botan code itself). See our Botan source package for details.
+
+Click the &apos;Qt&apos; tab to view the LGPL 2.1 license under which Nokia&apos;s version of Botan, and our derivative, are licensed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../licensedialog.ui" line="281"/>
+        <source>Sparkle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../licensedialog.ui" line="287"/>
+        <source>&lt;b&gt;NOTE: Sparkle is only used in the Mac OS X version of Silverlock&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../licensedialog.ui" line="297"/>
+        <source>Copyright &amp;copy; 2006 Andy Matuschak&lt;br /&gt;
+Contact: Andy Matuschak (&lt;a href=&quot;mailto:andy@andymatuschak.org&quot;&gt;andy@andymatuschak.org&lt;/a&gt;)&lt;br /&gt;
+&lt;a href=&quot;http://sparkle.andymatsuchak.org/&quot;&gt;http://sparkle.andymatsuchak.org/&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -854,284 +892,284 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="545"/>
+        <location filename="../mainwindow.ui" line="548"/>
         <source>Show Entry View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="548"/>
+        <location filename="../mainwindow.ui" line="551"/>
         <source>Show the entry information box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="556"/>
+        <location filename="../mainwindow.ui" line="559"/>
         <source>Full Screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="559"/>
+        <location filename="../mainwindow.ui" line="562"/>
         <source>Toggle the window state of the application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="568"/>
+        <location filename="../mainwindow.ui" line="571"/>
         <source>Help Contents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="571"/>
+        <location filename="../mainwindow.ui" line="574"/>
         <source>Display the application&apos;s help menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="576"/>
+        <location filename="../mainwindow.ui" line="579"/>
         <source>Website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="579"/>
+        <location filename="../mainwindow.ui" line="582"/>
         <source>Visit the Silverlock website</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="584"/>
+        <location filename="../mainwindow.ui" line="587"/>
         <source>Donate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="587"/>
+        <location filename="../mainwindow.ui" line="590"/>
         <source>Submit a donation to Petroules Enterprises</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="592"/>
+        <location filename="../mainwindow.ui" line="595"/>
         <source>Find...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="595"/>
+        <location filename="../mainwindow.ui" line="598"/>
         <source>Search the database for entries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="600"/>
+        <location filename="../mainwindow.ui" line="603"/>
         <source>Entries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="603"/>
+        <location filename="../mainwindow.ui" line="606"/>
         <source>Select all entries in the entry table</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="608"/>
+        <location filename="../mainwindow.ui" line="611"/>
         <source>Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="611"/>
+        <location filename="../mainwindow.ui" line="614"/>
         <source>Select all groups in the group browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="616"/>
+        <location filename="../mainwindow.ui" line="619"/>
         <source>Copy Field Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="619"/>
+        <location filename="../mainwindow.ui" line="622"/>
         <source>Copy the value of the selected field to the clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="622"/>
+        <location filename="../mainwindow.ui" line="625"/>
         <source>Ctrl+C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="627"/>
+        <location filename="../mainwindow.ui" line="630"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="635"/>
+        <location filename="../mainwindow.ui" line="638"/>
         <source>2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="643"/>
+        <location filename="../mainwindow.ui" line="646"/>
         <source>3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="651"/>
+        <location filename="../mainwindow.ui" line="654"/>
         <source>4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="659"/>
+        <location filename="../mainwindow.ui" line="662"/>
         <source>5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="667"/>
+        <location filename="../mainwindow.ui" line="670"/>
         <source>Open URL with Default Browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="670"/>
+        <location filename="../mainwindow.ui" line="673"/>
         <source>Open the selected entry&apos;s URL in the system default web browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="679"/>
+        <location filename="../mainwindow.ui" line="682"/>
         <source>Open URL with Internet Explorer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="682"/>
+        <location filename="../mainwindow.ui" line="685"/>
         <source>Open the selected entry&apos;s URL in Internet Explorer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="687"/>
+        <location filename="../mainwindow.ui" line="690"/>
         <source>Change Database Password...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="690"/>
+        <location filename="../mainwindow.ui" line="693"/>
         <source>Displays the database properties dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="699"/>
+        <location filename="../mainwindow.ui" line="702"/>
         <source>Lock Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="702"/>
+        <location filename="../mainwindow.ui" line="705"/>
         <source>Lock the workspace to prevent others accessing it without the database password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="705"/>
+        <location filename="../mainwindow.ui" line="708"/>
         <source>Ctrl+L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="710"/>
+        <location filename="../mainwindow.ui" line="713"/>
         <source>Find in Group...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="713"/>
+        <location filename="../mainwindow.ui" line="716"/>
         <source>Search the group for entries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="716"/>
+        <location filename="../mainwindow.ui" line="719"/>
         <source>Ctrl+Shift+F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="202"/>
+        <location filename="../mainwindow.cpp" line="209"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="224"/>
+        <location filename="../mainwindow.cpp" line="231"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="407"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="407"/>
         <source>Silverlock databases (*.sdbx)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="439"/>
+        <location filename="../mainwindow.cpp" line="446"/>
         <source>Save As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="440"/>
+        <location filename="../mainwindow.cpp" line="447"/>
         <source>Silverlock databases (*.sdbx);;XML documents (*.xml)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="450"/>
+        <location filename="../mainwindow.cpp" line="457"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="450"/>
+        <location filename="../mainwindow.cpp" line="457"/>
         <source>&lt;p&gt;&lt;b&gt;It is recommended that only advanced users select this option.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;If you save the database in XML format, the contents will not be encrypted and any user with access to the file will be able to view the information in your database. It is strongly recommended that you save your files in Silverlock&apos;s SDBX format instead.&lt;/p&gt;&lt;p&gt;Are you sure you want save in the XML format?&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="560"/>
-        <location filename="../mainwindow.cpp" line="848"/>
-        <location filename="../mainwindow.cpp" line="857"/>
-        <location filename="../mainwindow.cpp" line="1407"/>
-        <location filename="../mainwindow.cpp" line="1430"/>
-        <location filename="../mainwindow.cpp" line="1449"/>
-        <location filename="../mainwindow.cpp" line="1474"/>
-        <location filename="../mainwindow.cpp" line="1620"/>
+        <location filename="../mainwindow.cpp" line="567"/>
+        <location filename="../mainwindow.cpp" line="855"/>
+        <location filename="../mainwindow.cpp" line="864"/>
+        <location filename="../mainwindow.cpp" line="1419"/>
+        <location filename="../mainwindow.cpp" line="1442"/>
+        <location filename="../mainwindow.cpp" line="1461"/>
+        <location filename="../mainwindow.cpp" line="1486"/>
+        <location filename="../mainwindow.cpp" line="1638"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="560"/>
+        <location filename="../mainwindow.cpp" line="567"/>
         <source>You have not entered a search pattern.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="705"/>
+        <location filename="../mainwindow.cpp" line="712"/>
         <source> - Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="745"/>
+        <location filename="../mainwindow.cpp" line="752"/>
         <source>Delete Entries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="746"/>
+        <location filename="../mainwindow.cpp" line="753"/>
         <source>Are you sure you want to delete the selected entries?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="848"/>
+        <location filename="../mainwindow.cpp" line="855"/>
         <source>A group cannot be moved to itself or one of its subgroups.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="857"/>
+        <location filename="../mainwindow.cpp" line="864"/>
         <source>The source and destination group are the same.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="903"/>
+        <location filename="../mainwindow.cpp" line="910"/>
         <source>Delete Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="904"/>
+        <location filename="../mainwindow.cpp" line="911"/>
         <source>Are you sure you want to delete the selected groups?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1214"/>
+        <location filename="../mainwindow.cpp" line="1226"/>
         <source>&lt;b&gt;%1:&lt;/b&gt; Group(s): %2 / %3, Entry(-ies): %4 / %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../mainwindow.cpp" line="1231"/>
+        <location filename="../mainwindow.cpp" line="1243"/>
         <source>&lt;b&gt;Search results:&lt;/b&gt; (&quot;%1&quot;), %n entry(-ies) found</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1139,110 +1177,110 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
         </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1258"/>
+        <location filename="../mainwindow.cpp" line="1270"/>
         <source>&lt;b&gt;Group:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1263"/>
+        <location filename="../mainwindow.cpp" line="1275"/>
         <source>&lt;b&gt;Title:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1268"/>
+        <location filename="../mainwindow.cpp" line="1280"/>
         <source>&lt;b&gt;URL:&lt;/b&gt; &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1273"/>
+        <location filename="../mainwindow.cpp" line="1285"/>
         <source>&lt;b&gt;Username:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1278"/>
+        <location filename="../mainwindow.cpp" line="1290"/>
         <source>&lt;b&gt;Password:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1286"/>
+        <location filename="../mainwindow.cpp" line="1298"/>
         <source>&lt;b&gt;%1:&lt;/b&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1290"/>
+        <location filename="../mainwindow.cpp" line="1302"/>
         <source>&lt;b&gt;UUID:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1291"/>
+        <location filename="../mainwindow.cpp" line="1303"/>
         <source>&lt;b&gt;Created:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1292"/>
+        <location filename="../mainwindow.cpp" line="1304"/>
         <source>&lt;b&gt;Accessed:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1293"/>
+        <location filename="../mainwindow.cpp" line="1305"/>
         <source>&lt;b&gt;Modified:&lt;/b&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1304"/>
+        <location filename="../mainwindow.cpp" line="1316"/>
         <source>&lt;li&gt;&lt;b&gt;%1&lt;/b&gt;: %2&lt;/li&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1307"/>
+        <location filename="../mainwindow.cpp" line="1319"/>
         <source>&lt;p&gt;%1&lt;/p&gt; &lt;ul&gt;%2&lt;/ul&gt; &lt;hr /&gt; &lt;p&gt;%3&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1344"/>
+        <location filename="../mainwindow.cpp" line="1356"/>
         <source>Save Changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1345"/>
+        <location filename="../mainwindow.cpp" line="1357"/>
         <source>The database has been modified.
 Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1407"/>
+        <location filename="../mainwindow.cpp" line="1419"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1425"/>
+        <location filename="../mainwindow.cpp" line="1437"/>
         <source>File loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1449"/>
+        <location filename="../mainwindow.cpp" line="1461"/>
         <source>Cannot write file %1:
 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1467"/>
+        <location filename="../mainwindow.cpp" line="1479"/>
         <source>File saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1474"/>
+        <location filename="../mainwindow.cpp" line="1486"/>
         <source>Cannot write file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1514"/>
+        <location filename="../mainwindow.cpp" line="1526"/>
         <source>Untitled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1620"/>
+        <location filename="../mainwindow.cpp" line="1638"/>
         <source>The password you entered is incorrect. Please verify that you have entered it correctly.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1382,103 +1420,113 @@ Do you want to save your changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="281"/>
-        <source>Run Silverlock at startup (Windows only)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../preferencesdialog.ui" line="291"/>
+        <location filename="../preferencesdialog.ui" line="298"/>
         <source>File associations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="297"/>
+        <location filename="../preferencesdialog.ui" line="304"/>
         <source>&lt;p align=&quot;center&quot; style=&quot;color:#ff0000;&quot;&gt;&lt;b&gt;WARNING:&lt;/b&gt; Changing file association settings will take effect immediately and will not be restored by clicking the Cancel button.&lt;br /&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="307"/>
+        <location filename="../preferencesdialog.ui" line="314"/>
         <source>On Windows, SDBX files can be associated with Silverlock. When you double-click an SDBX file in Windows Explorer, it will open in Silverlock if this option is set.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="354"/>
+        <location filename="../preferencesdialog.ui" line="361"/>
         <source>SDBX file associations are currently &lt;b&gt;%1&lt;b&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="371"/>
+        <location filename="../preferencesdialog.ui" line="378"/>
         <source>&lt;p&gt;On Mac OS X, file associations are assigned using Silverlock&apos;s application bundle and cannot be modified.&lt;/p&gt;
 &lt;p&gt;File associations are not currently supported on Linux systems.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="319"/>
+        <location filename="../preferencesdialog.ui" line="326"/>
         <source>Clicking this button will immediately set SDBX files to be associated with Silverlock in Windows Explorer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="322"/>
-        <source>Create Association</source>
+        <location filename="../preferencesdialog.ui" line="281"/>
+        <source>Automatically run Silverlock when I start my computer or log into my user account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../preferencesdialog.ui" line="288"/>
+        <source>This feature is not available on this platform and configuration.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../preferencesdialog.ui" line="329"/>
+        <source>Create Association</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../preferencesdialog.ui" line="336"/>
         <source>Clicking this button will immediately remove the SDBX file association from Windows Explorer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="332"/>
+        <location filename="../preferencesdialog.ui" line="339"/>
         <source>Remove association</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="399"/>
+        <location filename="../preferencesdialog.ui" line="406"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="405"/>
+        <location filename="../preferencesdialog.ui" line="412"/>
         <source>Checking this option will cause the file most recently opened by Silverlock to be opened automatically when Silverlock starts.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="408"/>
+        <location filename="../preferencesdialog.ui" line="415"/>
         <source>Automatically open the last used database on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="415"/>
+        <location filename="../preferencesdialog.ui" line="422"/>
         <source>Checking this option will cause Silverlock to check for updates in the background each time the application is run. It is strongly recommended that you do not disable this option.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="418"/>
+        <location filename="../preferencesdialog.ui" line="425"/>
         <source>Check for updates when Silverlock is started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="425"/>
+        <location filename="../preferencesdialog.ui" line="432"/>
         <source>Checking this option will attempt to automatically save unsaved chanages to a database when the window is closed or the interface is locked. However, if the database does not have a file name set (e.g. you created a new file but have not yet saved it) the user still still be prompted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.ui" line="428"/>
+        <location filename="../preferencesdialog.ui" line="435"/>
         <source>Automatically save changes to the database when the window is closed or the interface is locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.cpp" line="141"/>
+        <location filename="../preferencesdialog.cpp" line="29"/>
+        <source>To tell Silverlock to automatically run when you start your computer or log in to your account, right click the Silverlock icon in the Dock and select &quot;Open at Login&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../preferencesdialog.cpp" line="150"/>
         <source>Clearing the window settings will take effect when you next restart the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.cpp" line="152"/>
+        <location filename="../preferencesdialog.cpp" line="161"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../preferencesdialog.cpp" line="152"/>
+        <location filename="../preferencesdialog.cpp" line="161"/>
         <source>Are you sure you wish to reset all preferences to their default settings?</source>
         <translation type="unfinished"></translation>
     </message>

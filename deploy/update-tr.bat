@@ -3,11 +3,11 @@ cd ..
 cd silverlocklib
 mkdir tr
 cd ..
-lupdate -no-obsolete silverlocklib/silverlocklib.pro
+lupdate -no-obsolete silverlocklib\silverlocklib.pro
 
 cd silverlock
 mkdir tr
 cd ..
-lupdate -no-obsolete silverlock/silverlock.pro
+lupdate -no-obsolete silverlock\silverlock.pro
 
 pause

@@ -21,7 +21,7 @@ UpdateDialog::UpdateDialog(QWidget *parent) :
 {
     this->ui->setupUi(this);
 
-    QNetworkReply *reply = this->m_network->get(QNetworkRequest(QUrl("http://www.petroules.com/version/silverlock/windows/")));
+    QNetworkReply *reply = this->m_network->get(QNetworkRequest(ApplicationInfo::url(ApplicationInfo::ApplicationUpdate)));
     QObject::connect(this->m_network, SIGNAL(finished(QNetworkReply*)), this, SLOT(checkReplyFinished(QNetworkReply*)));
     QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(checkError(QNetworkReply::NetworkError)));
 }

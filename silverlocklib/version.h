@@ -1,7 +1,7 @@
 #ifndef VERSION_H_SLL
 #define VERSION_H_SLL
 
-#include "../version.h"
+#include "../../petroules/qt/version.h"
 
 #define VER_FILEVERSION             1,0,0,0
 #define VER_PRODUCTVERSION          1,0,0,0

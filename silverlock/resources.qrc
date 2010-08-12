@@ -6,6 +6,5 @@
         <file>res/app.svg</file>
         <file>res/new.png</file>
         <file>res/iexplore.png</file>
-        <file>res/LaunchAgent.plist</file>
     </qresource>
 </RCC>

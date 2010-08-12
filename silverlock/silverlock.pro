@@ -29,7 +29,8 @@ SOURCES += \
     guardeddialog.cpp \
     inactivityeventfilter.cpp \
     entryeditdialog_helper.cpp \
-    databaseprintdialog.cpp
+    databaseprintdialog.cpp \
+    autoupdater.cpp
 HEADERS += \
     mainwindow.h \
     entryeditdialog.h \
@@ -52,7 +53,8 @@ HEADERS += \
     stable.h \
     inactivityeventfilter.h \
     databaseprintdialog.h \
-    version.h
+    version.h \
+    autoupdater.h
 PRECOMPILED_HEADER = stable.h
 FORMS += mainwindow.ui \
     entryeditdialog.ui \
@@ -95,6 +97,12 @@ win32 {
 macx {
     ICON = res/app.icns
 
+    HEADERS += cocoainitializer.h sparkleautoupdater.h
+    OBJECTIVE_SOURCES += cocoainitializer.mm sparkleautoupdater.mm
+    LIBS += -framework Sparkle -framework AppKit
+    QMAKE_CFLAGS += -F$$SPARKLE_FRAMEWORK
+    QMAKE_LFLAGS += -F$$SPARKLE_FRAMEWORK
+
     QMAKE_INFO_PLIST = Info.plist
 
     PLISTDIR = $$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents
@@ -112,10 +120,27 @@ macx {
                         $$PLISTFILE_BAK > $$PLISTFILE $$CMD_SEP
     QMAKE_POST_LINK += $$DELETE_CMD $$PLISTFILE_BAK $$CMD_SEP
 
-    QMAKE_POST_LINK += macdeployqt $$formatpath($$OUT_PWD/$$DESTDIR/$${TARGET}.app) $$CMD_SEP
+    # Delete the previous application bundle's frameworks and plugins so macdeployqt doesn't mess up
+    QMAKE_POST_LINK += $$DELETE_CMD -r $$formatpath($$OUT_PWD/$$DESTDIR/$${APP_DISPLAYNAME}.app/Contents/Frameworks) $$CMD_SEP
+    QMAKE_POST_LINK += $$DELETE_CMD -r $$formatpath($$OUT_PWD/$$DESTDIR/$${APP_DISPLAYNAME}.app/Contents/PlugIns) $$CMD_SEP
+    QMAKE_POST_LINK += $$DELETE_CMD $$formatpath($$OUT_PWD/$$DESTDIR/$${APP_DISPLAYNAME}.app/Contents/Resources/qt.conf) $$CMD_SEP
+
+    # Run macdeployqt (with -verbose=0, unfortunately, or it complains because of Sparkle) and copy over 3rd party frameworks
+    QMAKE_POST_LINK += macdeployqt $$formatpath($$OUT_PWD/$$DESTDIR/$${TARGET}.app) -verbose=0 $$CMD_SEP
+    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$SPARKLE_FRAMEWORK/Sparkle.framework) $$formatpath($$OUT_PWD/$$DESTDIR/$${TARGET}.app/Contents/Frameworks) $$CMD_SEP
+
+    # Rename the bundle to its friendly name
+    QMAKE_POST_LINK += mv $$formatpath($$OUT_PWD/$$DESTDIR/$${TARGET}.app) $$formatpath($$OUT_PWD/$$DESTDIR/$${APP_DISPLAYNAME}.app) $$CMD_SEP
 }
 
 linux-g++ {
+    # Copy launcher shell script and make executable
     QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$PWD/../deploy/linux/launcher.sh) $$formatpath($$OUT_PWD/$$DESTDIR/$${TARGET}.sh) $$CMD_SEP
     QMAKE_POST_LINK += chmod +x $$formatpath($${OUT_PWD}/$${DESTDIR}/$${TARGET}.sh) $$CMD_SEP
+
+    # Copy desktop entry file
+    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$PWD/../deploy/linux/launcher.desktop) $$formatpath($$OUT_PWD/$$DESTDIR/$${TARGET}.desktop) $$CMD_SEP
+
+    # Copy application icon
+    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$PWD/res/app.svg) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
 }

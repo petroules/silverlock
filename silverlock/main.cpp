@@ -8,6 +8,9 @@
 #include <liel.h>
 #ifdef Q_OS_WIN
 #include <windows.h>
+#elif defined(Q_WS_MAC)
+#include "cocoainitializer.h"
+#include "sparkleautoupdater.h"
 #endif
 
 void setAppInfo()
@@ -21,6 +24,12 @@ void setAppInfo()
     ApplicationInfo::setFileVersion(QVersion(VER_FILEVERSION_STR));
     ApplicationInfo::setCopyright(VER_LEGALCOPYRIGHT_STR);
     ApplicationInfo::setTrademarks(VER_LEGALTRADEMARKS1_STR);
+
+    ApplicationInfo::setUrl(ApplicationInfo::OrganizationHomePage, QUrl("http://www.petroules.com/"));
+    ApplicationInfo::setUrl(ApplicationInfo::OrganizationDonations, QUrl("http://www.petroules.com/donate/"));
+    ApplicationInfo::setUrl(ApplicationInfo::ApplicationHomePage, QUrl("http://www.petroules.com/products/silverlock/"));
+    ApplicationInfo::setUrl(ApplicationInfo::ApplicationHelp, QUrl("http://www.petroules.com/support/silverlock/"));
+    ApplicationInfo::setUrl(ApplicationInfo::ApplicationUpdate, QUrl("http://www.petroules.com/version/silverlock/"));
 }
 
 int main(int argc, char *argv[])
@@ -29,9 +38,14 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(globalresources);
     Q_INIT_RESOURCE(resources);
 
+    // Set application version, copyright and other metadatas
     setAppInfo();
     ApplicationInfo::initialize(instance);
 
+    // Mac OS X: This allows the application to recognize when the user double clicks a file in the Finder
+    QObject::connect(&instance, SIGNAL(fileOpenRequest(QString)), &instance, SIGNAL(messageReceived(QString)));
+
+    // Event filter for our idle timer to detect when the user appears to have gone away...
     InactivityEventFilter filter;
     instance.installEventFilter(&filter);
 
@@ -40,8 +54,8 @@ int main(int argc, char *argv[])
     AllowSetForegroundWindow(ASFW_ANY);
 #endif
 
-    // Send a string comprised of all but the first argument
-    // to the other applications and bail out if it received it
+    // Send a string comprised of all but the first argument (the application name) to any other
+    // instance that may be running, and bail out if it received it (e.g. it is running)
     QStringList args = instance.arguments();
     args.removeFirst();
     QString message = args.join(" ");
@@ -50,22 +64,32 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    // Create a new main window
     MainWindow *mw = new MainWindow(&filter);
     mw->show();
 
-    UpdateDialog *dialog = NULL;
+    // The update dialog won't interrupt users' flow since internally it is only shown if there is
+    // actually an update to download - if not it'll remain hidden and get destroyed by MainWindow's
+    // dtor later...
     if (SilverlockPreferences::instance().updateOnStartup())
     {
-         dialog = new UpdateDialog(mw);
-         dialog->setModal(true);
+#ifdef Q_WS_MAC
+        CocoaInitializer cocoaInitializer;
+        Q_UNUSED(cocoaInitializer);
+
+        AutoUpdater *updater = new SparkleAutoUpdater(ApplicationInfo::url(ApplicationInfo::ApplicationUpdate));
+        updater->checkForUpdates(true);
+#else
+        UpdateDialog *dialog = new UpdateDialog(mw);
+        dialog->setModal(true);
+#endif
     }
 
+    // If this is the first instance, we'll handle any command line arguments now
     mw->handleMessage(message);
 
     int code = instance.exec();
 
-    // Save settings and free memory
+    // Save all preferences and free memory
     SilverlockPreferences::instance().destroy();
 
     return code;

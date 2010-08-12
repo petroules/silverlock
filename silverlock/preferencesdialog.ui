@@ -278,7 +278,14 @@
             <string>Checking this option will cause Silverlock to automatically run whenever the user logs in to Windows.</string>
            </property>
            <property name="text">
-            <string>Run Silverlock at startup (Windows only)</string>
+            <string>Automatically run Silverlock when I start my computer or log into my user account</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="noRunAtStartupLabel">
+           <property name="text">
+            <string>This feature is not available on this platform and configuration.</string>
            </property>
           </widget>
          </item>

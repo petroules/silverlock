@@ -2,6 +2,7 @@
 #define SILVERLOCKSETTINGS_H
 
 #include <QtCore>
+#include <liel.h>
 
 class MainWindow;
 
@@ -36,7 +37,7 @@ public:
     void setMinimizeAfterClipboard(bool minimize);
     bool minimizeAfterLock() const;
     void setMinimizeAfterLock(bool minimize);
-    bool runAtStartupSupported() const;
+    static bool runAtStartupSupported();
     bool runAtStartup() const;
     void setRunAtStartup(bool run);
     bool isFileAssociationSet() const;
@@ -80,7 +81,10 @@ private:
     QString m_updateInstallerPath;
 
 #ifdef Q_OS_WIN
-    QString applicationPathForRegistry() const;
+    static QString applicationPathForRegistry();
+#elif defined(Q_OS_LINUX)
+    static QString startupFile();
+    static QString startupFileFor(LinuxSystemInfo::DesktopEnvironment desktopEnvironment);
 #endif
 };
 
