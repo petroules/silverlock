@@ -485,7 +485,7 @@ void SilverlockPreferences::addRecentFile(const QString &fileName)
     this->m_recentFiles.prepend(canonicalPath);
 
     // Remove all files after
-    while (this->m_recentFiles.size() > this->maxRecentFiles())
+    while (this->m_recentFiles.count() > this->maxRecentFiles())
     {
         this->m_recentFiles.removeLast();
     }
@@ -531,14 +531,20 @@ void SilverlockPreferences::clearWindowSettings()
     this->m_windowSettingsCleared = true;
 }
 
+/*!
+    Returns the path of the downloaded update installer.
+
+    This is stored so if the user cancels the installation they can restart
+    it later without having to re-download the installation file.
+ */
 QString SilverlockPreferences::updateInstallerPath() const
 {
-    return this->m_updateInstallerPath;
+    return QDir(this->m_updateInstallerPath).canonicalPath();
 }
 
 void SilverlockPreferences::setUpdateInstallerPath(const QString &path)
 {
-    this->m_updateInstallerPath = path;
+    this->m_updateInstallerPath = QDir(path).canonicalPath();
 }
 
 // Platform-specific methods...

@@ -5,6 +5,5 @@
         <file>license/lgpl-2.1.txt</file>
         <file>license/qsa-exception.txt</file>
         <file>license/qt-exception.txt</file>
-        <file>license/sparkle.txt</file>
     </qresource>
 </RCC>

@@ -15,9 +15,6 @@
 #include "inactivityeventfilter.h"
 #include "databaseprintdialog.h"
 #include <QtSingleApplication>
-#ifdef Q_WS_MAC
-#include "sparkleautoupdater.h"
-#endif
 
 /*!
     \class MainWindow
@@ -1008,13 +1005,8 @@ void MainWindow::on_actionDonate_triggered()
 
 void MainWindow::on_actionCheckForUpdates_triggered()
 {
-#ifdef Q_WS_MAC
-    AutoUpdater *updater = new SparkleAutoUpdater(ApplicationInfo::url(ApplicationInfo::ApplicationUpdate));
-    updater->checkForUpdates(false);
-#else
     UpdateDialog dialog(this);
     dialog.exec();
-#endif
 }
 
 void MainWindow::on_actionAboutSilverlock_triggered()
@@ -1567,7 +1559,7 @@ void MainWindow::updateRecentFileActions()
     QStringList files = SilverlockPreferences::instance().recentFileList();
 
     // Get the number of files we should add...
-    const int numRecentFiles = qMin(files.size(), maxFiles);
+    const int numRecentFiles = qMin(files.count(), maxFiles);
     for (int i = 0; i < numRecentFiles; i++)
     {
         QString text = QString("&%1 %2").arg(i + 1).arg(this->strippedName(files[i]));

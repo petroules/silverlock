@@ -39,7 +39,7 @@ Herein are the licenses for Silverlock and each of the projects it is linked wit
         <x>0</x>
         <y>0</y>
         <width>622</width>
-        <height>359</height>
+        <height>386</height>
        </rect>
       </property>
       <attribute name="label">
@@ -78,8 +78,8 @@ Contact: Petroules Enterprises (&lt;a href=&quot;mailto:support@petroules.com&qu
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>622</width>
-        <height>359</height>
+        <width>310</width>
+        <height>134</height>
        </rect>
       </property>
       <attribute name="label">
@@ -168,8 +168,8 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>605</width>
-        <height>367</height>
+        <width>465</width>
+        <height>380</height>
        </rect>
       </property>
       <attribute name="label">
@@ -234,8 +234,8 @@ See above to view the LGPL 2.1 license under which Nokia's version of QtSingleAp
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>622</width>
-        <height>359</height>
+        <width>154</width>
+        <height>651</height>
        </rect>
       </property>
       <attribute name="label">
@@ -273,38 +273,6 @@ Click the 'Qt' tab to view the LGPL 2.1 license under which Nokia's version of B
           <bool>true</bool>
          </property>
         </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="sparklePage">
-      <attribute name="label">
-       <string>Sparkle</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_7">
-       <item>
-        <widget class="QLabel" name="sparkleNote">
-         <property name="text">
-          <string>&lt;b&gt;NOTE: Sparkle is only used in the Mac OS X version of Silverlock&lt;/b&gt;</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="sparkleLabel">
-         <property name="text">
-          <string>Copyright &amp;copy; 2006 Andy Matuschak&lt;br /&gt;
-Contact: Andy Matuschak (&lt;a href=&quot;mailto:andy@andymatuschak.org&quot;&gt;andy@andymatuschak.org&lt;/a&gt;)&lt;br /&gt;
-&lt;a href=&quot;http://sparkle.andymatsuchak.org/&quot;&gt;http://sparkle.andymatsuchak.org/&lt;/a&gt;</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::RichText</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTextBrowser" name="sparkleLicense"/>
        </item>
       </layout>
      </widget>

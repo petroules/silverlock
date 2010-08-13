@@ -42,31 +42,44 @@ UpdateDialog::~UpdateDialog()
 
 void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
 {
+    QString error;
+    int line;
+    int column;
+
     QDomDocument doc;
-    if (doc.setContent(QString(reply->readAll())))
+    if (doc.setContent(QString(reply->readAll()), &error, &line, &column))
     {
-        QDomNode node = doc.documentElement().firstChild();
-        while (!node.isNull())
+        QDomElement release = doc.documentElement().firstChildElement();
+        while (!release.isNull())
         {
-            QDomElement e = node.toElement();
-            if (!e.isNull())
+            if (release.attribute("Platform") == ApplicationInfo::platformCode())
             {
-                if (e.tagName() == "Version")
+                QDomElement releaseChild = release.firstChildElement();
+                while (!releaseChild.isNull())
                 {
-                    this->m_newVersion = QVersion(e.text()).simplified();
-                }
-                else if (e.tagName() == "DownloadURL")
-                {
-                    this->m_downloadUrl = QUrl(e.text());
-                }
-                else if (e.tagName() == "DownloadChecksum")
-                {
-                    this->m_checksum = e.text();
+                    if (releaseChild.tagName() == "Version")
+                    {
+                        this->m_newVersion = QVersion(releaseChild.text()).simplified();
+                    }
+                    else if (releaseChild.tagName() == "DownloadURL")
+                    {
+                        this->m_downloadUrl = QUrl(releaseChild.text());
+                    }
+                    else if (releaseChild.tagName() == "DownloadChecksum")
+                    {
+                        this->m_checksum = releaseChild.text();
+                    }
+
+                    releaseChild = releaseChild.nextSiblingElement();
                 }
             }
 
-            node = node.nextSibling();
+            release = release.nextSiblingElement();
         }
+    }
+    else
+    {
+        qDebug() << error << "on line:" << line << ", column:" << column;
     }
 
     if (this->m_newVersion.isValid() && !this->m_downloadUrl.isEmpty() && !this->m_checksum.isEmpty())
@@ -124,7 +137,7 @@ void UpdateDialog::acceptUpgrade()
 {
     // Here we'll check if we already have the installer downloaded
     QFile tempFile(SilverlockPreferences::instance().updateInstallerPath());
-    if (tempFile.open(QIODevice::ReadOnly))
+    if (!tempFile.fileName().isEmpty() && tempFile.open(QIODevice::ReadOnly))
     {
         QCryptographicHash hash(QCryptographicHash::Md5);
         hash.addData(tempFile.readAll());
@@ -239,7 +252,13 @@ void UpdateDialog::on_installPushButton_clicked()
     QApplication::closeAllWindows();
 
     QProcess process;
+#ifdef Q_OS_WIN
     if (!process.startDetached(this->m_file))
+#elif defined(Q_OS_MAC)
+    if (!process.startDetached("open", QStringList(this->m_file)))
+#elif defined(Q_OS_LINUX)
+    if (!process.startDetached("xdg-open", QStringList(this->m_file)))
+#endif
     {
         QMessageBox::critical(this, tr("Error"), QString(tr("Failed to start the installer process. The error returned was: %1")).arg(process.errorString()));
         this->reject();

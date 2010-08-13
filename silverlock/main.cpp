@@ -8,9 +8,6 @@
 #include <liel.h>
 #ifdef Q_OS_WIN
 #include <windows.h>
-#elif defined(Q_WS_MAC)
-#include "cocoainitializer.h"
-#include "sparkleautoupdater.h"
 #endif
 
 void setAppInfo()
@@ -29,7 +26,7 @@ void setAppInfo()
     ApplicationInfo::setUrl(ApplicationInfo::OrganizationDonations, QUrl("http://www.petroules.com/donate/"));
     ApplicationInfo::setUrl(ApplicationInfo::ApplicationHomePage, QUrl("http://www.petroules.com/products/silverlock/"));
     ApplicationInfo::setUrl(ApplicationInfo::ApplicationHelp, QUrl("http://www.petroules.com/support/silverlock/"));
-    ApplicationInfo::setUrl(ApplicationInfo::ApplicationUpdate, QUrl("http://www.petroules.com/version/silverlock/"));
+    ApplicationInfo::setUrl(ApplicationInfo::ApplicationUpdate, QUrl("https://www.petroules.com/version/silverlock/"));
 }
 
 int main(int argc, char *argv[])
@@ -72,16 +69,8 @@ int main(int argc, char *argv[])
     // dtor later...
     if (SilverlockPreferences::instance().updateOnStartup())
     {
-#ifdef Q_WS_MAC
-        CocoaInitializer cocoaInitializer;
-        Q_UNUSED(cocoaInitializer);
-
-        AutoUpdater *updater = new SparkleAutoUpdater(ApplicationInfo::url(ApplicationInfo::ApplicationUpdate));
-        updater->checkForUpdates(true);
-#else
         UpdateDialog *dialog = new UpdateDialog(mw);
         dialog->setModal(true);
-#endif
     }
 
     // If this is the first instance, we'll handle any command line arguments now

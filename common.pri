@@ -1,4 +1,4 @@
-include($$PWD/../petroules/qt/common.pri)
+include($$PWD/../petroules/qt/petroules-common.pri)
 
 # We want Windows methods from at least Windows 2000 (NT 5.0)
 win32:DEFINES += WINVER=0x0500
@@ -19,5 +19,3 @@ BOTAN_LIB = Botan
 QSA_HEADERS = $$PWD/../3rdparty/qtsingleapplication/src
 QSA_BUILD = $$PWD/../3rdparty/qtsingleapplication/lib
 QSA_LIB = qsa-2.6
-
-SPARKLE_FRAMEWORK = $$PWD/../3rdparty/sparkle
