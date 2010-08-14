@@ -89,7 +89,7 @@ SetCompressorDictSize 64
 
 	# Display name and filename of installer
 	Name ${PRODUCT_NAME}
-	OutFile "${PRODUCT_UNIXNAME}-${PRODUCT_VERSION}-installer.exe"
+	OutFile "${PRODUCT_UNIXNAME}-${PRODUCT_VERSION}-windows.exe"
 
 	# Default installation folder
 	InstallDir "$PROGRAMFILES\${PRODUCT_PUBLISHER}\${PRODUCT_NAME}"
@@ -141,7 +141,7 @@ SetCompressorDictSize 64
 		File "${APP_BIN}\silverlocklib1.dll"
 		File "${APP_BIN}\liel1.dll"
 		File "${APP_BIN}\Botan.dll"
-		File "${APP_BIN}\QtSolutions_SingleApplication-2.6.dll"
+		File "${APP_BIN}\qsa-2.6.dll"
 		File "${QT_BIN}\mingwm10.dll"
 		File "${QT_BIN}\libgcc_s_dw2-1.dll"
 		File "${QT_BIN}\QtCore4.dll"
@@ -254,7 +254,7 @@ SetCompressorDictSize 64
 		Delete "$INSTDIR\silverlocklib1.dll"
 		Delete "$INSTDIR\liel1.dll"
 		Delete "$INSTDIR\Botan.dll"
-		Delete "$INSTDIR\QtSolutions_SingleApplication-2.6.dll"
+		Delete "$INSTDIR\qsa-2.6.dll"
 		Delete "$INSTDIR\mingwm10.dll"
 		Delete "$INSTDIR\libgcc_s_dw2-1.dll"
 		Delete "$INSTDIR\QtCore4.dll"
