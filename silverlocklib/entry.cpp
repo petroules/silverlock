@@ -1,6 +1,5 @@
 #include "entry.h"
 #include "group.h"
-#include <climits>
 
 /*!
     \class Entry
@@ -28,26 +27,6 @@ Entry::Entry(const QString &title, Group *parent) :
 Entry::~Entry()
 {
     this->detach();
-}
-
-/*!
-    \property Entry::url
-
-    This property holds the URL field of the entry.
- */
-
-QUrl Entry::url() const
-{
-    return this->m_url;
-}
-
-void Entry::setUrl(const QUrl &url)
-{
-    if (this->m_url != url)
-    {
-        this->m_url = url;
-        this->setModified();
-    }
 }
 
 /*!
@@ -86,6 +65,26 @@ void Entry::setPassword(const QString &password)
     if (this->m_password != password)
     {
         this->m_password = password;
+        this->setModified();
+    }
+}
+
+/*!
+    \property Entry::url
+
+    This property holds the URL field of the entry.
+ */
+
+QUrl Entry::url() const
+{
+    return this->m_url;
+}
+
+void Entry::setUrl(const QUrl &url)
+{
+    if (this->m_url != url)
+    {
+        this->m_url = url;
         this->setModified();
     }
 }
@@ -250,9 +249,9 @@ void Entry::fromXml(const QDomElement &element)
 {
     DatabaseNode::fromXml(element);
 
-    this->setUrl(element.attribute(XML_URL));
     this->setUsername(element.attribute(XML_USERNAME));
     this->setPassword(element.attribute(XML_PASSWORD));
+    this->setUrl(element.attribute(XML_URL));
     this->setNotes(element.attribute(XML_NOTES));
 
     // This function should NEVER be called from a parented DatabaseNode
@@ -287,9 +286,9 @@ QDomElement Entry::toXml(QDomDocument &document) const
 {
     QDomElement element = DatabaseNode::toXml(document);
     element.setTagName(XML_ENTRY);
-    element.setAttribute(XML_URL, this->url().toString());
     element.setAttribute(XML_USERNAME, this->username());
     element.setAttribute(XML_PASSWORD, this->password());
+    element.setAttribute(XML_URL, this->url().toString());
     element.setAttribute(XML_NOTES, this->notes());
 
     // Add all the recovery info
@@ -331,9 +330,9 @@ Entry* Entry::createCopy() const
 {
     Entry *entry = new Entry();
     entry->setTitle(this->title());
-    entry->setUrl(this->url());
     entry->setUsername(this->username());
     entry->setPassword(this->password());
+    entry->setUrl(this->url());
     entry->setNotes(this->notes());
 
     QMapIterator<QString, QString> i(this->recoveryInfo());

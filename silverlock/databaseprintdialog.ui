@@ -33,36 +33,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="urlCheckBox">
-        <property name="text">
-         <string>URL</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QCheckBox" name="usernameCheckBox">
-        <property name="text">
-         <string>Username</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QCheckBox" name="passwordCheckBox">
-        <property name="text">
-         <string>Password</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="notesCheckBox">
         <property name="text">
@@ -132,6 +102,36 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="usernameCheckBox">
+        <property name="text">
+         <string>Username</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QCheckBox" name="passwordCheckBox">
+        <property name="text">
+         <string>Password</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QCheckBox" name="urlCheckBox">
+        <property name="text">
+         <string>URL</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -190,9 +190,9 @@
  </widget>
  <tabstops>
   <tabstop>titleCheckBox</tabstop>
-  <tabstop>urlCheckBox</tabstop>
   <tabstop>usernameCheckBox</tabstop>
   <tabstop>passwordCheckBox</tabstop>
+  <tabstop>urlCheckBox</tabstop>
   <tabstop>notesCheckBox</tabstop>
   <tabstop>recoveryInfoCheckBox</tabstop>
   <tabstop>customFieldsCheckBox</tabstop>
@@ -202,6 +202,8 @@
   <tabstop>modificationTimeCheckBox</tabstop>
   <tabstop>textBrowser</tabstop>
   <tabstop>showActualCheckBox</tabstop>
+  <tabstop>printPushButton</tabstop>
+  <tabstop>cancelPushButton</tabstop>
  </tabstops>
  <resources/>
  <connections>

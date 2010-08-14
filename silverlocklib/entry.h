@@ -20,12 +20,12 @@ class SILVERLOCKLIBSHARED_EXPORT Entry : public DatabaseNode
 public:
     explicit Entry(const QString &title = QString(), Group *parent = NULL);
     ~Entry();
-    QUrl url() const;
-    void setUrl(const QUrl &url);
     QString username() const;
     void setUsername(const QString &username);
     QString password() const;
     void setPassword(const QString &password);
+    QUrl url() const;
+    void setUrl(const QUrl &url);
     QString notes() const;
     void setNotes(const QString &notes);
     const QMap<QString, QString>& recoveryInfo() const;

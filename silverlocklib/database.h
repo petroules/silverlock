@@ -19,6 +19,8 @@ public:
     static QVersion version();
     QString password() const;
     void setPassword(const QString &password);
+    int compression() const;
+    void setCompression(int compression);
     void setParentNode(Group *node);
     QDomElement toXml(QDomDocument &document) const;
 
@@ -29,6 +31,7 @@ protected:
 
 private:
     QString m_password;
+    int m_compression;
 };
 
 #endif // DATABASE_H

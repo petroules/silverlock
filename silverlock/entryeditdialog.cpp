@@ -24,6 +24,9 @@ EntryEditDialog::EntryEditDialog(Entry *entry, QWidget *parent) :
 
     // Hide the password by default
     this->ui->revealToolButton->setChecked(true);
+
+    // Focus to the title box
+    this->ui->titleLineEdit->setFocus();
 }
 
 /*!
@@ -62,9 +65,9 @@ void EntryEditDialog::load()
     {
         // Basic information
         this->ui->titleLineEdit->setText(this->m_entry->title());
-        this->ui->urlLineEdit->setText(this->m_entry->url().toString());
         this->ui->usernameLineEdit->setText(this->m_entry->username());
         this->ui->passwordLineEdit->setText(this->m_entry->password());
+        this->ui->urlLineEdit->setText(this->m_entry->url().toString());
         this->ui->notesTextEdit->setPlainText(this->m_entry->notes());
         this->readRecoveryInfo();
         this->readCustomFields();
@@ -86,9 +89,9 @@ void EntryEditDialog::save()
     {
         // Basic information
         this->m_entry->setTitle(this->ui->titleLineEdit->text());
-        this->m_entry->setUrl(QUrl(this->ui->urlLineEdit->text(), QUrl::StrictMode));
         this->m_entry->setUsername(this->ui->usernameLineEdit->text());
         this->m_entry->setPassword(this->ui->passwordLineEdit->text());
+        this->m_entry->setUrl(QUrl(this->ui->urlLineEdit->text(), QUrl::StrictMode));
         this->m_entry->setNotes(this->ui->notesTextEdit->toPlainText());
         this->writeRecoveryInfo();
         this->writeCustomFields();

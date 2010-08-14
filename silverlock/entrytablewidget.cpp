@@ -193,9 +193,9 @@ void EntryTableWidget::populateHelper(const QList<Entry*> &entries)
         QTreeWidgetItem *entryItem = new QTreeWidgetItem();
         entryItem->setIcon(COLUMN_TITLE, this->style()->standardIcon(QStyle::SP_FileIcon));
         this->setWidgetData(entryItem, COLUMN_TITLE, entry->title());
-        this->setWidgetData(entryItem, COLUMN_URL, entry->url().toString());
         this->setWidgetData(entryItem, COLUMN_USERNAME, entry->username());
         this->setWidgetData(entryItem, COLUMN_PASSWORD, entry->password());
+        this->setWidgetData(entryItem, COLUMN_URL, entry->url().toString());
         this->setWidgetData(entryItem, COLUMN_NOTES, entry->notes());
         this->setWidgetData(entryItem, COLUMN_UUID, entry->uuid().toString());
         this->ui->table->invisibleRootItem()->addChild(entryItem);

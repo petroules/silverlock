@@ -9,9 +9,9 @@
 
 // Column indexes
 #define COLUMN_TITLE    0
-#define COLUMN_URL      1
-#define COLUMN_USERNAME 2
-#define COLUMN_PASSWORD 3
+#define COLUMN_USERNAME 1
+#define COLUMN_PASSWORD 2
+#define COLUMN_URL      3
 #define COLUMN_NOTES    4
 #define COLUMN_UUID     5
 

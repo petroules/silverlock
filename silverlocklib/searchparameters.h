@@ -27,12 +27,6 @@ public:
     bool searchTitle;
 
     /*!
-        Indicates whether the URL field should be searched.
-        The default is \c true.
-     */
-    bool searchUrl;
-
-    /*!
         Indicates whether the username field should be searched.
         The default is \c true.
      */
@@ -43,6 +37,12 @@ public:
         The default is \c false.
      */
     bool searchPassword;
+
+    /*!
+        Indicates whether the URL field should be searched.
+        The default is \c true.
+     */
+    bool searchUrl;
 
     /*!
         Indicates whether the notes field should be searched.

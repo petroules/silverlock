@@ -51,7 +51,10 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
     }
 
     // Get the contents of the database file and create a new XML document
-    QString fileDataString = QString(device.readAll());
+    QTextStream ts(&device);
+    ts.setCodec("UTF-8");
+    QString fileDataString = ts.readAll();
+
     QDomDocument doc;
 
     // Try and see if it's a valid XML document; if it is, we'll simply continue on and read
@@ -76,10 +79,10 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
             return NULL;
         }
 
-        QVersion version = QVersion(root.attribute(XML_VERSION));
+        QVersion version = QVersion(root.attribute(XML_VERSION)).simplified();
         if (version != Database::version())
         {
-            this->m_errorString = tr("Unsupported database version: ") + version.toString();
+            this->m_errorString = tr("Unsupported database version: %1").arg(version.toString());
             return NULL;
         }
 

@@ -1,4 +1,5 @@
 #include "databasecrypto.h"
+#include "database.h"
 #include <botan/botan.h>
 #include <cstring>
 #include <fstream>
@@ -8,7 +9,12 @@
 #include <vector>
 
 #define ALGO "AES"
-#define HEADER "-------- SILVERLOCK DATABASE FILE --------"
+#define HEADER "SILVERLOCK DATABASE FILE"
+#define COMPRESSED "ZLIB"
+#define UNCOMPRESSED "UNCOMPRESSED"
+
+// Some black magic to catch problems at compile time
+#define X_ASSERT(pred) switch(0){case 0:case pred:;}
 
 using namespace Botan;
 
@@ -31,6 +37,8 @@ using namespace Botan;
 DatabaseCrypto::DatabaseCrypto(QObject *parent) :
     QObject(parent)
 {
+    // Make sure a Botan byte is the same size as a char (QByteArray's underlying storage)
+    X_ASSERT(sizeof(Botan::byte) == sizeof(char));
 }
 
 /*!
@@ -38,13 +46,14 @@ DatabaseCrypto::DatabaseCrypto(QObject *parent) :
 
     \param data The data to encrypt.
     \param password The passphrase used to encrypt \a data.
+    \param compressionLevel The level of compression to use on \a data. See Database::compression.
     \param error If this parameter is non-\c NULL, it will be set to DatabaseCrypto::NoError if the
     encryption process succeeded, or one of the other DatabaseCrypto::CryptoStatus enumeration
     constants if an error occurred.
 
     \return The encrypted data encoded in base 64, or an empty string if an error occurred.
  */
-QString DatabaseCrypto::encrypt(const QString &data, const QString &password, CryptoStatus *error)
+QString DatabaseCrypto::encrypt(const QString &data, const QString &password, int compressionLevel, CryptoStatus *error)
 {
     const std::string algo = ALGO;
     const QString header = HEADER;
@@ -66,6 +75,7 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, Cr
     {
         const u32bit key_len = max_keylength_of(algo);
         const u32bit iv_len = block_size_of(algo);
+        const bool compressed = compressionLevel != 0;
 
         AutoSeeded_RNG rng;
 
@@ -78,18 +88,27 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, Cr
         SymmetricKey mac_key = s2k->derive_key(16, "MAC" + passphrase);
 
         // Write the standard file header and the salt encoded in base64
-        out += header + "\n";
+        out += QString("%1 %2 %3\n").arg(header).arg(Database::version().toString())
+               .arg(compressed ? COMPRESSED : UNCOMPRESSED);
         out += QString::fromStdString(b64_encode(s2k->current_salt())) + "\n";
 
         Pipe pipe(new Fork(
             new Chain(new MAC_Filter("HMAC(SHA-1)", mac_key),
             new Base64_Encoder),
-            new Chain(/*new Zlib_Compression,*/ get_cipher(algo + "/CBC", bc_key, iv, ENCRYPTION),
+            new Chain(get_cipher(algo + "/CBC", bc_key, iv, ENCRYPTION),
             new Base64_Encoder(true))));
 
-        // Write our input data to the pipe to process it
+        // Write our input data to the pipe to process it - if compressionLevel = 0,
+        // nothing will be compressed
         pipe.start_msg();
-        pipe.write(data.toStdString());
+        QByteArray qCompressedData = qCompress(data.toUtf8(), compressionLevel);
+        Botan::byte rawCompressedData[qCompressedData.length()];
+        for (int i = 0; i < qCompressedData.length(); i++)
+        {
+            rawCompressedData[i] = qCompressedData[i];
+        }
+
+        pipe.write(rawCompressedData, qCompressedData.length());
         pipe.end_msg();
 
         // Get the encrypted data back from the pipe and write it to our output variable
@@ -151,14 +170,51 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
 
     try
     {
-        if (in.readLine() != header)
+        // Read the actual header line and store the expected prefix
+        QString actualHeaderLine = in.readLine();
+        QString headerLine = QString("%1 ").arg(header);
+
+        // Try the old header first... just in case (TODO: we'll remove this as of version 1.1)
+        bool wasCompressed = actualHeaderLine != "-------- SILVERLOCK DATABASE FILE --------";
+        if (wasCompressed)
         {
-            if (error)
+            // If the actual header is less than (or equal!) to our expected one, there is no version
+            // and is thus invalid, OR if the actual header doesn't start with our header, it's invalid
+            if (actualHeaderLine.length() <= headerLine.length() || !actualHeaderLine.startsWith(headerLine))
             {
-                *error = MissingHeader;
+                if (error)
+                {
+                    *error = MissingHeader;
+                }
+
+                return QString();
             }
 
-            return QString();
+            // Everything after the "SILVERLOCK DATABASE FILE"
+            QStringList theRest = actualHeaderLine.right(actualHeaderLine.length() - headerLine.length())
+                    .split(' ', QString::SkipEmptyParts);
+            if (theRest.count() == 2)
+            {
+                QVersion version(theRest[0]);
+                if (version.simplified() != Database::version())
+                {
+                    if (error)
+                    {
+                        *error = UnsupportedVersion;
+                    }
+
+                    return QString();
+                }
+            }
+            else
+            {
+                if (error)
+                {
+                    *error = MissingHeader;
+                }
+
+                return QString();
+            }
         }
 
         std::string salt_str = in.readLine().toStdString();
@@ -176,7 +232,6 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
         SymmetricKey mac_key = s2k->derive_key(16, "MAC" + passphrase);
 
         Pipe pipe(new Base64_Decoder, get_cipher(algo + "/CBC", bc_key, iv, DECRYPTION),
-            /*new Zlib_Decompression,*/
             new Fork(0, new Chain(new MAC_Filter("HMAC(SHA-1)", mac_key), new Base64_Encoder)));
 
         // Read all our data into the pipe for decryption
@@ -197,7 +252,21 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
         }
 
         // No errors were encountered; return the decrypted data
-        return QString::fromStdString(pipe.read_all_as_string(0));
+        SecureVector<Botan::byte> rawDecryptedData = pipe.read_all(0);
+        QByteArray qDecryptedData(rawDecryptedData.size(), '\0');
+        for (int i = 0; i < qDecryptedData.size(); i++)
+        {
+            qDecryptedData[i] = rawDecryptedData[i];
+        }
+
+        if (wasCompressed)
+        {
+            return QString::fromUtf8(qUncompress(qDecryptedData));
+        }
+        else
+        {
+            return QString::fromUtf8(qDecryptedData);
+        }
     }
     catch (Algorithm_Not_Found)
     {
@@ -267,6 +336,8 @@ QString DatabaseCrypto::statusMessage(CryptoStatus status)
             return tr("The message authentication codes were mismatched. The file may have been corrupted or tampered with.");
         case DecodingError:
             return tr("There was a problem decoding the file; either the password was invalid or the file may be corrupt.");
+        case UnsupportedVersion:
+            return tr("Unsupported database version.");
         case UnknownError:
             return tr("An unknown error occurred while decoding the file.");
         default:

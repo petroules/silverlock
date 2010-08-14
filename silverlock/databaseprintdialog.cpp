@@ -76,9 +76,9 @@ void DatabasePrintDialog::selectionLinkActivated(const QString &link)
 void DatabasePrintDialog::selectAll(bool select)
 {
     this->ui->titleCheckBox->setChecked(select);
-    this->ui->urlCheckBox->setChecked(select);
     this->ui->usernameCheckBox->setChecked(select);
     this->ui->passwordCheckBox->setChecked(select);
+    this->ui->urlCheckBox->setChecked(select);
     this->ui->notesCheckBox->setChecked(select);
     this->ui->recoveryInfoCheckBox->setChecked(select);
     this->ui->customFieldsCheckBox->setChecked(select);
@@ -103,9 +103,9 @@ void DatabasePrintDialog::updatePreview()
         Group *group = new Group(tr("My Group"));
 
         Entry *entry = new Entry("Google", group);
-        entry->setUrl(QUrl("http://www.google.com/"));
         entry->setUsername("john.doe");
         entry->setPassword("!$uper$ecretPa$$w0rd~");
+        entry->setUrl(QUrl("http://www.google.com/"));
         entry->setNotes(tr("This is my Google account!\n\nI created it on 2008-09-19 & have been using it since."));
         entry->insertRecoveryInfo(tr("What is your mother's maiden name?"), "Doe");
         entry->insertRecoveryInfo(tr("What is your favourite colour?"), "Blue");
@@ -166,11 +166,6 @@ QString DatabasePrintDialog::entryText(const Entry *entry) const
         preview += QString(tr("<b>Title:</b> %1")).arg(Qt::escape(entry->title())) + "<br />";
     }
 
-    if (this->ui->urlCheckBox->isChecked() && !entry->url().isEmpty())
-    {
-        preview += QString("<b>URL:</b> %1").arg(Qt::escape(entry->url().toString())) + "<br />";
-    }
-
     if (this->ui->usernameCheckBox->isChecked() && !entry->username().isEmpty())
     {
         preview += QString(tr("<b>Username:</b> %1")).arg(Qt::escape(entry->username())) + "<br />";
@@ -179,6 +174,11 @@ QString DatabasePrintDialog::entryText(const Entry *entry) const
     if (this->ui->passwordCheckBox->isChecked() && !entry->password().isEmpty())
     {
         preview += QString(tr("<b>Password:</b> %1")).arg(Qt::escape(entry->password())) + "<br />";
+    }
+
+    if (this->ui->urlCheckBox->isChecked() && !entry->url().isEmpty())
+    {
+        preview += QString("<b>URL:</b> %1").arg(Qt::escape(entry->url().toString())) + "<br />";
     }
 
     if (this->ui->notesCheckBox->isChecked() && !entry->notes().isEmpty())

@@ -24,6 +24,9 @@ GroupEditDialog::GroupEditDialog(Group *group, QWidget *parent) :
 
     // Hide the password by default
     this->ui->revealToolButton->setChecked(true);
+
+    // Focus to the title box
+    this->ui->titleLineEdit->setFocus();
 }
 
 /*!
@@ -71,12 +74,17 @@ void GroupEditDialog::load()
         if (db)
         {
             this->ui->passwordLineEdit->setText(db->password());
+            this->ui->defaultCompressionRadioButton->setChecked(db->compression() == -1);
+            this->ui->noCompressionRadioButton->setChecked(db->compression() == 0);
+            this->ui->customCompressionRadioButton->setChecked(db->compression() > 0);
+            this->ui->compresionLevelSpinBox->setValue(db->compression());
         }
 
         this->ui->passwordLabel->setVisible(db);
         this->ui->passwordLineEdit->setVisible(db);
         this->ui->revealToolButton->setVisible(db);
         this->setWindowTitle(db ? tr("Edit Database") : tr("Edit Group"));
+        this->ui->compressionTab->setVisible(db);
     }
 }
 
@@ -94,6 +102,18 @@ void GroupEditDialog::save()
         if (db)
         {
             db->setPassword(this->ui->passwordLineEdit->text());
+            if (this->ui->defaultCompressionRadioButton->isChecked())
+            {
+                db->setCompression(-1);
+            }
+            else if (this->ui->noCompressionRadioButton->isChecked())
+            {
+                db->setCompression(0);
+            }
+            else if (this->ui->customCompressionRadioButton->isChecked())
+            {
+                db->setCompression(this->ui->compresionLevelSpinBox->value());
+            }
         }
     }
 }

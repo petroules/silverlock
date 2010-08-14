@@ -1045,6 +1045,10 @@ void MainWindow::on_entryTable_customContextMenuRequested(QPoint pos)
     {
         this->ui->menuEntry->exec(QCursor::pos());
     }
+    else
+    {
+        this->ui->menuGroup->exec(QCursor::pos());
+    }
 }
 
 /*!
@@ -1267,11 +1271,6 @@ void MainWindow::populateInfoView(Entry *const entry)
             pairs.append(tr("<b>Title:</b> %1").arg(Qt::escape(entry->title())));
         }
 
-        if (!entry->url().isEmpty())
-        {
-            pairs.append(tr("<b>URL:</b> <a href=\"%1\">%1</a>").arg(Qt::escape(entry->url().toString())));
-        }
-
         if (!entry->username().isEmpty())
         {
             pairs.append(tr("<b>Username:</b> %1").arg(Qt::escape(entry->username())));
@@ -1280,6 +1279,11 @@ void MainWindow::populateInfoView(Entry *const entry)
         if (!entry->password().isEmpty())
         {
             pairs.append(tr("<b>Password:</b> %1").arg(Qt::escape(entry->password())));
+        }
+
+        if (!entry->url().isEmpty())
+        {
+            pairs.append(tr("<b>URL:</b> <a href=\"%1\">%1</a>").arg(Qt::escape(entry->url().toString())));
         }
 
         // Custom fields go after the primary data but before the unmodifiable details
@@ -1291,10 +1295,10 @@ void MainWindow::populateInfoView(Entry *const entry)
         }
 
         // We'll always have a UUID, and the created/accessed/modified times
-        pairs.append(tr("<b>UUID:</b> %1").arg(Qt::escape(entry->uuid().toString())));
-        pairs.append(tr("<b>Created:</b> %1").arg(Qt::escape(entry->created().toLocalTime().toString(Qt::SystemLocaleLongDate))));
-        pairs.append(tr("<b>Accessed:</b> %1").arg(Qt::escape(entry->accessed().toLocalTime().toString(Qt::SystemLocaleLongDate))));
-        pairs.append(tr("<b>Modified:</b> %1").arg(Qt::escape(entry->modified().toLocalTime().toString(Qt::SystemLocaleLongDate))));
+        pairs.append(tr("<font color='gray'><b>UUID:</b> %1</font>").arg(Qt::escape(entry->uuid().toString())));
+        pairs.append(tr("<font color='gray'><b>Created:</b> %1</font>").arg(Qt::escape(entry->created().toLocalTime().toString(Qt::SystemLocaleLongDate))));
+        pairs.append(tr("<font color='gray'><b>Accessed:</b> %1</font>").arg(Qt::escape(entry->accessed().toLocalTime().toString(Qt::SystemLocaleLongDate))));
+        pairs.append(tr("<font color='gray'><b>Modified:</b> %1</font>").arg(Qt::escape(entry->modified().toLocalTime().toString(Qt::SystemLocaleLongDate))));
 
         // Last accessed... NOW!
         entry->setAccessed();

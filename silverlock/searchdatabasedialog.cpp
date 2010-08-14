@@ -116,9 +116,9 @@ void SearchDatabaseDialog::updateWidgets()
 {
     this->ui->searchLineEdit->setText(this->m_searchParameters->searchPattern);
     this->ui->titleCheckBox->setChecked(this->m_searchParameters->searchTitle);
-    this->ui->urlCheckBox->setChecked(this->m_searchParameters->searchUrl);
     this->ui->usernameCheckBox->setChecked(this->m_searchParameters->searchUsername);
     this->ui->passwordCheckBox->setChecked(this->m_searchParameters->searchPassword);
+    this->ui->urlCheckBox->setChecked(this->m_searchParameters->searchUrl);
     this->ui->notesCheckBox->setChecked(this->m_searchParameters->searchNotes);
     this->ui->recoveryInfoCheckBox->setChecked(this->m_searchParameters->searchRecovery);
     this->ui->customFieldsCheckBox->setChecked(this->m_searchParameters->searchCustomFields);
@@ -135,9 +135,9 @@ void SearchDatabaseDialog::updateSearchParameters()
 {
     this->m_searchParameters->searchPattern = this->ui->searchLineEdit->text();
     this->m_searchParameters->searchTitle = this->ui->titleCheckBox->isChecked();
-    this->m_searchParameters->searchUrl = this->ui->urlCheckBox->isChecked();
     this->m_searchParameters->searchUsername = this->ui->usernameCheckBox->isChecked();
     this->m_searchParameters->searchPassword = this->ui->passwordCheckBox->isChecked();
+    this->m_searchParameters->searchUrl = this->ui->urlCheckBox->isChecked();
     this->m_searchParameters->searchNotes = this->ui->notesCheckBox->isChecked();
     this->m_searchParameters->searchRecovery = this->ui->recoveryInfoCheckBox->isChecked();
     this->m_searchParameters->searchCustomFields = this->ui->customFieldsCheckBox->isChecked();

@@ -56,7 +56,7 @@ bool DatabaseWriter::write(const Database *const database, QIODevice &device, bo
     if (encrypt)
     {
         DatabaseCrypto::CryptoStatus status;
-        fileDataString = DatabaseCrypto::encrypt(fileDataString, database->password(), &status);
+        fileDataString = DatabaseCrypto::encrypt(fileDataString, database->password(), database->compression(), &status);
         if (status != DatabaseCrypto::NoError)
         {
             this->m_errorString = DatabaseCrypto::statusMessage(status);
@@ -65,6 +65,7 @@ bool DatabaseWriter::write(const Database *const database, QIODevice &device, bo
     }
 
     QTextStream ts(&device);
+    ts.setCodec("UTF-8");
     ts << fileDataString;
     return true;
 }

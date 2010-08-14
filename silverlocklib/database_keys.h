@@ -12,6 +12,7 @@
 #define XML_DATABASE "Database"
 #define XML_VERSION "Version"
 #define XML_DBPASSWORD "Password"
+#define XML_COMPRESSION "Compression"
 
 #define XML_UUID "UUID"
 #define XML_TITLE "Title"
@@ -22,9 +23,9 @@
 #define XML_GROUP "Group"
 #define XML_ENTRY "Entry"
 
-#define XML_URL "URL"
 #define XML_USERNAME "Username"
 #define XML_PASSWORD "Password"
+#define XML_URL "URL"
 #define XML_NOTES "Notes"
 
 #define XML_RECOVERYINFO "RecoveryInfo"

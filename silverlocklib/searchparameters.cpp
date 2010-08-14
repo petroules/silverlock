@@ -30,9 +30,9 @@ SearchParameters::SearchParameters(QObject *parent)
 void SearchParameters::setDefaults()
 {
     this->searchTitle = true;
-    this->searchUrl = true;
     this->searchUsername = true;
     this->searchPassword = false;
+    this->searchUrl = true;
     this->searchNotes = true;
     this->searchRecovery = false;
     this->searchCustomFields = true;
@@ -56,8 +56,8 @@ Qt::CaseSensitivity SearchParameters::caseSensitiveEnum() const
  */
 bool SearchParameters::fieldsSelected() const
 {
-    return this->searchTitle || this->searchUrl || this->searchUsername ||
-        this->searchPassword || this->searchNotes || this->searchRecovery ||
+    return this->searchTitle || this->searchUsername || this->searchPassword ||
+        this->searchUrl || this->searchNotes || this->searchRecovery ||
         this->searchCustomFields || this->searchGroupTitle || this->searchUuid;
 }
 
@@ -78,11 +78,6 @@ QList<QString> SearchParameters::getDataList(const Entry &entry) const
         dataItems.append(entry.title());
     }
 
-    if (this->searchUrl)
-    {
-        dataItems.append(entry.url().toString());
-    }
-
     if (this->searchUsername)
     {
         dataItems.append(entry.username());
@@ -91,6 +86,11 @@ QList<QString> SearchParameters::getDataList(const Entry &entry) const
     if (this->searchPassword)
     {
         dataItems.append(entry.password());
+    }
+
+    if (this->searchUrl)
+    {
+        dataItems.append(entry.url().toString());
     }
 
     if (this->searchNotes)

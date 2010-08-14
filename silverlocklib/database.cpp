@@ -19,7 +19,7 @@
     \param password The database password. See \a password.
  */
 Database::Database(const QString &title, const QString &password)
-    : Group(title), m_password(password)
+    : Group(title), m_password(password), m_compression(-1)
 {
 }
 
@@ -46,7 +46,7 @@ Database::~Database()
  */
 QVersion Database::version()
 {
-    return QVersion("1.0");
+    return QVersion("1.0").simplified();
 }
 
 /*!
@@ -68,6 +68,37 @@ void Database::setPassword(const QString &password)
     if (this->m_password != password)
     {
         this->m_password = password;
+        this->setModified();
+    }
+}
+
+/*!
+    \property Database::compression
+
+    This property holds the database compression level.
+
+    -1 specifies default compression, 0 specifies no compression,
+    and 1 through 9 specify custom compression levels, 1 being
+    the least and 9 being the most. Attempts to set values outside
+    this range will result in the value being set to the default (-1).
+ */
+int Database::compression() const
+{
+    return this->m_compression;
+}
+
+void Database::setCompression(int compression)
+{
+    if (this->m_compression != compression)
+    {
+        // If the compression is outside the proper range...
+        if (compression < -1 || compression > 9)
+        {
+            // ...default to default compression
+            compression = -1;
+        }
+
+        this->m_compression = compression;
         this->setModified();
     }
 }
@@ -100,6 +131,7 @@ void Database::fromXml(const QDomElement &element)
     DatabaseNode::fromXml(element);
 
     this->setPassword(element.attribute(XML_DBPASSWORD));
+    this->setCompression(element.attribute(XML_COMPRESSION, QString::number(-1)).toInt());
 }
 
 QDomElement Database::toXml(QDomDocument &document) const
@@ -108,5 +140,6 @@ QDomElement Database::toXml(QDomDocument &document) const
     element.setTagName(XML_DATABASE);
     element.setAttribute(XML_VERSION, Database::version().toString());
     element.setAttribute(XML_DBPASSWORD, this->m_password);
+    element.setAttribute(XML_COMPRESSION, this->m_compression);
     return element;
 }

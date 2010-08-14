@@ -44,12 +44,17 @@ public:
         DecodingError,
 
         /*!
+            An unsupported database version was encountered.
+         */
+        UnsupportedVersion,
+
+        /*!
             An unknown error occurred during the encryption/decryption process.
          */
         UnknownError
     };
 
-    static QString encrypt(const QString &file, const QString &password, CryptoStatus *error = NULL);
+    static QString encrypt(const QString &file, const QString &password, int compressionLevel, CryptoStatus *error = NULL);
     static QString decrypt(const QString &file, const QString &password, CryptoStatus *error = NULL);
     static QString statusMessage(CryptoStatus status);
 
