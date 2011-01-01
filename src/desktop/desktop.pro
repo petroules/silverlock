@@ -47,7 +47,8 @@ HEADERS += \
     stable.h \
     inactivityeventfilter.h \
     databaseprintdialog.h \
-    version.h
+    version.h \
+    newdatabasewizard.h
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
@@ -68,7 +69,8 @@ SOURCES += \
     guardeddialog.cpp \
     inactivityeventfilter.cpp \
     entryeditdialog_helper.cpp \
-    databaseprintdialog.cpp
+    databaseprintdialog.cpp \
+    newdatabasewizard.cpp
 FORMS += mainwindow.ui \
     entryeditdialog.ui \
     groupeditdialog.ui \
@@ -82,10 +84,11 @@ FORMS += mainwindow.ui \
     aboutdialog.ui \
     licensedialog.ui \
     updatedialog.ui \
-    databaseprintdialog.ui
+    databaseprintdialog.ui \
+    newdatabasewizard.ui
 RESOURCES += \
     resources.qrc \
-    ../res/globalresources.qrc
+    ../../res/globalresources.qrc
 TRANSLATIONS += \
     tr/silverlock_de.ts \
     tr/silverlock_fr.ts
@@ -106,7 +109,7 @@ win32:LIBS += -luser32
     error("Could not find the qtsingleapplication.pri file! Have you run configure in the 3rdparty directory?")
 }
 
-SILVERLOCKLIB_PATH = ../silverlocklib
+SILVERLOCKLIB_PATH = ../libqt
 LIEL_PATH = ../liel
 
 # Silverlock support library

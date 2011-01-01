@@ -15,25 +15,19 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_1592BF14DDA64C6CA047E07556B2283C"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_1D0FB567E9CD4283978514F96647E1D0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2B3A35942E12451C8484487C8C371B7F"
+        "MsmKey" = "8:_2C17E57440204495BC723191E800E96D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_3E00243B58F24F5E9B9284E1935AF76E"
+        "MsmKey" = "8:_43D881F469A9460F83E1C1D87D0CFC67"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -45,7 +39,25 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_510776A22E0D4EA9A897AB1039FFF269"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6485214C448B485BB6D7F545535CE384"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_69C3DC2250C647819A005AFFE375D8B8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7C002E490D414BCDBC5E90E6FE1C13EA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -75,13 +87,25 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B7AC34E4563C444094AA8838F60B69E5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B8902083A2A44766B98D3D34BF499BE4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C0BAD2C2CC56456A975698CBCDBF7287"
+        "MsmKey" = "8:_CD7706AC0CAA49F2AA0DDB22F4D341FF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D2EAE2CEB49C408DB8AE1F5A51D66B3D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -93,7 +117,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\SilverlockWindowsInstaller.msi"
+        "OutputFilename" = "8:SilverlockWindowsInstallerd.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -125,7 +149,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\SilverlockWindowsInstaller.msi"
+        "OutputFilename" = "8:SilverlockWindowsInstaller.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -167,26 +191,6 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1592BF14DDA64C6CA047E07556B2283C"
-            {
-            "SourcePath" = "8:..\\..\\..\\..\\..\\silverlock-build-desktop\\silverlocklib\\release\\silverlocklib.dll"
-            "TargetName" = "8:silverlocklib.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1D0FB567E9CD4283978514F96647E1D0"
             {
             "SourcePath" = "8:C:\\OpenSSL-Win32\\libeay32.dll"
@@ -207,10 +211,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2B3A35942E12451C8484487C8C371B7F"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2C17E57440204495BC723191E800E96D"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\..\\silverlock-build-desktop\\silverlock\\release\\silverlock.exe"
-            "TargetName" = "8:silverlock.exe"
+            "SourcePath" = "8:..\\..\\res\\license\\gpl-3.0.rtf"
+            "TargetName" = "8:gpl-3.0.rtf"
             "Tag" = "8:"
             "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
@@ -227,12 +231,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3E00243B58F24F5E9B9284E1935AF76E"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_43D881F469A9460F83E1C1D87D0CFC67"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\res\\license\\gpl-3.0.txt"
-            "TargetName" = "8:gpl-3.0.txt"
+            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\iconengines\\qsvgicon4.dll"
+            "TargetName" = "8:qsvgicon4.dll"
             "Tag" = "8:"
-            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Folder" = "8:_93597BAC81DB49D5A2EB0E825434D6EE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -267,12 +271,72 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_510776A22E0D4EA9A897AB1039FFF269"
+            {
+            "SourcePath" = "8:..\\..\\res\\app.ico"
+            "TargetName" = "8:app.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6485214C448B485BB6D7F545535CE384"
+            {
+            "SourcePath" = "8:..\\..\\silverlock-build-desktop\\liel\\release\\liel.dll"
+            "TargetName" = "8:liel.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_69C3DC2250C647819A005AFFE375D8B8"
             {
             "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\bin\\QtSvg4.dll"
             "TargetName" = "8:QtSvg4.dll"
             "Tag" = "8:"
             "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7C002E490D414BCDBC5E90E6FE1C13EA"
+            {
+            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qico4.dll"
+            "TargetName" = "8:qico4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -367,10 +431,50 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C0BAD2C2CC56456A975698CBCDBF7287"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B7AC34E4563C444094AA8838F60B69E5"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\..\\liel\\qt\\liel\\release\\liel.dll"
-            "TargetName" = "8:liel.dll"
+            "SourcePath" = "8:..\\..\\silverlock-build-desktop\\libqt\\release\\silverlocklib.dll"
+            "TargetName" = "8:silverlocklib.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CD7706AC0CAA49F2AA0DDB22F4D341FF"
+            {
+            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qsvg4.dll"
+            "TargetName" = "8:qsvg4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D2EAE2CEB49C408DB8AE1F5A51D66B3D"
+            {
+            "SourcePath" = "8:..\\..\\silverlock-build-desktop\\desktop\\release\\silverlock.exe"
+            "TargetName" = "8:silverlock.exe"
             "Tag" = "8:"
             "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
@@ -390,6 +494,29 @@
         }
         "FileType"
         {
+            "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_1631174E6E8D4E8F966DFF6A329E9248"
+            {
+            "Name" = "8:Silverlock Database"
+            "Description" = "8:Silverlock Database"
+            "Extensions" = "8:.sdbx"
+            "MIME" = "8:text/plain"
+            "Icon" = "8:_510776A22E0D4EA9A897AB1039FFF269"
+            "IconIndex" = "3:0"
+                "Command"
+                {
+                "Command" = "8:_D2EAE2CEB49C408DB8AE1F5A51D66B3D"
+                }
+                "Verbs"
+                {
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_1CFCD93B7E9145FC8F8F60165F36DC89"
+                    {
+                    "Command" = "8:&Open"
+                    "Verb" = "8:open"
+                    "Arguments" = "8:\"%1\""
+                    "Order" = "3:0"
+                    }
+                }
+            }
         }
         "Folder"
         {
@@ -425,6 +552,28 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_93597BAC81DB49D5A2EB0E825434D6EE"
+                    {
+                    "Name" = "8:iconengines"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_814474311EAD44F09FC1B1F863207C4F"
+                        "Folders"
+                        {
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_C6565D5F9EFE447BB0E95F448E21D05F"
+                    {
+                    "Name" = "8:imageformats"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_9B4B8C2413EE4AA19241BB5069A8F24F"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
         }
@@ -444,7 +593,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Silverlock"
         "ProductCode" = "8:{6E4F4785-9F3B-435E-A9D2-86BD204789EC}"
-        "PackageCode" = "8:{2D90C74E-E6B4-4812-A02C-315E8A2A3B87}"
+        "PackageCode" = "8:{6F8D29D7-9853-45C5-BA90-AD00947EA476}"
         "UpgradeCode" = "8:{263683D4-7D39-47D7-B2A0-2878D4D5241B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -454,14 +603,14 @@
         "ProductVersion" = "8:1.1"
         "Manufacturer" = "8:Petroules"
         "ARPHELPTELEPHONE" = "8:"
-        "ARPHELPLINK" = "8:"
+        "ARPHELPLINK" = "8:http://www.petroules.com/support/silverlock/"
         "Title" = "8:Silverlock Setup"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Petroules"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:"
+        "ARPCOMMENTS" = "8:Silverlock is a secure password management application designed to ease the management of account credentials and related information."
         "ARPURLINFOABOUT" = "8:http://www.petroules.com/"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_510776A22E0D4EA9A897AB1039FFF269"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -564,7 +713,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_3F414FCB1EE54EF1ADB9B94A27CDA59E"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5CCF40261B98476EB8B5F722C7BBFBB1"
             {
             "Name" = "8:Silverlock"
             "Arguments" = "8:"
@@ -572,10 +721,24 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_2B3A35942E12451C8484487C8C371B7F"
+            "Target" = "8:_D2EAE2CEB49C408DB8AE1F5A51D66B3D"
+            "Folder" = "8:_31C1E3103B654606AEE35258F373924A"
+            "WorkingFolder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Icon" = "8:_510776A22E0D4EA9A897AB1039FFF269"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_62F3CE0B9BE3445ABCA3AD093EB712C3"
+            {
+            "Name" = "8:Silverlock"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_D2EAE2CEB49C408DB8AE1F5A51D66B3D"
             "Folder" = "8:_438FB43A6CB54F21930C4794B940F96E"
             "WorkingFolder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
-            "Icon" = "8:"
+            "Icon" = "8:_510776A22E0D4EA9A897AB1039FFF269"
             "Feature" = "8:"
             }
         }
@@ -588,6 +751,53 @@
             "Attributes" = "3:1"
                 "Dialogs"
                 {
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_54E1930CA1894F5F94BAC0B88742B963"
+                    {
+                    "Sequence" = "3:110"
+                    "DisplayName" = "8:License Agreement"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdAdminLicenseDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "EulaText"
+                            {
+                            "Name" = "8:EulaText"
+                            "DisplayName" = "8:#1008"
+                            "Description" = "8:#1108"
+                            "Type" = "3:6"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:_2C17E57440204495BC723191E800E96D"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Sunken"
+                            {
+                            "Name" = "8:Sunken"
+                            "DisplayName" = "8:#1007"
+                            "Description" = "8:#1107"
+                            "Type" = "3:5"
+                            "ContextData" = "8:4;True=4;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:4"
+                            "DefaultValue" = "3:4"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_552C4205D2A74EE8AEFBD4D98A35F304"
                     {
                     "Sequence" = "3:300"
@@ -747,7 +957,7 @@
                 {
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_9537FEF9C5DA4A26BEC0FB8A39302D1F"
                     {
-                    "Sequence" = "3:300"
+                    "Sequence" = "3:400"
                     "DisplayName" = "8:Confirm Installation"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -817,7 +1027,7 @@
                     }
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_C1124D2CBE1341538E5CBE178051DEDE"
                     {
-                    "Sequence" = "3:200"
+                    "Sequence" = "3:300"
                     "DisplayName" = "8:Installation Folder"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
@@ -846,6 +1056,53 @@
                             "Setting" = "3:0"
                             "Value" = "3:1"
                             "DefaultValue" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                        }
+                    }
+                    "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_F5BD38E1690349E8893ECE0962D959BD"
+                    {
+                    "Sequence" = "3:200"
+                    "DisplayName" = "8:License Agreement"
+                    "UseDynamicProperties" = "11:TRUE"
+                    "IsDependency" = "11:FALSE"
+                    "SourcePath" = "8:<VsdDialogDir>\\VsdLicenseDlg.wid"
+                        "Properties"
+                        {
+                            "BannerBitmap"
+                            {
+                            "Name" = "8:BannerBitmap"
+                            "DisplayName" = "8:#1001"
+                            "Description" = "8:#1101"
+                            "Type" = "3:8"
+                            "ContextData" = "8:Bitmap"
+                            "Attributes" = "3:4"
+                            "Setting" = "3:1"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "EulaText"
+                            {
+                            "Name" = "8:EulaText"
+                            "DisplayName" = "8:#1008"
+                            "Description" = "8:#1108"
+                            "Type" = "3:6"
+                            "ContextData" = "8:"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:2"
+                            "Value" = "8:_2C17E57440204495BC723191E800E96D"
+                            "UsePlugInResources" = "11:TRUE"
+                            }
+                            "Sunken"
+                            {
+                            "Name" = "8:Sunken"
+                            "DisplayName" = "8:#1007"
+                            "Description" = "8:#1107"
+                            "Type" = "3:5"
+                            "ContextData" = "8:4;True=4;False=0"
+                            "Attributes" = "3:0"
+                            "Setting" = "3:0"
+                            "Value" = "3:4"
+                            "DefaultValue" = "3:4"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }

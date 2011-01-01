@@ -14,6 +14,7 @@
 #include "updatedialog.h"
 #include "inactivityeventfilter.h"
 #include "databaseprintdialog.h"
+#include "newdatabasewizard.h"
 #include <qtsingleapplication.h>
 
 /*!
@@ -381,21 +382,16 @@ void MainWindow::on_actionNew_triggered()
     }
     else
     {
-        Database *database = new Database(QString(), QString());
-        GroupEditDialog dialog(database, this);
-        if (dialog.exec() == QDialog::Accepted)
+        NewDatabaseWizard wizard(this);
+        if (wizard.exec() == QDialog::Accepted)
         {
-            this->m_documentState.load(database);
-            this->ui->groupBrowser->populate(database);
+            this->m_documentState.load(wizard.database());
+            this->ui->groupBrowser->populate(wizard.database());
             this->setCurrentFile(QString());
 
             // Call this here so the user doesn't accidentally close
             // the window without saving their new database
             this->databaseWasModified();
-        }
-        else
-        {
-            delete database;
         }
     }
 }
