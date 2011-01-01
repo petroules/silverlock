@@ -1,2 +1,6 @@
 TEMPLATE = subdirs
-SUBDIRS += silverlocklib silverlock
+CONFIG += ordered
+SUBDIRS += \
+    ../liel/qt/liel \
+    silverlocklib \
+    silverlock

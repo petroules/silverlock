@@ -1,20 +1,25 @@
 #include "databasecrypto.h"
 #include "database.h"
-#include <botan/botan.h>
-#include <cstring>
-#include <fstream>
 #include <iostream>
-#include <memory>
-#include <string>
-#include <vector>
+#include <botan/botan.h>
 
-#define ALGO "AES"
+// Little fix for the SecureVector template on MSVC...
+#ifdef min
+#undef min
+#endif
+
+#define ALGO "AES-256"
 #define HEADER "SILVERLOCK DATABASE FILE"
 #define COMPRESSED "ZLIB"
 #define UNCOMPRESSED "UNCOMPRESSED"
 
 // Some black magic to catch problems at compile time
 #define X_ASSERT(pred) switch(0){case 0:case pred:;}
+
+// Check to make sure we have the required libraries
+#if !(defined(BOTAN_HAS_AES) && defined(BOTAN_HAS_ALGORITHM_FACTORY) && defined(BOTAN_HAS_PBKDF2))
+    #error "Silverlock requires the following Botan modules: AES. Please recompile Botan with these modules enabled."
+#endif
 
 using namespace Botan;
 
@@ -39,6 +44,11 @@ DatabaseCrypto::DatabaseCrypto(QObject *parent) :
 {
     // Make sure a Botan byte is the same size as a char (QByteArray's underlying storage)
     X_ASSERT(sizeof(Botan::byte) == sizeof(char));
+}
+
+QString DatabaseCrypto::botanVersion()
+{
+    return QString::fromStdString(Botan::version_string());
 }
 
 /*!
@@ -73,42 +83,47 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, in
 
     try
     {
-        const u32bit key_len = max_keylength_of(algo);
-        const u32bit iv_len = block_size_of(algo);
+        const BlockCipher* cipher_proto = global_state().algorithm_factory().prototype_block_cipher(algo);
+        const u32bit key_len = cipher_proto->maximum_keylength();
+        const u32bit iv_len = cipher_proto->block_size();
         const bool compressed = compressionLevel != 0;
+        const u32bit iterations = 8192;
 
         AutoSeeded_RNG rng;
+        SecureVector<Botan::byte> salt(8);
+        rng.randomize(&salt[0], salt.size());
 
-        std::auto_ptr<S2K> s2k(get_s2k("PBKDF2(SHA-1)"));
-        s2k->set_iterations(8192);
-        s2k->new_random_salt(rng, 8);
-
-        SymmetricKey bc_key = s2k->derive_key(key_len, "BLK" + passphrase);
-        InitializationVector iv = s2k->derive_key(iv_len, "IVL" + passphrase);
-        SymmetricKey mac_key = s2k->derive_key(16, "MAC" + passphrase);
+        std::auto_ptr<PBKDF> pbkdf(get_pbkdf("PBKDF2(SHA-1)"));
+        SymmetricKey bc_key = pbkdf->derive_key(key_len, "BLK" + passphrase, &salt[0], salt.size(), iterations);
+        InitializationVector iv = pbkdf->derive_key(iv_len, "IVL" + passphrase, &salt[0], salt.size(), iterations);
+        SymmetricKey mac_key = pbkdf->derive_key(16, "MAC" + passphrase, &salt[0], salt.size(), iterations);
 
         // Write the standard file header and the salt encoded in base64
         out += QString("%1 %2 %3\n").arg(header).arg(Database::version().toString())
                .arg(compressed ? COMPRESSED : UNCOMPRESSED);
-        out += QString::fromStdString(b64_encode(s2k->current_salt())) + "\n";
+        out += QString::fromStdString(b64_encode(salt)) + "\n";
 
-        Pipe pipe(new Fork(
-            new Chain(new MAC_Filter("HMAC(SHA-1)", mac_key),
-            new Base64_Encoder),
-            new Chain(get_cipher(algo + "/CBC", bc_key, iv, ENCRYPTION),
-            new Base64_Encoder(true))));
+        Pipe pipe(
+            new Fork(
+                new Chain(
+                    new MAC_Filter("HMAC(SHA-1)", mac_key),
+                    new Base64_Encoder),
+                new Chain(
+                    get_cipher(algo + "/CBC/PKCS7", bc_key, iv, ENCRYPTION),
+                    new Base64_Encoder(true))));
 
         // Write our input data to the pipe to process it - if compressionLevel = 0,
         // nothing will be compressed
         pipe.start_msg();
         QByteArray qCompressedData = qCompress(data.toUtf8(), compressionLevel);
-        Botan::byte rawCompressedData[qCompressedData.length()];
+        SecureVector<Botan::byte> rawCompressedData;
+        rawCompressedData.resize(qCompressedData.length());
         for (int i = 0; i < qCompressedData.length(); i++)
         {
             rawCompressedData[i] = qCompressedData[i];
         }
 
-        pipe.write(rawCompressedData, qCompressedData.length());
+        pipe.write(rawCompressedData);
         pipe.end_msg();
 
         // Get the encrypted data back from the pipe and write it to our output variable
@@ -123,8 +138,6 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, in
         {
             *error = UnknownError;
         }
-
-        return QString();
     }
     catch (std::exception &e)
     {
@@ -133,9 +146,9 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, in
         {
             *error = UnknownError;
         }
-
-        return QString();
     }
+
+    return QString();
 }
 
 /*!
@@ -174,65 +187,67 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
         QString actualHeaderLine = in.readLine();
         QString headerLine = QString("%1 ").arg(header);
 
-        // Try the old header first... just in case (TODO: we'll remove this as of version 1.1)
-        bool wasCompressed = actualHeaderLine != "-------- SILVERLOCK DATABASE FILE --------";
-        if (wasCompressed)
+        // If the actual header is less than (or equal!) to our expected one, there is no version
+        // and is thus invalid, OR if the actual header doesn't start with our header, it's invalid
+        if (actualHeaderLine.length() <= headerLine.length() || !actualHeaderLine.startsWith(headerLine))
         {
-            // If the actual header is less than (or equal!) to our expected one, there is no version
-            // and is thus invalid, OR if the actual header doesn't start with our header, it's invalid
-            if (actualHeaderLine.length() <= headerLine.length() || !actualHeaderLine.startsWith(headerLine))
+            if (error)
+            {
+                *error = MissingHeader;
+            }
+
+            return QString();
+        }
+
+        // Everything after the "SILVERLOCK DATABASE FILE"
+        QStringList theRest = actualHeaderLine.right(actualHeaderLine.length() - headerLine.length())
+                .split(' ', QString::SkipEmptyParts);
+        if (theRest.count() == 2)
+        {
+            QVersion version(theRest[0]);
+            if (version.simplified() != Database::version())
             {
                 if (error)
                 {
-                    *error = MissingHeader;
-                }
-
-                return QString();
-            }
-
-            // Everything after the "SILVERLOCK DATABASE FILE"
-            QStringList theRest = actualHeaderLine.right(actualHeaderLine.length() - headerLine.length())
-                    .split(' ', QString::SkipEmptyParts);
-            if (theRest.count() == 2)
-            {
-                QVersion version(theRest[0]);
-                if (version.simplified() != Database::version())
-                {
-                    if (error)
-                    {
-                        *error = UnsupportedVersion;
-                    }
-
-                    return QString();
-                }
-            }
-            else
-            {
-                if (error)
-                {
-                    *error = MissingHeader;
+                    *error = UnsupportedVersion;
                 }
 
                 return QString();
             }
         }
+        else
+        {
+            if (error)
+            {
+                *error = MissingHeader;
+            }
+
+            return QString();
+        }
 
         std::string salt_str = in.readLine().toStdString();
         std::string mac_str = in.readLine().toStdString();
 
-        const u32bit key_len = max_keylength_of(algo);
-        const u32bit iv_len = block_size_of(algo);
+        const BlockCipher* cipher_proto = global_state().algorithm_factory().prototype_block_cipher(algo);
+        const u32bit key_len = cipher_proto->maximum_keylength();
+        const u32bit iv_len = cipher_proto->block_size();
+        const u32bit iterations = 8192;
 
-        std::auto_ptr<S2K> s2k(get_s2k("PBKDF2(SHA-1)"));
-        s2k->set_iterations(8192);
-        s2k->change_salt(b64_decode(salt_str));
+        SecureVector<Botan::byte> salt = b64_decode(salt_str);
 
-        SymmetricKey bc_key = s2k->derive_key(key_len, "BLK" + passphrase);
-        InitializationVector iv = s2k->derive_key(iv_len, "IVL" + passphrase);
-        SymmetricKey mac_key = s2k->derive_key(16, "MAC" + passphrase);
+        std::auto_ptr<PBKDF> pbkdf(get_pbkdf("PBKDF2(SHA-1)"));
+        SymmetricKey bc_key = pbkdf->derive_key(key_len, "BLK" + passphrase, &salt[0], salt.size(), iterations);
+        InitializationVector iv = pbkdf->derive_key(iv_len, "IVL" + passphrase, &salt[0], salt.size(), iterations);
+        SymmetricKey mac_key = pbkdf->derive_key(16, "MAC" + passphrase, &salt[0], salt.size(), iterations);
 
-        Pipe pipe(new Base64_Decoder, get_cipher(algo + "/CBC", bc_key, iv, DECRYPTION),
-            new Fork(0, new Chain(new MAC_Filter("HMAC(SHA-1)", mac_key), new Base64_Encoder)));
+        Pipe pipe(
+            new Base64_Decoder,
+            get_cipher(algo + "/CBC/PKCS7", bc_key, iv, DECRYPTION),
+            new Fork(
+                NULL,
+                new Chain(
+                    new MAC_Filter("HMAC(SHA-1)", mac_key),
+                    new Base64_Encoder)));
 
         // Read all our data into the pipe for decryption
         pipe.start_msg();
@@ -259,14 +274,7 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
             qDecryptedData[i] = rawDecryptedData[i];
         }
 
-        if (wasCompressed)
-        {
-            return QString::fromUtf8(qUncompress(qDecryptedData));
-        }
-        else
-        {
-            return QString::fromUtf8(qDecryptedData);
-        }
+        return QString::fromUtf8(qUncompress(qDecryptedData));
     }
     catch (Algorithm_Not_Found)
     {

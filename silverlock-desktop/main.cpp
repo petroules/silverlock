@@ -1,13 +1,16 @@
 #include <QtGui>
-#include <QtSingleApplication>
+#include <qtsingleapplication.h>
 #include "mainwindow.h"
 #include "silverlockpreferences.h"
 #include "updatedialog.h"
 #include "inactivityeventfilter.h"
 #include "version.h"
 #include <liel.h>
-#ifdef Q_OS_WIN
-#include <windows.h>
+#ifdef Q_WS_WIN
+extern "C"
+{
+    #include <windows.h>
+}
 #endif
 
 void setAppInfo()
@@ -35,9 +38,9 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(globalresources);
     Q_INIT_RESOURCE(resources);
 
-    // Set application version, copyright and other metadatas
+    // Set application version, copyright and other metadata
     setAppInfo();
-    ApplicationInfo::initialize(instance);
+    ApplicationInfo::initialize();
 
     // Mac OS X: This allows the application to recognize when the user double clicks a file in the Finder
     QObject::connect(&instance, SIGNAL(fileOpenRequest(QString)), &instance, SIGNAL(messageReceived(QString)));
@@ -46,7 +49,7 @@ int main(int argc, char *argv[])
     InactivityEventFilter filter;
     instance.installEventFilter(&filter);
 
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
     // We need this call to allow the original process to bring itself to the foreground
     AllowSetForegroundWindow(ASFW_ANY);
 #endif

@@ -12,7 +12,7 @@
     Constructs a new DocumentState.
  */
 DocumentState::DocumentState(QObject *parent) :
-    QObject(parent), m_database(NULL), m_currentFile(NULL),
+    QObject(parent), m_database(NULL), m_currentFile(QString()),
     m_isUntitled(true), m_isLocked(false)
 {
 }

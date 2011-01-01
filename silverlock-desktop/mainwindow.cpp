@@ -14,7 +14,7 @@
 #include "updatedialog.h"
 #include "inactivityeventfilter.h"
 #include "databaseprintdialog.h"
-#include <QtSingleApplication>
+#include <qtsingleapplication.h>
 
 /*!
     \class MainWindow
@@ -163,7 +163,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     {
         case QSystemTrayIcon::Trigger:
             {
-#ifndef Q_OS_MAC
+#ifndef Q_WS_MAC
                 // We don't want this to happen in Mac OS X since the Dock already has a "hide"
                 // option which does pretty much the same thing, plus tray icons in Mac show the
                 // context menu whether they are left or right clicked, so it makes no sense to have
@@ -203,6 +203,7 @@ void MainWindow::setupUiAdditional()
     // Add the toolbar search box and button and connect their slots appropriately
     this->ui->mainToolBar->addWidget(this->m_searchBox = new QLineEdit(this));
     this->m_searchBox->setSizePolicy(QSizePolicy::Preferred, this->m_searchBox->sizePolicy().verticalPolicy());
+    this->m_searchBox->setPlaceholderText(tr("Enter search terms"));
     this->ui->mainToolBar->addWidget(this->m_searchButton = new QPushButton(tr("Search"), this));
     this->m_searchButton->setSizePolicy(QSizePolicy::Preferred, this->m_searchButton->sizePolicy().verticalPolicy());
     QObject::connect(this->m_searchBox, SIGNAL(returnPressed()), this->m_searchButton, SLOT(click()));
@@ -257,7 +258,7 @@ void MainWindow::setupUiAdditional()
     this->ui->actionAlwaysOnTop->setVisible(false);
 #endif
 
-#ifndef Q_OS_WIN
+#ifndef Q_WS_WIN
     // Internet Explorer only exists in Windows, so...
     this->ui->actionInternetExplorer->setEnabled(false);
     this->ui->actionInternetExplorer->setVisible(false);
@@ -513,26 +514,10 @@ void MainWindow::openRecentFile()
 
 void MainWindow::lockWorkspace()
 {
-    if (this->m_documentState.hasDocument() && !this->m_documentState.isLocked())
+    if (this->m_documentState.hasDocument() && !this->m_documentState.isLocked() && this->maybeSave())
     {
-        if (this->maybeSave())
-        {
-            this->m_documentState.lock();
-
-            // Hide the search box text in case there are sensitive terms in the search box
-            this->m_searchBox->setEchoMode(QLineEdit::NoEcho);
-            this->ui->mainPage->setEnabled(false);
-            this->ui->unlockPage->setEnabled(true);
-            this->ui->stackedWidget->setCurrentWidget(this->ui->unlockPage);
-
-            // Focus to the enter password line edit
-            this->ui->unlockWorkspacePasswordLineEdit->setFocus();
-
-            if (SilverlockPreferences::instance().minimizeAfterLock())
-            {
-                this->setWindowState(Qt::WindowMinimized);
-            }
-        }
+        this->m_documentState.lock();
+        this->lockWorkspace(true);
     }
 }
 
@@ -540,12 +525,31 @@ void MainWindow::unlockWorkspace()
 {
     if (this->m_documentState.hasDocument() && this->m_documentState.isLocked())
     {
-        this->m_searchBox->setEchoMode(QLineEdit::Normal);
-        this->ui->unlockPage->setEnabled(false);
-        this->ui->mainPage->setEnabled(true);
-        this->ui->stackedWidget->setCurrentWidget(this->ui->mainPage);
-
+        this->lockWorkspace(false);
         this->m_documentState.unlock();
+    }
+}
+
+void MainWindow::lockWorkspace(bool lock)
+{
+    // May contain sensitive terms
+    this->m_searchBox->setEchoMode(lock ? QLineEdit::NoEcho : QLineEdit::Normal);
+    this->ui->mainPage->setEnabled(!lock);
+    this->ui->unlockPage->setEnabled(lock);
+    this->m_nodeCountStatusLabel->setVisible(!lock);
+    this->ui->stackedWidget->setCurrentWidget(lock ? this->ui->unlockPage : this->ui->mainPage);
+
+    if (lock)
+    {
+        // Focus to the enter password line edit
+        this->ui->unlockWorkspacePasswordLineEdit->setFocus();
+        this->ui->unlockWorkspacePasswordLineEdit->setEchoMode(QLineEdit::Password);
+        this->ui->unlockWorkspaceRevealToolButton->setChecked(true);
+
+        if (SilverlockPreferences::instance().minimizeAfterLock())
+        {
+            this->setWindowState(Qt::WindowMinimized);
+        }
     }
 }
 
@@ -574,9 +578,16 @@ void MainWindow::on_actionCopyFieldValue_triggered()
 {
     if (this->ui->entryTable->hasFocus())
     {
+        // Make sure setting the clipboard here doesn't immediately stop our timer
+        QObject::disconnect(QApplication::clipboard(), SIGNAL(dataChanged()), this->m_clearClipboardTimer, SLOT(stop()));
+
         QApplication::clipboard()->setText(this->ui->entryTable->selectedFieldText());
         if (SilverlockPreferences::instance().autoClearClipboardEnabled())
         {
+            // We connect this slot so that if the user copies something ELSE
+            // while the timer is running, do NOT clear that new data
+            QObject::connect(QApplication::clipboard(), SIGNAL(dataChanged()), this->m_clearClipboardTimer, SLOT(stop()));
+
             this->m_clearClipboardTimer->start(SilverlockPreferences::instance().autoClearClipboard() * 1000);
         }
 
@@ -590,6 +601,7 @@ void MainWindow::on_actionCopyFieldValue_triggered()
 void MainWindow::clearClipboard()
 {
     QApplication::clipboard()->clear();
+    this->m_clearClipboardTimer->stop();
 }
 
 void MainWindow::on_actionDefaultBrowser_triggered()
@@ -612,7 +624,7 @@ void MainWindow::on_actionDefaultBrowser_triggered()
 
 void MainWindow::on_actionInternetExplorer_triggered()
 {
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
     if (this->m_documentState.hasDocument())
     {
         Database *db = this->m_documentState.database();
@@ -1160,7 +1172,7 @@ void MainWindow::updateInterfaceState()
 
     this->ui->actionCopyFieldValue->setEnabled(entries == 1 && !locked);
     this->ui->actionDefaultBrowser->setEnabled(entries == 1 && !locked);
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
     this->ui->actionInternetExplorer->setEnabled(entries == 1 && !locked);
 #endif
     this->ui->actionMoveEntries->setEnabled(entries > 0 && !locked);

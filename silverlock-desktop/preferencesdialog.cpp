@@ -23,7 +23,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     this->ui->runAtStartupCheckBox->setEnabled(SilverlockPreferences::runAtStartupSupported());
     this->ui->noRunAtStartupLabel->setVisible(!SilverlockPreferences::runAtStartupSupported());
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
     // Mac OS X users can right click the dock icon for "run at startup"... there's nothing else
     // on the system tab for Mac users at this point so no reason for them to see it
     this->ui->noRunAtStartupLabel->setText(tr("To tell Silverlock to automatically run when you start your computer or log in to your account, right click the Silverlock icon in the Dock and select \"Open at Login\"."));
@@ -88,7 +88,7 @@ void PreferencesDialog::load(const SilverlockPreferences &prefs)
 
     this->ui->createAssocPushButton->setIcon(this->style()->standardIcon(QStyle::SP_VistaShield));
     this->ui->removeAssocPushButton->setIcon(this->style()->standardIcon(QStyle::SP_VistaShield));
-#ifndef Q_OS_WIN
+#ifndef Q_WS_WIN
     this->ui->createAssocPushButton->setEnabled(false);
     this->ui->removeAssocPushButton->setEnabled(false);
 #else

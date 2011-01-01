@@ -587,7 +587,7 @@
     <string>Donate</string>
    </property>
    <property name="statusTip">
-    <string>Submit a donation to Petroules Enterprises</string>
+    <string>Submit a donation to Petroules</string>
    </property>
   </action>
   <action name="actionFind">

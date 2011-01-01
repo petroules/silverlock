@@ -84,7 +84,7 @@ void GroupEditDialog::load()
         this->ui->passwordLineEdit->setVisible(db);
         this->ui->revealToolButton->setVisible(db);
         this->setWindowTitle(db ? tr("Edit Database") : tr("Edit Group"));
-        this->ui->compressionTab->setVisible(db);
+        this->ui->tabWidget->setTabEnabled(this->ui->tabWidget->indexOf(this->ui->compressionTab), db);
     }
 }
 

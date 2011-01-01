@@ -80,7 +80,7 @@ private:
     bool m_windowSettingsCleared;
     QString m_updateInstallerPath;
 
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
     static QString applicationPathForRegistry();
 #elif defined(Q_OS_LINUX)
     static QString startupFile();

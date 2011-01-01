@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="infoLabel">
      <property name="text">
-      <string>&lt;p align=&quot;center&quot;&gt;Silverlock is made possible by &lt;a href=&quot;http://www.petroules.com/&quot;&gt;Petroules Enterprises&lt;/a&gt;, &lt;a href=&quot;http://qt.nokia.com/&quot;&gt;Qt&lt;/a&gt; and other open source software.&lt;br /&gt;
+      <string>&lt;p align=&quot;center&quot;&gt;Silverlock is made possible by &lt;a href=&quot;http://www.petroules.com/&quot;&gt;Petroules&lt;/a&gt;, &lt;a href=&quot;http://qt.nokia.com/&quot;&gt;Qt&lt;/a&gt; and other open source software.&lt;br /&gt;
 Herein are the licenses for Silverlock and each of the projects it is linked with.&lt;/p&gt;</string>
      </property>
      <property name="textFormat">
@@ -168,8 +168,8 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>465</width>
-        <height>380</height>
+        <width>403</width>
+        <height>134</height>
        </rect>
       </property>
       <attribute name="label">
@@ -181,7 +181,7 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
          <property name="text">
           <string>Copyright &amp;copy; 2010 Nokia Corporation and/or its subsidiary(-ies)&lt;br /&gt;
 Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;qt-info@nokia.com&lt;/a&gt;)&lt;br /&gt;
-&lt;a href=&quot;http://qt.nokia.com/products/appdev/add-on-products/catalog/4/Utilities/qtsingleapplication/&quot;&gt;http://qt.nokia.com/products/appdev/add-on-products/catalog/4/Utilities/qtsingleapplication/&lt;/a&gt;</string>
+&lt;a href=&quot;http://qt.gitorious.org/qt-solutions/qt-solutions/trees/master/qtsingleapplication&quot;&gt;http://qt.gitorious.org/qt-solutions/qt-solutions/trees/master/qtsingleapplication&lt;/a&gt;</string>
          </property>
          <property name="textFormat">
           <enum>Qt::RichText</enum>
@@ -201,32 +201,6 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="qsaAdditionalLabel">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="qsaAdditionalPetroulesLabel">
-         <property name="text">
-          <string>The distribution of QtSingleApplication used has two small modifications from Nokia's original version 2.6, to support opening files on Mac OS X using the Finder, and a shorter library name to avoid a conflict when using macdeployqt. See our QtSingleApplication source package for details.
-
-See above to view the LGPL 2.1 license under which Nokia's version of QtSingleApplication, and our derivative, are licensed.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="botanPage">
@@ -234,8 +208,8 @@ See above to view the LGPL 2.1 license under which Nokia's version of QtSingleAp
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>154</width>
-        <height>651</height>
+        <width>622</width>
+        <height>386</height>
        </rect>
       </property>
       <attribute name="label">
@@ -263,11 +237,9 @@ See above to view the LGPL 2.1 license under which Nokia's version of QtSingleAp
         <widget class="QTextBrowser" name="botanLicense"/>
        </item>
        <item>
-        <widget class="QLabel" name="botanAdditionalLabel">
+        <widget class="QLabel" name="botanVersionLabel">
          <property name="text">
-          <string>The distribution of Botan used is Nokia's version of Botan 1.8.8 found in the Qt Creator 2.0 sources (LGPL 2.1) with a very small modification to the build file (but not the Botan code itself). See our Botan source package for details.
-
-Click the 'Qt' tab to view the LGPL 2.1 license under which Nokia's version of Botan, and our derivative, are licensed.</string>
+          <string>Silverlock's support library currently utilizes version &lt;b&gt;%1&lt;/b&gt; of Botan.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>

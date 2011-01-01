@@ -93,6 +93,7 @@ private slots:
     void openRecentFile();
     void lockWorkspace();
     void unlockWorkspace();
+    void lockWorkspace(bool lock);
     void toolbarSearch();
     void on_actionExit_triggered();
     void on_actionCopyFieldValue_triggered();

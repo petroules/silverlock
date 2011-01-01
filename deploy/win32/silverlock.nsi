@@ -14,9 +14,9 @@ SetCompressorDictSize 64
 	# Set product information...
 	!define PRODUCT_NAME "Silverlock"
 	!define PRODUCT_UNIXNAME "silverlock"
-	!define PRODUCT_VERSION "1.0"
+	!define PRODUCT_VERSION "1.1"
 	!define PRODUCT_VERSION_LONG "${PRODUCT_VERSION}.0.0"
-	!define PRODUCT_PUBLISHER "Petroules Enterprises"
+	!define PRODUCT_PUBLISHER "Petroules"
 	!define PRODUCT_WEB_SITE "http://www.petroules.com/products/${PRODUCT_UNIXNAME}/"
 	!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\${PRODUCT_UNIXNAME}.exe"
 	!define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -25,11 +25,12 @@ SetCompressorDictSize 64
 	!define COPYRIGHT_YEARS "2010"
 
 	# Paths for files and resources
-	!define QT_BIN "C:\Qt\2010.04\qt\bin"
+	!define QT_BIN "Q:\Qt\4.7.1-win\bin"
 	!define QT_PLUGINS "${QT_BIN}\..\plugins"
+	!define OPENSSL_BIN "C:\OpenSSL-Win32"
 	!define APP_BIN "..\..\..\${PRODUCT_UNIXNAME}-build-desktop\bin"
 	!define PATH_RES "..\..\res"
-	!define PATH_APPRES "..\..\silverlock\res"
+	!define PATH_APPRES "..\..\${APP_UNIXNAME}\res"
 
 	# Warn the user if they try to close the installer
 	!define MUI_ABORTWARNING
@@ -53,7 +54,7 @@ SetCompressorDictSize 64
 	!insertmacro MUI_PAGE_DIRECTORY
 	Var StartMenuFolder ; Define variable to hold start menu folder
 	!define MUI_STARTMENUPAGE_DEFAULTFOLDER "${PRODUCT_NAME}" ; Set default start menu folder
-	!insertmacro MUI_PAGE_STARTMENU "${PRODUCT_NAME}" $StartMenuFolder
+	!insertmacro MUI_PAGE_STARTMENU "${PRODUCT_UNIXNAME}" $StartMenuFolder
 	!insertmacro MUI_PAGE_INSTFILES
 	!define MUI_FINISHPAGE_NOAUTOCLOSE ; Don't automatically skip past the install details page when it's done
 	!define MUI_FINISHPAGE_LINK "$(LANG_CaptionWebsite)" ; Finish page link text
@@ -67,7 +68,6 @@ SetCompressorDictSize 64
 
 	# Define languages that the installer has
 	!insertmacro MUI_LANGUAGE "English"
-	!insertmacro MUI_LANGUAGE "German"
 
 ;--------------------------------
 ; Language strings
@@ -149,7 +149,8 @@ SetCompressorDictSize 64
 		File "${QT_BIN}\QtNetwork4.dll"
 		File "${QT_BIN}\QtSvg4.dll"
 		File "${QT_BIN}\QtXml4.dll"
-		File "D:\Development\Web\PetroulesEnterprisesWebsite\PetroulesEnterprisesWebsite\favicon.ico"
+		File "${OPENSSL_BIN}\libeay32.dll"
+		File "${OPENSSL_BIN}\ssleay32.dll"
 		CreateDirectory "$INSTDIR\iconengines\"
 		SetOutPath "$INSTDIR\iconengines"
 		File "${QT_PLUGINS}\iconengines\qsvgicon4.dll"
@@ -159,7 +160,7 @@ SetCompressorDictSize 64
 		File "${QT_PLUGINS}\imageformats\qsvg4.dll"
 
 		# Create start menu shortcuts only if the user selected them
-		!insertmacro MUI_STARTMENU_WRITE_BEGIN "${PRODUCT_NAME}"
+		!insertmacro MUI_STARTMENU_WRITE_BEGIN "${PRODUCT_UNIXNAME}"
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\$(LANG_CaptionMainApp).lnk" "$INSTDIR\silverlock.exe" "" "$INSTDIR\silverlock.exe" 0 SW_SHOWNORMAL "" $(LANG_CaptionMainApp)
 		!insertmacro MUI_STARTMENU_WRITE_END
@@ -262,7 +263,8 @@ SetCompressorDictSize 64
 		Delete "$INSTDIR\QtNetwork4.dll"
 		Delete "$INSTDIR\QtSvg4.dll"
 		Delete "$INSTDIR\QtXml4.dll"
-		Delete "$INSTDIR\favicon.ico"
+		Delete "$INSTDIR\libeay32.dll"
+		Delete "$INSTDIR\ssleay32.dll"
 		# Not removing INSTDIR here because the finalizer does that
 		Delete "$INSTDIR\iconengines\qsvgicon4.dll"
 		RMDir "$INSTDIR\iconengines"

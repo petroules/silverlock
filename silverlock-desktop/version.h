@@ -1,12 +1,12 @@
 #ifndef VERSION_H_SL
 #define VERSION_H_SL
 
-#include "../../petroules/qt/petroules-version.h"
+#include "../../common/petroules/qt/petroules-version.h"
 
-#define VER_FILEVERSION             1,0,0,0
-#define VER_PRODUCTVERSION          1,0,0,0
-#define VER_FILEVERSION_STR         "1.0.0.0"
-#define VER_PRODUCTVERSION_STR      "1.0"
+#define VER_FILEVERSION             1,1,0,0
+#define VER_PRODUCTVERSION          1,1,0,0
+#define VER_FILEVERSION_STR         "1.1.0.0"
+#define VER_PRODUCTVERSION_STR      "1.1"
 #define VER_ORIGINALFILENAME_STR    "silverlock.exe"
 
 #define APP_DISPLAYNAME             "Silverlock"

@@ -1,5 +1,6 @@
 #include "licensedialog.h"
 #include "ui_licensedialog.h"
+#include <databasecrypto.h>
 
 /*!
     \class LicenseDialog
@@ -22,11 +23,11 @@ LicenseDialog::LicenseDialog(QWidget *parent) :
     this->ui->silverlockLicense->setText(getLicense("gpl-3.0"));
     this->ui->lielLicense->setText(getLicense("lgpl-2.1"));
     this->ui->qtLicense->setText(getLicense("lgpl-2.1"));
-    this->ui->qsaLicense->setText(getLicense("lgpl-2.1"));
+    this->ui->qsaLicense->setText(getLicense("qsa"));
     this->ui->botanLicense->setText(getLicense("botan"));
 
     this->ui->qtAdditionalLabel->setText(getLicense("qt-exception"));
-    this->ui->qsaAdditionalLabel->setText(getLicense("qsa-exception"));
+    this->ui->botanVersionLabel->setText(this->ui->botanVersionLabel->text().arg(DatabaseCrypto::botanVersion()));
 }
 
 /*!

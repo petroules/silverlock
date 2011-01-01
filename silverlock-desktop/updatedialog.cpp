@@ -95,7 +95,7 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
         }
         else
         {
-            this->setError(tr("Your version of Silverlock appears to be newer than the latest available version. Please contact Petroules Enterprises for further assistance."));
+            this->setError(tr("Your version of Silverlock appears to be newer than the latest available version. Please contact <a href=\"http://www.petroules.com/\">Petroules</a> for further assistance."));
         }
     }
     else
@@ -252,9 +252,9 @@ void UpdateDialog::on_installPushButton_clicked()
     QApplication::closeAllWindows();
 
     QProcess process;
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
     if (!process.startDetached(this->m_file))
-#elif defined(Q_OS_MAC)
+#elif defined(Q_WS_MAC)
     if (!process.startDetached("open", QStringList(this->m_file)))
 #elif defined(Q_OS_LINUX)
     if (!process.startDetached("xdg-open", QStringList(this->m_file)))

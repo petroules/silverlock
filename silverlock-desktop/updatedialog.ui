@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="checkingPage">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -372,10 +372,16 @@
          <property name="text">
           <string>An error occurred during the update process: %1</string>
          </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
+         </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
          <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="openExternalLinks">
           <bool>true</bool>
          </property>
         </widget>

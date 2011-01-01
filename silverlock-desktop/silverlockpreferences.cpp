@@ -306,7 +306,7 @@ void SilverlockPreferences::setMinimizeAfterLock(bool minimize)
  */
 bool SilverlockPreferences::runAtStartupSupported()
 {
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
     return true;
 #elif defined(Q_OS_LINUX)
     return !SilverlockPreferences::startupFile().isEmpty();
@@ -323,7 +323,7 @@ bool SilverlockPreferences::runAtStartup() const
         return false;
     }
 
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
     QString path = this->applicationPathForRegistry();
 
     // If we're running on Windows, set the check box if the registry contains the correct key set to the running application's path
@@ -343,7 +343,7 @@ void SilverlockPreferences::setRunAtStartup(bool run)
         return;
     }
 
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
     QSettings settings(KEY_WIN_STARTUP_PATH, QSettings::NativeFormat);
     if (run)
     {
@@ -548,7 +548,7 @@ void SilverlockPreferences::setUpdateInstallerPath(const QString &path)
 }
 
 // Platform-specific methods...
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
 /*!
     Gets the path of the running application with native separators and enclosed in quotes, suitable
     for entry into the Windows registry.
