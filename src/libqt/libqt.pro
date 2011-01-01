@@ -12,6 +12,7 @@ QT += core gui network xml
 CONFIG += dll
 TEMPLATE = lib
 DEFINES += SILVERLOCKLIB_LIBRARY
+TARGET = $$APP_UNIXNAME
 
 # --------------------------------------------------
 # This section contains all the main code/resource
@@ -64,8 +65,8 @@ OTHER_FILES += \
 
 win32:LIBS += -ladvapi32 -luser32
 
-LIEL_PATH = ../../liel/qt/liel
-BOTAN_PATH = ../../3rdparty/temp/botan
+LIEL_PATH = ../liel/qt/liel
+BOTAN_PATH = ../3rdparty/temp/botan
 win32-msvc*:BOTAN_PATH = $$BOTAN_PATH-msvc
 
 # LIEL library
@@ -99,6 +100,7 @@ else:unix:!symbian: PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/libbotan.a
 
 win32:RC_FILE = silverlocklib.rc
 macx:ICON = res/app.icns
+macx:CONFIG += absolute_library_soname # for macdeployqt
 
 # --------------------------------------------------
 # This section contains commands for deployment to
@@ -123,12 +125,3 @@ unix:!symbian {
     }
     INSTALLS += target
 }
-
-#TARGET = $$APP_UNIXNAME
-#DESTDIR = ../lib
-#macx {
-#    # Necessary for macdeployqt to work (DESTDIR must also end in /lib)
-#    CONFIG += absolute_library_soname
-#    target.path = $$OUT_PWD/$$DESTDIR
-#    INSTALLS += target
-#}

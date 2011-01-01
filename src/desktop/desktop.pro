@@ -7,16 +7,10 @@ include(version.pri)
 # project template, and any variables that need to
 # be defined.
 # --------------------------------------------------
+
 QT += core gui network svg xml
 TEMPLATE = app
-DEFINES += NETWORKACCESS # Needs to be defined for Symbian
-symbian:TARGET.UID3 = 0xE77E4BB4
-
-# If your application uses the Qt Mobility libraries, uncomment
-# the following lines and add the respective components to the
-# MOBILITY variable.
-# CONFIG += mobility
-# MOBILITY +=
+TARGET = $$APP_UNIXNAME
 
 # --------------------------------------------------
 # This section contains all the main code/resource
@@ -29,6 +23,7 @@ symbian:TARGET.UID3 = 0xE77E4BB4
 # * translations (.tr)
 # * any other files belonging in the OTHER_FILES var
 # --------------------------------------------------
+
 PRECOMPILED_HEADER = stable.h
 HEADERS += \
     mainwindow.h \
@@ -107,12 +102,12 @@ OTHER_FILES += \
 
 win32:LIBS += -luser32
 
-!include($$PWD/../../3rdparty/temp/qtsolutions/qtsingleapplication/src/qtsingleapplication.pri) {
+!include(../3rdparty/temp/qtsolutions/qtsingleapplication/src/qtsingleapplication.pri) {
     error("Could not find the qtsingleapplication.pri file! Have you run configure in the 3rdparty directory?")
 }
 
 SILVERLOCKLIB_PATH = ../silverlocklib
-LIEL_PATH = ../../liel/qt/liel
+LIEL_PATH = ../liel
 
 # Silverlock support library
 
@@ -149,12 +144,6 @@ win32:CONFIG(debug, debug|release):CONFIG += console
 # This section contains commands for deployment to
 # various platforms, especially mobile devices
 # --------------------------------------------------
-
-include(deployment.pri)
-qtcAddDeployment()
-
-#TARGET = $$APP_UNIXNAME
-#DESTDIR = ../bin
 
 # Copy over dependent libraries - not necessary on Mac OS X as macdeployqt will take care of it...
 #!macx {
