@@ -5,19 +5,19 @@
 	<key>CFBundleSignature</key>
 	<string>PETR</string>
 	<key>CFBundleDisplayName</key>
-	<string>@DISPLAY_NAME@</string>
+        <string>Silverlock</string>
 	<key>CFBundleIdentifier</key>
-	<string>@BUNDLE_IDENTIFIER@</string>
+        <string>com.petroules.silverlock</string>
 	<key>CFBundleName</key>
-	<string>@DISPLAY_NAME@</string>
+        <string>Silverlock</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleVersion</key>
-	<string>@VERSION@</string>
+        <string>1.1.0.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>@SHORT_VERSION@</string>
+        <string>1.1</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>@COPYRIGHT@</string>
+        <string>Copyright &#169; 2010-2011 Petroules</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>

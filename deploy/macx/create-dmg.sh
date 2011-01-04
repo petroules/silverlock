@@ -7,27 +7,36 @@ echo
 APPNAME="silverlock"
 FRIENDLYNAME="Silverlock"
 
+OLDBUNDLE="$APPNAME.app"
 BUNDLE="$FRIENDLYNAME.app"
 DISKIMAGE="$APPNAME.dmg"
-DMGDIR="$PWD/../../../silverlock-build-desktop/bin"
+SRCDIR="$PWD/../../silverlock-build-desktop"
+DMGDIR="$PWD/tmp"
 
-if [ ! -d "$DMGDIR/$BUNDLE" ] ; then
-    echo "ERROR: cannot find application bundle \"$BUNDLE\" in directory \"$DIRECTORY\""
+if [ ! -d "$SRCDIR/$OLDBUNDLE" ] ; then
+    echo "ERROR: cannot find application bundle \"$OLDBUNDLE\" in directory \"$SRCDIR\""
     exit
 fi
 
-if [ -f "$DMGDIR/$DISKIMAGE" ] ; then
-    rm "$DMGDIR/$DISKIMAGE"
+# Remove previous disk image
+if [ -f "$DISKIMAGE" ] ; then
+    rm "$DISKIMAGE"
 fi
+
+# Copy the bundle from the build directory, macdeployqt it, and rename it
+mkdir "$DMGDIR"
+cp -R "$DMGDIR/$OLDBUNDLE" "$DMGDIR"
+macdeployqt "$DMGDIR/$OLDBUNDLE" -verbose=3
+mv "$DMGDIR/$OLDBUNDLE" "$DMGDIR/$BUNDLE"
 
 # Create a symlink to /Applications in the build directory
 ln -s "/Applications" "$DMGDIR"
 
 # Create disk image
 # The window must be 46 pixels taller than the background image
-"$PWD/../../../3rdparty/create-dmg/create-dmg" \
+"$PWD/../../src/3rdparty/create-dmg/create-dmg" \
     --volname "$FRIENDLYNAME" \
-    --background "$PWD/../../../petroules/qt/macx/dmg-background.png" \
+    --background "$PWD/dmg-background.png" \
     --window-size 600 396 \
     --icon-size 128 \
 	--icon "$BUNDLE" 160 100 \
@@ -35,10 +44,7 @@ ln -s "/Applications" "$DMGDIR"
     "$DISKIMAGE" \
     "$DMGDIR"
 
-hdiutil internet-enable -yes "$DISKIMAGE"
-
-# Move the disk image to the output directory
-mv "$DISKIMAGE" "$DMGDIR/$DISKIMAGE"
+hdiutil internet-enable -yes "$DMGDIR/$DISKIMAGE"
 
 # Remove Applications folder link
 rm "$DMGDIR/Applications"

@@ -3,7 +3,6 @@
         <file>res/help.png</file>
         <file>res/print.png</file>
         <file>res/print_preview.png</file>
-        <file>res/app.svg</file>
         <file>res/new.png</file>
         <file>res/iexplore.png</file>
     </qresource>

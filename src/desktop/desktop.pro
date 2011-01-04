@@ -1,6 +1,3 @@
-include(../common.pri)
-include(version.pri)
-
 # --------------------------------------------------
 # This section contains project configuration
 # directives such as the required Qt modules, the
@@ -10,7 +7,10 @@ include(version.pri)
 
 QT += core gui network svg xml
 TEMPLATE = app
-TARGET = $$APP_UNIXNAME
+TARGET = silverlock
+
+# We want Windows methods from at least Windows 2000 (NT 5.0)
+win32:DEFINES += WINVER=0x0500
 
 # --------------------------------------------------
 # This section contains all the main code/resource
@@ -122,6 +122,8 @@ else:unix: LIBS += -L$$OUT_PWD/$$SILVERLOCKLIB_PATH/ -lsilverlocklib
 INCLUDEPATH += $$PWD/$$SILVERLOCKLIB_PATH
 DEPENDPATH += $$PWD/$$SILVERLOCKLIB_PATH
 
+macx:PRE_TARGETDEPS += $$OUT_PWD/$$SILVERLOCKLIB_PATH/libsilverlocklib.a
+
 # LIEL library
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$LIEL_PATH/release/ -lliel
@@ -132,13 +134,32 @@ else:unix: LIBS += -L$$OUT_PWD/$$LIEL_PATH/ -lliel
 INCLUDEPATH += $$PWD/$$LIEL_PATH
 DEPENDPATH += $$PWD/$$LIEL_PATH
 
+macx:PRE_TARGETDEPS += $$OUT_PWD/$$LIEL_PATH/libliel.a
+
+# Botan library
+
+macx {
+	win32:CONFIG(release, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
+	else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotand
+	else:symbian: LIBS += -lbotan
+	else:unix: LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
+
+	INCLUDEPATH += $$PWD/$$BOTAN_PATH/build/include
+	DEPENDPATH += $$PWD/$$BOTAN_PATH/build/include
+
+	win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botan.lib
+	else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botand.lib
+	else:unix:!symbian: PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/libbotan.a
+}
+
 # --------------------------------------------------
 # This section contains miscellaneous commands such
 # as Windows resource files and icons for Mac OS X
 # --------------------------------------------------
 
 win32:RC_FILE = silverlock.rc
-macx:ICON = res/app.icns
+macx:ICON = ../../res/app.icns
+macx:QMAKE_INFO_PLIST = Info.plist
 
 # Show the console when debugging on Windows
 win32:CONFIG(debug, debug|release):CONFIG += console
@@ -147,22 +168,6 @@ win32:CONFIG(debug, debug|release):CONFIG += console
 # This section contains commands for deployment to
 # various platforms, especially mobile devices
 # --------------------------------------------------
-
-# Copy over dependent libraries - not necessary on Mac OS X as macdeployqt will take care of it...
-#!macx {
-#    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$OUT_PWD/../lib/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
-#    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$LIEL_BUILD/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
-#    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$BOTAN_BUILD/*.$$LIB_EXT) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
-#}
-
-#macx {
-#    # Use our custom plist file and populate it with the correct information
-#    QMAKE_INFO_PLIST = Info.plist
-#    QMAKE_POST_LINK += $$populateplist()
-
-#    # Run macdeployqt and rename the bundle to its friendly name
-#    QMAKE_POST_LINK += $$macdeployqt(3) $$renamebundle()
-#}
 
 #linux* {
 #    # Copy launcher shell script and make executable

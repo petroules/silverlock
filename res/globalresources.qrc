@@ -7,7 +7,7 @@
         <file>license/qt-exception.txt</file>
         <file>license/qsa.txt</file>
     </qresource>
-	<qresource prefix="/res">
+	<qresource prefix="/main/res">
 		<file>app.icns</file>
 		<file>app.ico</file>
 		<file>app.png</file>
