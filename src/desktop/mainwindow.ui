@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../../res/globalresources.qrc">
     <normaloff>:/main/res/app.svg</normaloff>:/main/res/app.svg</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_5">
     <property name="margin">
      <number>0</number>
     </property>
@@ -24,36 +24,29 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="mainPage">
+      <widget class="QWidget" name="welcomePage">
        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="margin">
+         <number>0</number>
+        </property>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="GroupBrowserWidget" name="groupBrowser" native="true"/>
-          </item>
-          <item>
-           <widget class="EntryTableWidget" name="entryTable" native="true"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QTextBrowser" name="infoView">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>125</height>
-           </size>
-          </property>
-          <property name="openLinks">
-           <bool>false</bool>
+         <widget class="QWebView" name="welcomeWebView">
+          <property name="url">
+           <url>
+            <string>qrc:/main/res/welcome.html</string>
+           </url>
           </property>
          </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="mainPage">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="EntryTableWidget" name="entryTable" native="true"/>
         </item>
        </layout>
       </widget>
@@ -228,19 +221,11 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <widget class="QMenu" name="menuToolbars">
-     <property name="title">
-      <string>Toolbars</string>
-     </property>
-    </widget>
     <addaction name="actionAlwaysOnTop"/>
     <addaction name="actionCenterToScreen"/>
     <addaction name="separator"/>
     <addaction name="actionConfigureColumns"/>
     <addaction name="separator"/>
-    <addaction name="menuToolbars"/>
-    <addaction name="separator"/>
-    <addaction name="actionShowEntryView"/>
     <addaction name="actionFullScreen"/>
    </widget>
    <widget class="QMenu" name="menuTools">
@@ -313,15 +298,9 @@
    <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
+  <widget class="QToolBar" name="standardToolBar">
    <property name="windowTitle">
-    <string>Main</string>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>16</width>
-     <height>16</height>
-    </size>
+    <string>Standard</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -338,10 +317,50 @@
    <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="infoDockWidget">
+   <property name="windowTitle">
+    <string>Entry Information</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="infoDockWidgetContents">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QTextBrowser" name="infoView">
+       <property name="openLinks">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="groupsDockWidget">
+   <property name="windowTitle">
+    <string>Groups</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="groupsDockWidgetContent">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="GroupBrowserWidget" name="groupBrowser" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <action name="actionNew">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/main/res/new.png</normaloff>:/main/res/new.png</iconset>
+     <normaloff>:/main/res/db.svg</normaloff>:/main/res/db.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;New</string>
@@ -377,7 +396,7 @@
   <action name="actionPrint">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/main/res/print.png</normaloff>:/main/res/print.png</iconset>
+     <normaloff>:/main/res/printer.svg</normaloff>:/main/res/printer.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Print...</string>
@@ -447,6 +466,9 @@
    </property>
    <property name="statusTip">
     <string>Check for an newer version of the application</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::ApplicationSpecificRole</enum>
    </property>
   </action>
   <action name="actionAboutSilverlock">
@@ -695,7 +717,7 @@
   </action>
   <action name="actionLockWorkspace">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../../res/globalresources.qrc">
      <normaloff>:/main/res/app.svg</normaloff>:/main/res/app.svg</iconset>
    </property>
    <property name="text">
@@ -723,6 +745,11 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKit/QWebView</header>
+  </customwidget>
+  <customwidget>
    <class>GroupBrowserWidget</class>
    <extends>QWidget</extends>
    <header>groupbrowserwidget.h</header>
@@ -744,13 +771,13 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>infoView</tabstop>
   <tabstop>unlockWorkspacePasswordLineEdit</tabstop>
   <tabstop>unlockWorkspaceRevealToolButton</tabstop>
   <tabstop>unlockWorkspacePushButton</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>
+  <include location="../../res/globalresources.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -802,86 +829,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>groupBrowser</sender>
-   <signal>populating()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>clearViews()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>253</x>
-     <y>247</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>499</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>entryTable</sender>
-   <signal>populating()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>clearViews()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>746</x>
-     <y>247</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>499</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionSelectAllEntries</sender>
-   <signal>triggered()</signal>
-   <receiver>entryTable</receiver>
-   <slot>selectAll()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>746</x>
-     <y>247</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionSelectAllGroups</sender>
-   <signal>triggered()</signal>
-   <receiver>groupBrowser</receiver>
-   <slot>selectAll()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>253</x>
-     <y>247</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionShowEntryView</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>infoView</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>499</x>
-     <y>508</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>unlockWorkspaceRevealToolButton</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
@@ -913,6 +860,102 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSelectAllEntries</sender>
+   <signal>triggered()</signal>
+   <receiver>entryTable</receiver>
+   <slot>selectAll()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>130</x>
+     <y>69</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSelectAllGroups</sender>
+   <signal>triggered()</signal>
+   <receiver>groupBrowser</receiver>
+   <slot>selectAll()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>39</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowEntryView</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>infoView</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>483</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>entryTable</sender>
+   <signal>populating()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clearViews()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>groupBrowser</sender>
+   <signal>populating()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clearViews()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>39</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>menuView</sender>
+   <signal>aboutToShow()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>updateMenus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>86</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>save()</slot>
@@ -920,5 +963,6 @@
   <slot>lockWorkspace()</slot>
   <slot>clearViews()</slot>
   <slot>hideUnlockPassword(bool)</slot>
+  <slot>updateMenus()</slot>
  </slots>
 </ui>

@@ -287,6 +287,9 @@
            <property name="text">
             <string>This feature is not available on this platform and configuration.</string>
            </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item>

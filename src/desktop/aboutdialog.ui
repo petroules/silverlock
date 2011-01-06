@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>620</width>
-    <height>270</height>
+    <width>489</width>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,7 +37,7 @@ border-bottom: 1px solid #000;</string>
         </property>
         <property name="text">
          <string>&lt;span style=&quot;font-size:36pt;&quot;&gt;%1&lt;/span&gt;&lt;br /&gt;
-&lt;span style=&quot;font-size:9pt;&quot;&gt;&lt;b&gt;version %2&lt;/b&gt;&lt;/span&gt;</string>
+&lt;span&gt;&lt;b&gt;version %2&lt;/b&gt;&lt;/span&gt;</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -63,7 +63,7 @@ border-bottom: 1px solid #000;</string>
          <string notr="true">border: 0;</string>
         </property>
         <property name="pixmap">
-         <pixmap resource="resources.qrc">:/main/res/app.svg</pixmap>
+         <pixmap resource="../../res/globalresources.qrc">:/main/res/app.svg</pixmap>
         </property>
        </widget>
       </item>
@@ -73,8 +73,13 @@ border-bottom: 1px solid #000;</string>
    <item>
     <widget class="QLabel" name="labelInfo">
      <property name="text">
-      <string>&lt;p align=&quot;center&quot; style=&quot;font-size:11pt;&quot;&gt;%1, %2&lt;br /&gt;%3 is made possible by &lt;a href=&quot;http://qt.nokia.com/&quot;&gt;Qt&lt;/a&gt; and other open source software (see license).&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;font-size:11pt;&quot;&gt;The padlock icon used in this application is a public domain image. Details can be found &lt;a href=&quot;http://www.openclipart.org/detail/33505&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</string>
+      <string>&lt;p&gt;%1. %2.&lt;br /&gt;%3 is made possible by the &lt;a href=&quot;http://qt.nokia.com/&quot;&gt;Qt&lt;/a&gt; framework by Nokia, and other open source software (see license).&lt;/p&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="margin">
+      <number>8</number>
      </property>
      <property name="openExternalLinks">
       <bool>true</bool>
@@ -124,6 +129,13 @@ border-bottom: 1px solid #000;</string>
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="buildInfoPushButton">
+       <property name="text">
+        <string>Build Information</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -145,7 +157,7 @@ border-bottom: 1px solid #000;</string>
   <tabstop>licensePushButton</tabstop>
  </tabstops>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../../res/globalresources.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -180,8 +192,25 @@ border-bottom: 1px solid #000;</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>buildInfoPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>AboutDialog</receiver>
+   <slot>displayBuildInformationDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>325</x>
+     <y>361</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>244</x>
+     <y>191</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>displayLicenseDialog()</slot>
+  <slot>displayBuildInformationDialog()</slot>
  </slots>
 </ui>

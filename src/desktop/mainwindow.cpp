@@ -32,7 +32,7 @@
 MainWindow::MainWindow(InactivityEventFilter *filter, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow), m_nodeCountStatusLabel(NULL), m_searchBox(NULL), m_searchButton(NULL),
-    m_lockIdleTimerValue(0), m_exitIdleTimerValue(0)
+    m_lockIdleTimerValue(0), m_exitIdleTimerValue(0), widgetsAndToolbarsAction(NULL)
 {
     this->ui->setupUi(this);
     WindowManager::centerMainWindow(this);
@@ -202,10 +202,10 @@ void MainWindow::setupSignals()
 void MainWindow::setupUiAdditional()
 {
     // Add the toolbar search box and button and connect their slots appropriately
-    this->ui->mainToolBar->addWidget(this->m_searchBox = new QLineEdit(this));
+    this->ui->standardToolBar->addWidget(this->m_searchBox = new QLineEdit(this));
     this->m_searchBox->setSizePolicy(QSizePolicy::Preferred, this->m_searchBox->sizePolicy().verticalPolicy());
     this->m_searchBox->setPlaceholderText(tr("Enter search terms"));
-    this->ui->mainToolBar->addWidget(this->m_searchButton = new QPushButton(tr("Search"), this));
+    this->ui->standardToolBar->addWidget(this->m_searchButton = new QPushButton(tr("Search"), this));
     this->m_searchButton->setSizePolicy(QSizePolicy::Preferred, this->m_searchButton->sizePolicy().verticalPolicy());
     QObject::connect(this->m_searchBox, SIGNAL(returnPressed()), this->m_searchButton, SLOT(click()));
     QObject::connect(this->m_searchButton, SIGNAL(clicked()), SLOT(toolbarSearch()));
@@ -230,8 +230,10 @@ void MainWindow::setupUiAdditional()
     this->statusBar()->showMessage(tr("Ready"));
     this->statusBar()->addPermanentWidget(this->m_nodeCountStatusLabel = new QLabel(this));
 
-    // Add actions for toolbars
-    this->ui->menuToolbars->addAction(this->ui->mainToolBar->toggleViewAction());
+    // Add actions for dock widgets and toolbars
+    this->widgetsAndToolbarsAction = this->ui->menuView->insertMenu(this->ui->actionFullScreen, this->createPopupMenu());
+    this->widgetsAndToolbarsAction->setText(tr("Widgets && Toolbars"));
+    this->ui->menuView->insertSeparator(this->ui->actionFullScreen);
 
     // Set menu actions to correct initial states
     this->ui->actionShowEntryView->setChecked(true);
@@ -534,6 +536,12 @@ void MainWindow::lockWorkspace(bool lock)
     this->ui->unlockPage->setEnabled(lock);
     this->m_nodeCountStatusLabel->setVisible(!lock);
     this->ui->stackedWidget->setCurrentWidget(lock ? this->ui->unlockPage : this->ui->mainPage);
+
+    this->ui->groupBrowser->setVisible(!lock);
+    this->ui->infoView->setVisible(!lock);
+
+    this->ui->groupsDockWidget->setVisible(!lock);
+    this->ui->infoDockWidget->setVisible(!lock);
 
     if (lock)
     {
@@ -978,11 +986,13 @@ void MainWindow::on_actionFullScreen_triggered(bool checked)
 {
     if (checked)
     {
+        this->setUnifiedTitleAndToolBarOnMac(false);
         this->showFullScreen();
     }
     else
     {
         this->showNormal();
+        this->setUnifiedTitleAndToolBarOnMac(true);
     }
 }
 
@@ -1137,6 +1147,12 @@ bool MainWindow::isDatabaseSelected()
     return isDatabaseSelected;
 }
 
+void MainWindow::updateMenus()
+{
+    this->ui->actionAlwaysOnTop->setChecked(WindowManager::isTopMost(this));
+    this->ui->actionFullScreen->setChecked(this->isFullScreen());
+}
+
 /*!
     Updates the state of interface so that only widgets and menu items
     that are applicable to the current application state are enabled.
@@ -1215,6 +1231,8 @@ void MainWindow::clearViews()
 
     this->ui->infoView->clear();
     this->setNodeCount(NULL);
+
+    this->ui->stackedWidget->setCurrentWidget(this->ui->mainPage);
 }
 
 /*!

@@ -10,8 +10,9 @@ FRIENDLYNAME="Silverlock"
 OLDBUNDLE="$APPNAME.app"
 BUNDLE="$FRIENDLYNAME.app"
 DISKIMAGE="$APPNAME.dmg"
-SRCDIR="$PWD/../../silverlock-build-desktop"
+SRCDIR="$PWD/../../silverlock-build-desktop/desktop"
 DMGDIR="$PWD/tmp"
+CREATEDMGDIR="$PWD/../../src/3rdparty/temp/create-dmg"
 
 if [ ! -d "$SRCDIR/$OLDBUNDLE" ] ; then
     echo "ERROR: cannot find application bundle \"$OLDBUNDLE\" in directory \"$SRCDIR\""
@@ -25,7 +26,7 @@ fi
 
 # Copy the bundle from the build directory, macdeployqt it, and rename it
 mkdir "$DMGDIR"
-cp -R "$DMGDIR/$OLDBUNDLE" "$DMGDIR"
+cp -R "$SRCDIR/$OLDBUNDLE" "$DMGDIR"
 macdeployqt "$DMGDIR/$OLDBUNDLE" -verbose=3
 mv "$DMGDIR/$OLDBUNDLE" "$DMGDIR/$BUNDLE"
 
@@ -34,17 +35,19 @@ ln -s "/Applications" "$DMGDIR"
 
 # Create disk image
 # The window must be 46 pixels taller than the background image
-"$PWD/../../src/3rdparty/create-dmg/create-dmg" \
+chmod +x "$CREATEDMGDIR/create-dmg"
+chmod +x "$CREATEDMGDIR/support/AdiumApplescriptRunner"
+"$CREATEDMGDIR/create-dmg" \
     --volname "$FRIENDLYNAME" \
-    --background "$PWD/dmg-background.png" \
+    --background "dmg-background.png" \
     --window-size 600 396 \
     --icon-size 128 \
-	--icon "$BUNDLE" 160 100 \
+    --icon "$BUNDLE" 160 100 \
     --icon "Applications" 440 100 \
     "$DISKIMAGE" \
     "$DMGDIR"
 
-hdiutil internet-enable -yes "$DMGDIR/$DISKIMAGE"
+hdiutil internet-enable -yes "$DISKIMAGE"
 
-# Remove Applications folder link
-rm "$DMGDIR/Applications"
+# Remove temporary folder
+rm -rf "$DMGDIR"

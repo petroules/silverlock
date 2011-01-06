@@ -5,7 +5,7 @@
 # be defined.
 # --------------------------------------------------
 
-QT += core gui network svg xml
+QT += core gui network svg webkit xml
 TEMPLATE = app
 TARGET = silverlock
 
@@ -104,6 +104,7 @@ OTHER_FILES += \
 # --------------------------------------------------
 
 win32:LIBS += -luser32
+macx:LIBS += -framework CoreFoundation -framework Cocoa
 
 !include(../3rdparty/temp/qtsolutions/qtsingleapplication/src/qtsingleapplication.pri) {
     error("Could not find the qtsingleapplication.pri file! Have you run configure in the 3rdparty directory?")
@@ -111,6 +112,8 @@ win32:LIBS += -luser32
 
 SILVERLOCKLIB_PATH = ../libqt
 LIEL_PATH = ../liel
+BOTAN_PATH = ../3rdparty/temp/botan
+win32-msvc*:BOTAN_PATH = $$BOTAN_PATH-msvc
 
 # Silverlock support library
 
@@ -138,19 +141,17 @@ macx:PRE_TARGETDEPS += $$OUT_PWD/$$LIEL_PATH/libliel.a
 
 # Botan library
 
-macx {
-	win32:CONFIG(release, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
-	else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotand
-	else:symbian: LIBS += -lbotan
-	else:unix: LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotand
+else:symbian: LIBS += -lbotan
+else:unix: LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
 
-	INCLUDEPATH += $$PWD/$$BOTAN_PATH/build/include
-	DEPENDPATH += $$PWD/$$BOTAN_PATH/build/include
+INCLUDEPATH += $$PWD/$$BOTAN_PATH/build/include
+DEPENDPATH += $$PWD/$$BOTAN_PATH/build/include
 
-	win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botan.lib
-	else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botand.lib
-	else:unix:!symbian: PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/libbotan.a
-}
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botan.lib
+else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botand.lib
+else:unix:!symbian: PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/libbotan.a
 
 # --------------------------------------------------
 # This section contains miscellaneous commands such

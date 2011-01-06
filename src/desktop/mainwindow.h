@@ -58,6 +58,8 @@ private:
 
     InactivityEventFilter *m_filter;
 
+    QAction *widgetsAndToolbarsAction;
+
     void setupSignals();
     void setupUiAdditional();
     void setupKeyboardShortcuts();
@@ -126,6 +128,7 @@ private slots:
     void on_groupBrowser_itemSelectionChanged();
     void on_entryTable_itemSelectionChanged();
     bool isDatabaseSelected();
+    void updateMenus();
     void updateInterfaceState();
     void databaseWasModified();
     void clearViews();

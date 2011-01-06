@@ -516,10 +516,23 @@ void SilverlockPreferences::saveWindowSettings(MainWindow *mainWindow)
 
 void SilverlockPreferences::restoreWindowSettings(MainWindow *mainWindow)
 {
+    // Turn this off for now since we might be restoring to fullscreen
+    mainWindow->setUnifiedTitleAndToolBarOnMac(false);
+
     QSettings settings;
     mainWindow->restoreGeometry(settings.value(KEY_MAIN_WINDOW_GEOMETRY).toByteArray());
     mainWindow->restoreState(settings.value(KEY_MAIN_WINDOW_STATE).toByteArray());
     mainWindow->restoreEntryTableState(settings.value(KEY_ENTRY_TABLE_STATE).toByteArray());
+
+    // We only want the unified title and toolbar when we're not in fullscreen,
+    // otherwise it causes problems and can crash the application when returning
+    // to normal window state
+
+    // If the main window is not in fullscreen mode, turn on the special toolbar
+    if (!mainWindow->isFullScreen())
+    {
+        mainWindow->setUnifiedTitleAndToolBarOnMac(true);
+    }
 }
 
 void SilverlockPreferences::clearWindowSettings()

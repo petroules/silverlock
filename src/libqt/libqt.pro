@@ -63,37 +63,35 @@ OTHER_FILES += \
 # Botan needs some stuff from here
 win32:LIBS += -ladvapi32 -luser32
 
-!macx {
-	LIEL_PATH = ../liel
-	BOTAN_PATH = ../3rdparty/temp/botan
-	win32-msvc*:BOTAN_PATH = $$BOTAN_PATH-msvc
+LIEL_PATH = ../liel
+BOTAN_PATH = ../3rdparty/temp/botan
+win32-msvc*:BOTAN_PATH = $$BOTAN_PATH-msvc
 
-	# LIEL library
+# LIEL library
 
-	win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$LIEL_PATH/release/ -lliel
-	else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$LIEL_PATH/debug/ -lliel
-	else:symbian: LIBS += -lliel
-	else:unix: LIBS += -L$$OUT_PWD/$$LIEL_PATH/ -lliel
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$LIEL_PATH/release/ -lliel
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$LIEL_PATH/debug/ -lliel
+else:symbian: LIBS += -lliel
+else:unix: LIBS += -L$$OUT_PWD/$$LIEL_PATH/ -lliel
 
-	INCLUDEPATH += $$PWD/$$LIEL_PATH
-	DEPENDPATH += $$PWD/$$LIEL_PATH
+INCLUDEPATH += $$PWD/$$LIEL_PATH
+DEPENDPATH += $$PWD/$$LIEL_PATH
 
-	macx:PRE_TARGETDEPS += $$OUT_PWD/$$LIEL_PATH/libliel.a
+macx:PRE_TARGETDEPS += $$OUT_PWD/$$LIEL_PATH/libliel.a
 
-	# Botan library
+# Botan library
 
-	win32:CONFIG(release, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
-	else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotand
-	else:symbian: LIBS += -lbotan
-	else:unix: LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotand
+else:symbian: LIBS += -lbotan
+else:unix: LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
 
-	INCLUDEPATH += $$PWD/$$BOTAN_PATH/build/include
-	DEPENDPATH += $$PWD/$$BOTAN_PATH/build/include
+INCLUDEPATH += $$PWD/$$BOTAN_PATH/build/include
+DEPENDPATH += $$PWD/$$BOTAN_PATH/build/include
 
-	win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botan.lib
-	else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botand.lib
-	else:unix:!symbian: PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/libbotan.a
-}
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botan.lib
+else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botand.lib
+else:unix:!symbian: PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/libbotan.a
 
 # --------------------------------------------------
 # This section contains miscellaneous commands such
