@@ -1,0 +1,1 @@
+The files <qtsingleapplication.cpp> and <qtsingleapplication.h> are part Qt Solutions' QtSingleApplication. Qt Solutions is licensed under the BSD license from Nokia. The license file can be found in the ../qtsolutions directory. These files are modified from their original versions to add support for opening files through Finder on Mac OS X. Our changes are in the public domain.
