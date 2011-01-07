@@ -63,7 +63,7 @@ OTHER_FILES += \
 # Botan needs some stuff from here
 win32:LIBS += -ladvapi32 -luser32
 
-LIEL_PATH = ../liel
+LIEL_PATH = ../3rdparty/temp/liel/qt/liel
 BOTAN_PATH = ../3rdparty/temp/botan
 win32-msvc*:BOTAN_PATH = $$BOTAN_PATH-msvc
 

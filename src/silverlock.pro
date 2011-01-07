@@ -1,6 +1,6 @@
 TEMPLATE = subdirs
 CONFIG += ordered
 SUBDIRS += \
-    liel \
+    3rdparty/temp/liel/qt/liel \
     libqt \
     desktop

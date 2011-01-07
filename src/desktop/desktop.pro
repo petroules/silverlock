@@ -111,7 +111,7 @@ macx:LIBS += -framework CoreFoundation -framework Cocoa
 }
 
 SILVERLOCKLIB_PATH = ../libqt
-LIEL_PATH = ../liel
+LIEL_PATH = ../3rdparty/temp/liel/qt/liel
 BOTAN_PATH = ../3rdparty/temp/botan
 win32-msvc*:BOTAN_PATH = $$BOTAN_PATH-msvc
 

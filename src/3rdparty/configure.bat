@@ -23,6 +23,8 @@ REM Set filenames
 set BOTAN_FN=Botan-1.9.12
 set QTSLNS_FN=qt-solutions-qt-solutions
 set QTSLNS_AFN=%QTSLNS_FN%-master
+set LIEL_FN=liel-liel
+set LIEL_AFN=%LIEL_FN%-master
 
 REM Set directory locations
 set ARCHIVES_DIR=%CD%\archives
@@ -40,6 +42,11 @@ echo Extracting Qt Solutions source...
 7z e -o%OUT_DIR% %ARCHIVES_DIR%\%QTSLNS_AFN%.tar.gz
 7z x -o%OUT_DIR% %OUT_DIR%\%QTSLNS_AFN%.tar %QTSLNS_FN%
 move %OUT_DIR%\%QTSLNS_FN% %OUT_DIR%\qtsolutions
+
+echo Extracting LIEL source...
+7z e -o%OUT_DIR% %ARCHIVES_DIR%\%LIEL_AFN%.tar.gz
+7z x -o%OUT_DIR% %OUT_DIR%\%LIEL_AFN%.tar %LIEL_FN%
+move %OUT_DIR%\%LIEL_FN% %OUT_DIR%\liel
 
 echo Copying modified QtSingleApplication files...
 copy "%PETROULES_DIR%\qtsingleapplication.cpp" "%OUT_DIR%\qtsolutions\qtsingleapplication\src"

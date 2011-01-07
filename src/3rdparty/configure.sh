@@ -13,6 +13,8 @@ mkdir "temp"
 BOTAN_FN=Botan-1.9.12
 QTSLNS_FN=qt-solutions-qt-solutions
 QTSLNS_AFN=$QTSLNS_FN-master
+LIEL_FN=liel-liel
+LIEL_AFN=$LIEL_FN-master
 
 # Set directory locations
 ARCHIVES_DIR=$PWD/archives
@@ -26,6 +28,10 @@ mv $BOTAN_FN $OUT_DIR/botan
 echo Extracting Qt Solutions source...
 tar xzf $ARCHIVES_DIR/$QTSLNS_AFN.tar.gz $QTSLNS_FN
 mv $QTSLNS_FN $OUT_DIR/qtsolutions
+
+echo Extracting LIEL source...
+tar xzf $ARCHIVES_DIR/$LIEL_AFN.tar.gz $LIEL_FN
+mv $LIEL_FN $OUT_DIR/liel
 
 echo Extracting create-dmg tool...
 unzip $ARCHIVES_DIR/create-dmg.zip -d $OUT_DIR
