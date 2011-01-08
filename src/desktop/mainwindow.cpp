@@ -1529,6 +1529,9 @@ QString MainWindow::closeFile()
         this->ui->entryTable->clear();
         this->clearViews();
 
+        // Put the welcome page back
+        this->ui->stackedWidget->setCurrentWidget(this->ui->welcomePage);
+
         return fileName;
     }
 

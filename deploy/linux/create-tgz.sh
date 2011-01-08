@@ -38,6 +38,9 @@ if [ -f $TEMP_DIR/libQtSvg.so ]; then
 	cp $QT_DIR/plugins/iconengines/*.so $TEMP_DIR/iconengines
 fi
 
+# Copy over icon
+cp $PWD/../../res/app.svg $TEMP_DIR
+
 # Create the gzipped tarball and then remove the temp directory
 tar czf silverlock.tar.gz silverlock
 rm -rf $TEMP_DIR
