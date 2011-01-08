@@ -51,12 +51,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6485214C448B485BB6D7F545535CE384"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_69C3DC2250C647819A005AFFE375D8B8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -142,6 +136,12 @@
         "Entry"
         {
         "MsmKey" = "8:_E8E31E4CABF84BE791717E288E9A97F1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ECE96A5290FE4E63826C2CF3CA52FF99"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -337,26 +337,6 @@
             {
             "SourcePath" = "8:..\\..\\res\\app.ico"
             "TargetName" = "8:app.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6485214C448B485BB6D7F545535CE384"
-            {
-            "SourcePath" = "8:..\\..\\silverlock-build-desktop\\liel\\release\\liel.dll"
-            "TargetName" = "8:liel.dll"
             "Tag" = "8:"
             "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
@@ -639,6 +619,26 @@
             "TargetName" = "8:qtaccessiblewidgets4.dll"
             "Tag" = "8:"
             "Folder" = "8:_3C2E7099213F445DB376C9BB66BDB2A2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ECE96A5290FE4E63826C2CF3CA52FF99"
+            {
+            "SourcePath" = "8:..\\..\\silverlock-build-desktop\\3rdparty\\temp\\liel\\qt\\liel\\release\\liel.dll"
+            "TargetName" = "8:liel.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
