@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>5</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="checkingPage">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -310,7 +310,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Silverlock version &lt;b&gt;%1&lt;/b&gt; has been downloaded successfully. Silverlock will now prompt you to save your documents and exit and the installer will guide you through the installation of the new version.</string>
+          <string>Silverlock has been downloaded successfully. Silverlock will now prompt you to save your documents and exit and the installer will guide you through the installation of the new version.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

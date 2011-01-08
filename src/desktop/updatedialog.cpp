@@ -175,7 +175,15 @@ void UpdateDialog::downloadProgress(qint64 received, qint64 total)
 
 void UpdateDialog::downloadReplyFinished(QNetworkReply *reply)
 {
-    QTemporaryFile temp;
+#ifdef Q_WS_WIN
+    QTemporaryFile temp("qt_temp.XXXXXX.msi");
+#elif defined(Q_WS_MAC)
+	QTemporaryFile temp("qt_temp.XXXXXX.dmg");
+#elif defined(Q_OS_LINUX)
+	QTemporaryFile temp("qt_temp.XXXXXX.tar.gz");
+#else
+	#error "Implement automatic updater for this platform!"
+#endif
     temp.setAutoRemove(false);
     if (temp.open())
     {
@@ -250,14 +258,21 @@ void UpdateDialog::on_cancelDownloadPushButton_clicked()
 void UpdateDialog::on_installPushButton_clicked()
 {
     QApplication::closeAllWindows();
+	
+	QString nativeFilePath = QDir::toNativeSeparators(this->m_file);
 
     QProcess process;
 #ifdef Q_WS_WIN
-    if (!process.startDetached(this->m_file))
+	QStringList args;
+	args << "/i";
+	args << nativeFilePath;
+    if (!process.startDetached("msiexec", QStringList(args)))
 #elif defined(Q_WS_MAC)
-    if (!process.startDetached("open", QStringList(this->m_file)))
+    if (!process.startDetached("open", QStringList(nativeFilePath)))
 #elif defined(Q_OS_LINUX)
-    if (!process.startDetached("xdg-open", QStringList(this->m_file)))
+    if (!process.startDetached("xdg-open", QStringList(nativeFilePath)))
+#else
+	#error "Implement automatic updater for this platform!"
 #endif
     {
         QMessageBox::critical(this, tr("Error"), QString(tr("Failed to start the installer process. The error returned was: %1")).arg(process.errorString()));
