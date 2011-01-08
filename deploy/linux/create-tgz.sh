@@ -14,8 +14,9 @@ cp $BUILD_DIR/desktop/silverlock $TEMP_DIR
 cp -R $BUILD_DIR/libqt/libsilverlocklib.* $TEMP_DIR
 cp -R $BUILD_DIR/3rdparty/temp/liel/qt/liel/libliel.* $TEMP_DIR
 
-# Give Silverlock the executable bit
+# Give Silverlock and its launcher the executable bit
 chmod +x $TEMP_DIR/silverlock
+chmod +x $TEMP_DIR/silverlock.sh
 
 # Copy over Qt libraries
 cp -R $QT_DIR/lib/libQtCore.so* $TEMP_DIR
