@@ -1,6 +1,7 @@
 #include "databasecrypto.h"
 #include "database.h"
 #include <iostream>
+#include <memory>
 #include <botan/botan.h>
 
 // Little fix for the SecureVector template on MSVC...
