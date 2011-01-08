@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_01636861584644E8AEF0490C1A49F5BF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_1D0FB567E9CD4283978514F96647E1D0"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -57,7 +63,19 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_756CAC8D737B4AE4BF0D905725662F6D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7C002E490D414BCDBC5E90E6FE1C13EA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7D761D4347BE4153A26A29DD84433E08"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -70,6 +88,18 @@
         "Entry"
         {
         "MsmKey" = "8:_9B31AE3E7E1B48439B685DDAF35E6DF7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A21EBCDAA0A342EFA54A21315E31256D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5C01BF2547546B096E321AA6C987148"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -106,6 +136,18 @@
         "Entry"
         {
         "MsmKey" = "8:_D2EAE2CEB49C408DB8AE1F5A51D66B3D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E8E31E4CABF84BE791717E288E9A97F1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F28339F0FA874401BE470821E1605BF2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -191,6 +233,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_01636861584644E8AEF0490C1A49F5BF"
+            {
+            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qmng4.dll"
+            "TargetName" = "8:qmng4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1D0FB567E9CD4283978514F96647E1D0"
             {
             "SourcePath" = "8:C:\\OpenSSL-Win32\\libeay32.dll"
@@ -331,10 +393,50 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_756CAC8D737B4AE4BF0D905725662F6D"
+            {
+            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qgif4.dll"
+            "TargetName" = "8:qgif4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7C002E490D414BCDBC5E90E6FE1C13EA"
             {
             "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qico4.dll"
             "TargetName" = "8:qico4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7D761D4347BE4153A26A29DD84433E08"
+            {
+            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qjpeg4.dll"
+            "TargetName" = "8:qjpeg4.dll"
             "Tag" = "8:"
             "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
             "Condition" = "8:"
@@ -375,6 +477,46 @@
             {
             "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\bin\\QtCore4.dll"
             "TargetName" = "8:QtCore4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A21EBCDAA0A342EFA54A21315E31256D"
+            {
+            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qtiff4.dll"
+            "TargetName" = "8:qtiff4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A5C01BF2547546B096E321AA6C987148"
+            {
+            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\bin\\QtWebKit4.dll"
+            "TargetName" = "8:QtWebKit4.dll"
             "Tag" = "8:"
             "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
@@ -491,6 +633,46 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E8E31E4CABF84BE791717E288E9A97F1"
+            {
+            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\accessible\\qtaccessiblewidgets4.dll"
+            "TargetName" = "8:qtaccessiblewidgets4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_3C2E7099213F445DB376C9BB66BDB2A2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F28339F0FA874401BE470821E1605BF2"
+            {
+            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\accessible\\qtaccessiblecompatwidgets4.dll"
+            "TargetName" = "8:qtaccessiblecompatwidgets4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_3C2E7099213F445DB376C9BB66BDB2A2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -552,6 +734,17 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_3C2E7099213F445DB376C9BB66BDB2A2"
+                    {
+                    "Name" = "8:accessible"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_E8A72856241C4415A9F3C99E5E02A7BC"
+                        "Folders"
+                        {
+                        }
+                    }
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_93597BAC81DB49D5A2EB0E825434D6EE"
                     {
                     "Name" = "8:iconengines"

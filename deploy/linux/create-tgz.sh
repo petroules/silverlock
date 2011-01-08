@@ -24,13 +24,19 @@ cp -R $QT_DIR/lib/libQtGui.so* $TEMP_DIR
 cp -R $QT_DIR/lib/libQtNetwork.so* $TEMP_DIR
 cp -R $QT_DIR/lib/libQtSvg.so* $TEMP_DIR
 cp -R $QT_DIR/lib/libQtXml.so* $TEMP_DIR
+cp -R $QT_DIR/lib/libQtWebKit.so* $TEMP_DIR
 
 # Copy over Qt plugins
-mkdir $TEMP_DIR/iconengines
-cp $QT_DIR/plugins/iconengines/libqsvgicon.so $TEMP_DIR/iconengines
+mkdir $TEMP_DIR/accessible
+cp $QT_DIR/plugins/accessible/*.so $TEMP_DIR/accessible
+
 mkdir $TEMP_DIR/imageformats
-cp $QT_DIR/plugins/imageformats/libqico.so $TEMP_DIR/imageformats
-cp $QT_DIR/plugins/imageformats/libqsvg.so $TEMP_DIR/imageformats
+cp $QT_DIR/plugins/imageformats/*.so $TEMP_DIR/imageformats
+
+if [ -f $TEMP_DIR/libQtSvg.so ]; then
+	mkdir $TEMP_DIR/iconengines
+	cp $QT_DIR/plugins/iconengines/*.so $TEMP_DIR/iconengines
+fi
 
 # Create the gzipped tarball and then remove the temp directory
 tar czf silverlock.tar.gz silverlock
