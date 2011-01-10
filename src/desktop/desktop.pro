@@ -164,20 +164,3 @@ macx:QMAKE_INFO_PLIST = Info.plist
 
 # Show the console when debugging on Windows
 win32:CONFIG(debug, debug|release):CONFIG += console
-
-# --------------------------------------------------
-# This section contains commands for deployment to
-# various platforms, especially mobile devices
-# --------------------------------------------------
-
-#linux* {
-#    # Copy launcher shell script and make executable
-#    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$PWD/../deploy/linux/launcher.sh) $$formatpath($$OUT_PWD/$$DESTDIR/$${TARGET}.sh) $$CMD_SEP
-#    QMAKE_POST_LINK += chmod +x $$formatpath($${OUT_PWD}/$${DESTDIR}/$${TARGET}.sh) $$CMD_SEP
-
-#    # Copy desktop entry file
-#    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$PWD/../deploy/linux/launcher.desktop) $$formatpath($$OUT_PWD/$$DESTDIR/$${TARGET}.desktop) $$CMD_SEP
-
-#    # Copy application icon
-#    QMAKE_POST_LINK += $$COPY_CMD $$formatpath($$PWD/res/app.svg) $$formatpath($$OUT_PWD/$$DESTDIR) $$CMD_SEP
-#}

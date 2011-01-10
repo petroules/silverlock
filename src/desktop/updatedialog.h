@@ -40,6 +40,7 @@ private slots:
     void on_acceptUpgradePushButton_clicked();
     void on_alreadyLatestPushButton_clicked();
     void on_cancelCheckingPushButton_clicked();
+    void sslErrors(QNetworkReply *reply, QList<QSslError> errors);
     void checkReplyFinished(QNetworkReply *reply);
     void checkError(QNetworkReply::NetworkError error);
     void downloadProgress(qint64 received, qint64 total);

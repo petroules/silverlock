@@ -21,8 +21,9 @@ UpdateDialog::UpdateDialog(QWidget *parent) :
 {
     this->ui->setupUi(this);
 
-    QNetworkReply *reply = this->m_network->get(QNetworkRequest(ApplicationInfo::url(ApplicationInfo::ApplicationUpdate)));
+    QObject::connect(this->m_network, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(sslErrors(QNetworkReply*,QList<QSslError>)));
     QObject::connect(this->m_network, SIGNAL(finished(QNetworkReply*)), this, SLOT(checkReplyFinished(QNetworkReply*)));
+    QNetworkReply *reply = this->m_network->get(QNetworkRequest(ApplicationInfo::url(ApplicationInfo::ApplicationUpdate)));
     QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(checkError(QNetworkReply::NetworkError)));
 }
 
@@ -38,6 +39,27 @@ UpdateDialog::~UpdateDialog()
     }
 
     delete this->ui;
+}
+
+void UpdateDialog::sslErrors(QNetworkReply *reply, QList<QSslError> errors)
+{
+    // Ensure the update dialog is visible so our message box doesn't go off screen
+    this->show();
+
+    QStringList sslErrors;
+    foreach (QSslError error, errors)
+    {
+        sslErrors += error.errorString();
+    }
+
+    QString sslErrorString = sslErrors.join("</li><li>");
+    int ret = QMessageBox::warning(this, tr("SSL Errors"),
+        tr("<p>SSL Errors for %1</p><ul><li>%2</li></ul><p>Do you want to ignore these errors?</p>")
+            .arg(reply->url().toString()).arg(sslErrorString), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+    if (ret == QMessageBox::Yes)
+    {
+        reply->ignoreSslErrors();
+    }
 }
 
 void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
@@ -100,7 +122,13 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
     }
     else
     {
-        this->setError(tr("Unable to determine the latest version of Silverlock."));
+        QString error = tr("Unable to determine the latest version of Silverlock.");
+        if (!reply->errorString().isEmpty())
+        {
+            error += " " + reply->errorString();
+        }
+
+        this->setError(error);
     }
 }
 

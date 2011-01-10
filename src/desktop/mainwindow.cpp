@@ -204,7 +204,9 @@ void MainWindow::setupUiAdditional()
     // Add the toolbar search box and button and connect their slots appropriately
     this->ui->standardToolBar->addWidget(this->m_searchBox = new QLineEdit(this));
     this->m_searchBox->setSizePolicy(QSizePolicy::Preferred, this->m_searchBox->sizePolicy().verticalPolicy());
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
     this->m_searchBox->setPlaceholderText(tr("Enter search terms"));
+#endif
     this->ui->standardToolBar->addWidget(this->m_searchButton = new QPushButton(tr("Search"), this));
     this->m_searchButton->setSizePolicy(QSizePolicy::Preferred, this->m_searchButton->sizePolicy().verticalPolicy());
     QObject::connect(this->m_searchBox, SIGNAL(returnPressed()), this->m_searchButton, SLOT(click()));
@@ -280,7 +282,11 @@ void MainWindow::setupKeyboardShortcuts()
     this->ui->actionSave->setShortcut(QKeySequence::Save);
     this->ui->actionSaveAs->setShortcut(QKeySequence::SaveAs);
     this->ui->actionPrint->setShortcut(QKeySequence::Print);
+#if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)
     this->ui->actionExit->setShortcut(QKeySequence::Quit);
+#elif defined(Q_WS_MAC) || defined(Q_OS_LINUX)
+    this->ui->actionExit->setShortcut(QKeySequence(Qt::Key_Control | Qt::Key_Q));
+#endif
 
     // Edit menu
     this->ui->actionSelectAllEntries->setShortcut(QKeySequence::SelectAll);
@@ -299,7 +305,11 @@ void MainWindow::setupKeyboardShortcuts()
     this->ui->actionFullScreen->setShortcut(Qt::Key_F11);
 
     // Tools menu
+#if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)
     this->ui->actionPreferences->setShortcut(QKeySequence::Preferences);
+#elif defined(Q_WS_MAC)
+    this->ui->actionPreferences->setShortcut(QKeySequence(Qt::Key_Control | Qt::Key_Comma));
+#endif
 
     // Help menu
     this->ui->actionHelpContents->setShortcut(QKeySequence::HelpContents);
@@ -307,17 +317,15 @@ void MainWindow::setupKeyboardShortcuts()
 
 void MainWindow::setupMenuIcons()
 {
-    // File menu
     this->ui->actionOpen->setIcon(this->style()->standardIcon(QStyle::SP_DialogOpenButton));
     this->ui->actionClose->setIcon(this->style()->standardIcon(QStyle::SP_DialogCloseButton));
     this->ui->actionSave->setIcon(this->style()->standardIcon(QStyle::SP_DialogSaveButton));
+
+#if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)
     this->ui->actionExit->setIcon(QIcon::fromTheme("application-exit"));
-
-    // Tools menu
     this->ui->actionPreferences->setIcon(QIcon::fromTheme("preferences-other"));
-
-    // Help menu
     this->ui->actionAboutSilverlock->setIcon(QIcon::fromTheme("help-about"));
+#endif
 }
 
 void MainWindow::handleMessage(const QString &message)

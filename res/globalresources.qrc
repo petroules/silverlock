@@ -2,15 +2,15 @@
     <qresource prefix="/main">
         <file>license/botan.txt</file>
         <file>license/gpl-3.0.txt</file>
-		<file>license/gpl-3.0.rtf</file>
+        <file>license/gpl-3.0.rtf</file>
         <file>license/lgpl-2.1.txt</file>
         <file>license/qt-exception.txt</file>
         <file>license/qsa.txt</file>
     </qresource>
-	<qresource prefix="/main/res">
-		<file>app.icns</file>
-		<file>app.ico</file>
-		<file>app.png</file>
-		<file>app.svg</file>
-	</qresource>
+    <qresource prefix="/main/res">
+        <file>app.icns</file>
+        <file>app.ico</file>
+        <file>app.png</file>
+        <file>app.svg</file>
+    </qresource>
 </RCC>
