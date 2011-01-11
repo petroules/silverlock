@@ -8,7 +8,14 @@ int main(int argc, char *argv[])
     // This validates the server certificate for the update server
     if (WindowsCertificateValidator::validateCertificate("petroules.com"))
     {
-        QProcess::startDetached("silverlock.exe", a.arguments());
+        // First argument is the executable name
+        QStringList args = a.arguments();
+        if (!args.isEmpty())
+        {
+            args.removeFirst();
+        }
+
+        QProcess::startDetached(QCoreApplication::applicationDirPath() + "/silverlock.exe", args, QDir::currentPath());
     }
 
     return 0;
