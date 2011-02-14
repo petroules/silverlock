@@ -10,7 +10,7 @@ FRIENDLYNAME="Silverlock"
 OLDBUNDLE="$APPNAME.app"
 BUNDLE="$FRIENDLYNAME.app"
 DISKIMAGE="$APPNAME.dmg"
-SRCDIR="$PWD/../../silverlock-build-desktop/desktop"
+SRCDIR="$PWD/../../$APPNAME-build-desktop/desktop"
 DMGDIR="$PWD/tmp"
 CREATEDMGDIR="$PWD/../../src/3rdparty/temp/create-dmg"
 

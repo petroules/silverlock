@@ -71,7 +71,8 @@ SOURCES += \
     entryeditdialog_helper.cpp \
     databaseprintdialog.cpp \
     newdatabasewizard.cpp
-FORMS += mainwindow.ui \
+FORMS += \
+	mainwindow.ui \
     entryeditdialog.ui \
     groupeditdialog.ui \
     preferencesdialog.ui \

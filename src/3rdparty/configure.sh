@@ -1,5 +1,5 @@
 echo "This script configures 3rd party code for building with Petroules applications."
-echo "Copyright (c) 2010-2011 Petroules"
+echo "Copyright (c) 2010-2011 Petroules Corporation"
 
 rm -rf "temp"
 
