@@ -41,6 +41,28 @@ UpdateDialog::~UpdateDialog()
     delete this->ui;
 }
 
+bool UpdateDialog::automaticUpdatesSupported()
+{
+#ifdef Q_WS_MAC
+    QDir dir = QDir(QCoreApplication::applicationDirPath());
+    dir.cdUp();
+    dir.cdUp();
+    QString bundleName = dir.dirName();
+    dir.cdUp();
+
+    QProcess proc;
+    proc.setWorkingDirectory(dir.path());
+    proc.start(QString("codesign --verify %1").arg(bundleName));
+    proc.waitForFinished();
+
+    return proc.readAllStandardError().endsWith(".app: code object is not signed\n");
+#elif (defined(Q_WS_WIN) && !defined(Q_WS_WINCE)) || (defined(Q_OS_LINUX) && defined(Q_WS_X11))
+    return true;
+#else
+    return false;
+#endif
+}
+
 void UpdateDialog::sslErrors(QNetworkReply *reply, QList<QSslError> errors)
 {
     // Ensure the update dialog is visible so our message box doesn't go off screen

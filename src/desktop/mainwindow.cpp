@@ -268,6 +268,9 @@ void MainWindow::setupUiAdditional()
     this->ui->actionInternetExplorer->setEnabled(false);
     this->ui->actionInternetExplorer->setVisible(false);
 #endif
+
+	// If automatic updates aren't enabled for this platform then we needn't show the menu item
+	this->ui->actionCheckForUpdates->setVisible(UpdateDialog::automaticUpdatesSupported());
 }
 
 /*!

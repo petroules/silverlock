@@ -38,6 +38,7 @@ DatabasePrintDialog::~DatabasePrintDialog()
  */
 void DatabasePrintDialog::print()
 {
+#ifndef QT_NO_PRINTER
     QPrinter printer;
     QTextDocument document;
     document.setHtml(this->groupText(this->m_database));
@@ -46,6 +47,9 @@ void DatabasePrintDialog::print()
     QPrintDialog dialog(&printer, this);
     this->hide();
     dialog.exec();
+#else
+    QMessageBox::critical(this, tr("No print support"), tr("This computer or device does not support printing."));
+#endif
 }
 
 /*!

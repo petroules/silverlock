@@ -17,6 +17,7 @@ class UpdateDialog : public QDialog
 public:
     explicit UpdateDialog(QWidget *parent = NULL);
     ~UpdateDialog();
+	static bool automaticUpdatesSupported();
 
 private:
     Ui::UpdateDialog *ui;

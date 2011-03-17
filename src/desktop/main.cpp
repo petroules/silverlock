@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     // The update dialog won't interrupt users' flow since internally it is only shown if there is
     // actually an update to download - if not it'll remain hidden and get destroyed by MainWindow's
     // dtor later...
-    if (SilverlockPreferences::instance().updateOnStartup())
+    if (UpdateDialog::automaticUpdatesSupported() && SilverlockPreferences::instance().updateOnStartup())
     {
         UpdateDialog *dialog = new UpdateDialog(mw);
         dialog->setModal(true);
