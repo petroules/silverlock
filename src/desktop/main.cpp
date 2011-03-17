@@ -26,10 +26,10 @@ void setAppInfo()
     ApplicationInfo::setTrademarks(VER_LEGALTRADEMARKS1_STR);
 
     ApplicationInfo::setUrl(ApplicationInfo::OrganizationHomePage, QUrl("http://www.petroules.com/"));
-    ApplicationInfo::setUrl(ApplicationInfo::OrganizationDonations, QUrl("http://www.petroules.com/donate/"));
-    ApplicationInfo::setUrl(ApplicationInfo::ApplicationHomePage, QUrl("http://www.petroules.com/products/silverlock/"));
-    ApplicationInfo::setUrl(ApplicationInfo::ApplicationHelp, QUrl("http://www.petroules.com/support/silverlock/"));
-    ApplicationInfo::setUrl(ApplicationInfo::ApplicationUpdate, QUrl("https://www.petroules.com/version/silverlock/"));
+    ApplicationInfo::setUrl(ApplicationInfo::OrganizationDonations, QUrl("http://www.petroules.com/donate"));
+    ApplicationInfo::setUrl(ApplicationInfo::ApplicationHomePage, QUrl("http://www.petroules.com/products/silverlock"));
+    ApplicationInfo::setUrl(ApplicationInfo::ApplicationHelp, QUrl("http://www.petroules.com/support/silverlock"));
+    ApplicationInfo::setUrl(ApplicationInfo::ApplicationUpdate, QUrl("https://www.petroules.com/version/silverlock"));
 }
 
 int main(int argc, char *argv[])

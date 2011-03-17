@@ -15,7 +15,19 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_01636861584644E8AEF0490C1A49F5BF"
+        "MsmKey" = "8:_015A41439BC54E028691F886C4C4AB72"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_12AA658C485B4DB39EA880F9ED48C7B1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1A955F6838FB452D8CDECF6F12A692DE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -33,13 +45,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_43D881F469A9460F83E1C1D87D0CFC67"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4D3E95147EED4A09A292FA2428107C6E"
+        "MsmKey" = "8:_38B0F3A68E9E491B86A512FE19A2849B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -51,13 +57,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_69C3DC2250C647819A005AFFE375D8B8"
+        "MsmKey" = "8:_51361C402B0D4BF499D130615B5B40D7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_756CAC8D737B4AE4BF0D905725662F6D"
+        "MsmKey" = "8:_5461B5B77E7844A58ED6D22508A95F1E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5545F486BD9A4892BE36180DC785E869"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5DBB3AF4ADDB49D1B0351702007507BE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -69,19 +87,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7C002E490D414BCDBC5E90E6FE1C13EA"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7D761D4347BE4153A26A29DD84433E08"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7FFF29E0DAC14052BD78735AD54056D5"
+        "MsmKey" = "8:_79470EB0BE56491CA23081A382B05B4B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -93,19 +99,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9B31AE3E7E1B48439B685DDAF35E6DF7"
+        "MsmKey" = "8:_83B389CDA4E64B67ADD6628D3816DDD9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_A21EBCDAA0A342EFA54A21315E31256D"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A5C01BF2547546B096E321AA6C987148"
+        "MsmKey" = "8:_9957EF02C9ED400C8A1E3DE11078952E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -117,19 +117,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B48B1C908C3B4ABDB3376895E32666E4"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B7AC34E4563C444094AA8838F60B69E5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_CD7706AC0CAA49F2AA0DDB22F4D341FF"
+        "MsmKey" = "8:_C7D8CF59836F4A7EBAC4EE5DEA281DDE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -141,13 +135,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E832E716F471436491FC470603F56D7F"
+        "MsmKey" = "8:_D7AB2507132A42B4880C5F1A3E5B0E0C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E8E31E4CABF84BE791717E288E9A97F1"
+        "MsmKey" = "8:_E28CA713492B46E79F45C38A33E90D32"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -159,7 +153,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F28339F0FA874401BE470821E1605BF2"
+        "MsmKey" = "8:_F5F584761C0E4DA98513F37CDACF9886"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F7FB2EA7A1114238ABA912D2AD3C321F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -245,12 +245,52 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_01636861584644E8AEF0490C1A49F5BF"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_015A41439BC54E028691F886C4C4AB72"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qmng4.dll"
-            "TargetName" = "8:qmng4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\plugins\\imageformats\\qico4.dll"
+            "TargetName" = "8:qico4.dll"
             "Tag" = "8:"
             "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_12AA658C485B4DB39EA880F9ED48C7B1"
+            {
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\bin\\QtCore4.dll"
+            "TargetName" = "8:QtCore4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1A955F6838FB452D8CDECF6F12A692DE"
+            {
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\bin\\phonon4.dll"
+            "TargetName" = "8:phonon4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -305,30 +345,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_43D881F469A9460F83E1C1D87D0CFC67"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_38B0F3A68E9E491B86A512FE19A2849B"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\iconengines\\qsvgicon4.dll"
-            "TargetName" = "8:qsvgicon4.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_93597BAC81DB49D5A2EB0E825434D6EE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4D3E95147EED4A09A292FA2428107C6E"
-            {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\bin\\QtNetwork4.dll"
-            "TargetName" = "8:QtNetwork4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\bin\\QtWebKit4.dll"
+            "TargetName" = "8:QtWebKit4.dll"
             "Tag" = "8:"
             "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
@@ -365,9 +385,49 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_69C3DC2250C647819A005AFFE375D8B8"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_51361C402B0D4BF499D130615B5B40D7"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\bin\\QtSvg4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\bin\\QtXml4.dll"
+            "TargetName" = "8:QtXml4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5461B5B77E7844A58ED6D22508A95F1E"
+            {
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\bin\\QtNetwork4.dll"
+            "TargetName" = "8:QtNetwork4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5545F486BD9A4892BE36180DC785E869"
+            {
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\bin\\QtSvg4.dll"
             "TargetName" = "8:QtSvg4.dll"
             "Tag" = "8:"
             "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
@@ -385,12 +445,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_756CAC8D737B4AE4BF0D905725662F6D"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5DBB3AF4ADDB49D1B0351702007507BE"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qgif4.dll"
-            "TargetName" = "8:qgif4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\plugins\\accessible\\qtaccessiblewidgets4.dll"
+            "TargetName" = "8:qtaccessiblewidgets4.dll"
             "Tag" = "8:"
-            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
+            "Folder" = "8:_3C2E7099213F445DB376C9BB66BDB2A2"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -405,52 +465,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7C002E490D414BCDBC5E90E6FE1C13EA"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_79470EB0BE56491CA23081A382B05B4B"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qico4.dll"
-            "TargetName" = "8:qico4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\plugins\\imageformats\\qmng4.dll"
+            "TargetName" = "8:qmng4.dll"
             "Tag" = "8:"
             "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7D761D4347BE4153A26A29DD84433E08"
-            {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qjpeg4.dll"
-            "TargetName" = "8:qjpeg4.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7FFF29E0DAC14052BD78735AD54056D5"
-            {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\bin\\QtGui4.dll"
-            "TargetName" = "8:QtGui4.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -485,10 +505,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B31AE3E7E1B48439B685DDAF35E6DF7"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_83B389CDA4E64B67ADD6628D3816DDD9"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\bin\\QtCore4.dll"
-            "TargetName" = "8:QtCore4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\bin\\QtGui4.dll"
+            "TargetName" = "8:QtGui4.dll"
             "Tag" = "8:"
             "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
@@ -505,32 +525,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A21EBCDAA0A342EFA54A21315E31256D"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9957EF02C9ED400C8A1E3DE11078952E"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qtiff4.dll"
-            "TargetName" = "8:qtiff4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\plugins\\imageformats\\qjpeg4.dll"
+            "TargetName" = "8:qjpeg4.dll"
             "Tag" = "8:"
             "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A5C01BF2547546B096E321AA6C987148"
-            {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\bin\\QtWebKit4.dll"
-            "TargetName" = "8:QtWebKit4.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -549,26 +549,6 @@
             {
             "SourcePath" = "8:C:\\OpenSSL-Win32\\ssleay32.dll"
             "TargetName" = "8:ssleay32.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B48B1C908C3B4ABDB3376895E32666E4"
-            {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\bin\\QtXml4.dll"
-            "TargetName" = "8:QtXml4.dll"
             "Tag" = "8:"
             "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
             "Condition" = "8:"
@@ -605,12 +585,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CD7706AC0CAA49F2AA0DDB22F4D341FF"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C7D8CF59836F4A7EBAC4EE5DEA281DDE"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\imageformats\\qsvg4.dll"
-            "TargetName" = "8:qsvg4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\plugins\\iconengines\\qsvgicon4.dll"
+            "TargetName" = "8:qsvgicon4.dll"
             "Tag" = "8:"
-            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
+            "Folder" = "8:_93597BAC81DB49D5A2EB0E825434D6EE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -645,12 +625,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E832E716F471436491FC470603F56D7F"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D7AB2507132A42B4880C5F1A3E5B0E0C"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\bin\\phonon4.dll"
-            "TargetName" = "8:phonon4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\plugins\\imageformats\\qgif4.dll"
+            "TargetName" = "8:qgif4.dll"
             "Tag" = "8:"
-            "Folder" = "8:_4D70DA81EE2948C9B244A16B81FF4C29"
+            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -665,12 +645,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E8E31E4CABF84BE791717E288E9A97F1"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E28CA713492B46E79F45C38A33E90D32"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\accessible\\qtaccessiblewidgets4.dll"
-            "TargetName" = "8:qtaccessiblewidgets4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\plugins\\imageformats\\qsvg4.dll"
+            "TargetName" = "8:qsvg4.dll"
             "Tag" = "8:"
-            "Folder" = "8:_3C2E7099213F445DB376C9BB66BDB2A2"
+            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -705,9 +685,29 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F28339F0FA874401BE470821E1605BF2"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F5F584761C0E4DA98513F37CDACF9886"
             {
-            "SourcePath" = "8:C:\\Qt\\4.7.1-vs2008\\plugins\\accessible\\qtaccessiblecompatwidgets4.dll"
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\plugins\\imageformats\\qtiff4.dll"
+            "TargetName" = "8:qtiff4.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_C6565D5F9EFE447BB0E95F448E21D05F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F7FB2EA7A1114238ABA912D2AD3C321F"
+            {
+            "SourcePath" = "8:C:\\QtSDK\\Desktop\\Qt\\4.7.2\\msvc2008\\plugins\\accessible\\qtaccessiblecompatwidgets4.dll"
             "TargetName" = "8:qtaccessiblecompatwidgets4.dll"
             "Tag" = "8:"
             "Folder" = "8:_3C2E7099213F445DB376C9BB66BDB2A2"
@@ -778,7 +778,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_4D70DA81EE2948C9B244A16B81FF4C29"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFilesFolder]Petroules\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -837,21 +837,21 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Silverlock"
-        "ProductCode" = "8:{4C7E6E0E-B91B-4898-98A4-1F43E10662B0}"
-        "PackageCode" = "8:{8647FC9D-F312-4C02-B387-C1E0CC4BC236}"
+        "ProductCode" = "8:{B9C0478A-EB10-4532-82F7-DB0CC2722C44}"
+        "PackageCode" = "8:{1F6881C9-1983-4B5F-B60B-94E785485ED7}"
         "UpgradeCode" = "8:{263683D4-7D39-47D7-B2A0-2878D4D5241B}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.1"
-        "Manufacturer" = "8:Petroules"
+        "ProductVersion" = "8:1.1.2"
+        "Manufacturer" = "8:Petroules Corporation"
         "ARPHELPTELEPHONE" = "8:"
-        "ARPHELPLINK" = "8:http://www.petroules.com/support/silverlock/"
+        "ARPHELPLINK" = "8:http://www.petroules.com/support/silverlock"
         "Title" = "8:Silverlock Setup"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:Petroules"
+        "ARPCONTACT" = "8:Petroules Corporation"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:Silverlock is a secure password management application designed to ease the management of account credentials and related information."
         "ARPURLINFOABOUT" = "8:http://www.petroules.com/"

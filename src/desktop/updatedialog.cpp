@@ -94,6 +94,8 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
 
                     releaseChild = releaseChild.nextSiblingElement();
                 }
+
+                break;
             }
 
             release = release.nextSiblingElement();
