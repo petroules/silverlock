@@ -49,9 +49,9 @@ Herein are the licenses for Silverlock and each of the projects it is linked wit
        <item>
         <widget class="QLabel" name="silverlockLabel">
          <property name="text">
-          <string>Copyright &amp;copy; 2010 Petroules Enterprises, All Rights Reserved&lt;br /&gt;
-Contact: Petroules Enterprises (&lt;a href=&quot;mailto:support@petroules.com&quot;&gt;support@petroules.com&lt;/a&gt;)&lt;br /&gt;
-&lt;a href=&quot;http://www.petroules.com/products/silverlock/&quot;&gt;http://www.petroules.com/products/silverlock/&lt;/a&gt;</string>
+          <string>Copyright &amp;copy; 2010 Petroules Corporation, All Rights Reserved&lt;br /&gt;
+Contact: Petroules Corporation (&lt;a href=&quot;mailto:support@petroules.com&quot;&gt;support@petroules.com&lt;/a&gt;)&lt;br /&gt;
+&lt;a href=&quot;http://www.petroules.com/products/silverlock&quot;&gt;http://www.petroules.com/products/silverlock&lt;/a&gt;</string>
          </property>
          <property name="textFormat">
           <enum>Qt::RichText</enum>
@@ -89,9 +89,9 @@ Contact: Petroules Enterprises (&lt;a href=&quot;mailto:support@petroules.com&qu
        <item>
         <widget class="QLabel" name="lielLabel">
          <property name="text">
-          <string>Copyright &amp;copy; 2010 Petroules Enterprises, All Rights Reserved&lt;br /&gt;
-Contact: Petroules Enterprises (&lt;a href=&quot;mailto:support@petroules.com&quot;&gt;support@petroules.com&lt;/a&gt;)&lt;br /&gt;
-&lt;a href=&quot;http://www.petroules.com/products/liel/&quot;&gt;http://www.petroules.com/products/liel/&lt;/a&gt;</string>
+          <string>Copyright &amp;copy; 2010 Petroules Corporation, All Rights Reserved&lt;br /&gt;
+Contact: Petroules Corporation (&lt;a href=&quot;mailto:support@petroules.com&quot;&gt;support@petroules.com&lt;/a&gt;)&lt;br /&gt;
+&lt;a href=&quot;http://www.petroules.com/products/liel&quot;&gt;http://www.petroules.com/products/liel&lt;/a&gt;</string>
          </property>
          <property name="textFormat">
           <enum>Qt::RichText</enum>
