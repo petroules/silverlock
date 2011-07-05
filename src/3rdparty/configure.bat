@@ -2,13 +2,15 @@
 echo This script configures 3rd party code for building with Petroules applications.
 echo Copyright (c) 2010-2011 Petroules Corporation
 
-rmdir /s /q "temp"
+set BUILDDIR=temp-win32-msvc
+
+rmdir /s /q "%BUILDDIR%"
 
 IF "%1"=="--clean" (
 	goto EOF
 )
 
-md "temp"
+md "%BUILDDIR%"
 
 REM Set default path to 7-Zip
 set PATHTO7Z=%PROGRAMFILES%\7-Zip
@@ -29,7 +31,7 @@ set LIEL_AFN=%LIEL_FN%-master
 REM Set directory locations
 set ARCHIVES_DIR=%CD%\archives
 set PETROULES_DIR=%CD%\petroules
-set OUT_DIR=%CD%\temp
+set OUT_DIR=%CD%\%BUILDDIR%
 
 echo Extracting Botan source...
 7z e -o%OUT_DIR% %ARCHIVES_DIR%\%BOTAN_FN%.tgz

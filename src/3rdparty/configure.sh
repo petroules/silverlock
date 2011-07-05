@@ -1,13 +1,32 @@
 echo "This script configures 3rd party code for building with Petroules applications."
 echo "Copyright (c) 2010-2011 Petroules Corporation"
 
-rm -rf "temp"
+# Detect operating system by first assuming we are 
+if [ $(uname -o) == "Msys" ]; then # we are Windows (MSYS)
+	BUILDDIR="temp-win32-gcc"
+fi
+
+if [ $(uname) == "Darwin" ]; then # we are Mac OS X
+	BUILDDIR="temp-mac64"
+fi
+
+if [ $(uname) == "Linux" ]; then # we are some sort of Linux
+	# We only support 32-bit Linux at this point
+	BUILDDIR="temp-linux32"
+fi
+
+if [ $BUILDDIR == "" ]; then # unknown operating system, error
+	echo Unknown operating system $(uname), quitting
+	exit
+fi
+
+rm -rf "$BUILDDIR"
 
 if [ "$1" == "--clean" ]; then
 	exit
 fi
 
-mkdir "temp"
+mkdir "$BUILDDIR"
 
 # Set filenames
 BOTAN_FN=Botan-1.9.12
@@ -19,7 +38,7 @@ LIEL_AFN=$LIEL_FN-master
 # Set directory locations
 ARCHIVES_DIR=$PWD/archives
 PETROULES_DIR=$PWD/petroules
-OUT_DIR=$PWD/temp
+OUT_DIR=$PWD/$BUILDDIR
 
 echo Extracting Botan source...
 tar xzf $ARCHIVES_DIR/$BOTAN_FN.tgz $BOTAN_FN

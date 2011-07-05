@@ -192,7 +192,7 @@ void Entry::clearRecoveryInfo()
 void Entry::insertCustomField(const QString &key, const QString &value)
 {
     // Blank keys are not accepted!
-    if (key.isEmpty() || this->m_recoveryInfo.contains(key))
+    if (key.isEmpty() || this->m_customFields.contains(key))
     {
         return;
     }

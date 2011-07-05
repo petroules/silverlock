@@ -63,21 +63,26 @@ OTHER_FILES += \
 # Botan needs some stuff from here
 win32:LIBS += -ladvapi32 -luser32
 
-LIEL_PATH = ../3rdparty/temp/liel/qt/liel
-BOTAN_PATH = ../3rdparty/temp/botan
+win32:TEMP_BUILDDIR = temp-win32-gcc
+win32-msvc*:TEMP_BUILDDIR = temp-win32-msvc
+macx:TEMP_BUILDDIR = temp-mac64
+linux-g++:TEMP_BUILDDIR = temp-linux32
+
+SYNTEZA_PATH = ../3rdparty/$$TEMP_BUILDDIR/synteza/qt
+BOTAN_PATH = ../3rdparty/$$TEMP_BUILDDIR/botan
 win32-msvc*:BOTAN_PATH = $$BOTAN_PATH-msvc
 
-# LIEL library
+# Synteza library
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$LIEL_PATH/release/ -lliel
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$LIEL_PATH/debug/ -lliel
-else:symbian: LIBS += -lliel
-else:unix: LIBS += -L$$OUT_PWD/$$LIEL_PATH/ -lliel
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/release/ -lsynteza
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/debug/ -lsynteza
+else:symbian: LIBS += -lsynteza
+else:unix: LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/ -lsynteza
 
-INCLUDEPATH += $$PWD/$$LIEL_PATH
-DEPENDPATH += $$PWD/$$LIEL_PATH
+INCLUDEPATH += $$PWD/$$SYNTEZA_PATH
+DEPENDPATH += $$PWD/$$SYNTEZA_PATH
 
-macx:PRE_TARGETDEPS += $$OUT_PWD/$$LIEL_PATH/libliel.a
+macx:PRE_TARGETDEPS += $$OUT_PWD/$$SYNTEZA_PATH/libsynteza.a
 
 # Botan library
 

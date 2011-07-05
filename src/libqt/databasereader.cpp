@@ -4,7 +4,7 @@
 #include "databasecrypto.h"
 #include "entry.h"
 #include "group.h"
-#include <liel.h>
+#include <synteza.h>
 
 /*!
     \class DatabaseReader

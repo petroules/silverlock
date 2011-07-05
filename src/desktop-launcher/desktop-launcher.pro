@@ -1,3 +1,5 @@
+!win32:error("The Silverlock launcher is only intended to be compiled for Microsoft Windows. Please run the 'desktop' project instead of 'desktop-launcher'.")
+
 # --------------------------------------------------
 # This section contains project configuration
 # directives such as the required Qt modules, the
