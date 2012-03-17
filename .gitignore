@@ -20,6 +20,10 @@ src/android/obj
 src/blackberry/bin
 src/libjava/bin
 
+# Xcode
+src/libobjc/**/xcuserdata
+src/libobjc/**/project.xcworkspace
+
 # Build files for deployment
 deploy/win32/*.msi
 deploy/win32/*.sln
