@@ -2,4 +2,9 @@
 <resources>
     <string name="hello">Hello World, Silverlock!</string>
     <string name="app_name">Silverlock</string>
+    <string name="file_url">File URL:</string>
+    <string name="file_password">File password:</string>
+    <string name="ok">OK</string>
+    <string name="default_url">http://www.jakepetroules.com/files/TestDatabase.sdbx</string>
+    <string name="tests">Tests</string>
 </resources>
