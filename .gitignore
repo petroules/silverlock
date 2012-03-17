@@ -1,9 +1,26 @@
+# OS cache files
 .DS_Store
-deploy/win32/*.msi
-deploy/win32/*.sln
-deploy/win32/*.suo
-silverlock-build-*
-src/.metadata
+Thumbs.db
+
+# Eclipse workspace
+.metadata
+
+# Other IDE and build files
 src/*.pro.user
 src/3rdparty/temp-*
 src/3rdparty/make.*
+
+# Qt build directories
+silverlock-build-*
+
+# Eclipse build directories
+src/android/bin
+src/android/libs
+src/android/obj
+src/blackberry/bin
+src/libjava/bin
+
+# Build files for deployment
+deploy/win32/*.msi
+deploy/win32/*.sln
+deploy/win32/*.suo
