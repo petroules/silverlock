@@ -10,8 +10,10 @@ IF "%1"=="--debug" (
 
 REM Configure Botan using its Python configure script
 REM Here we want to make sure to select x86 processor as building 64-bit Qt-based Petroules apps is not yet supported
-configure.py --os=windows --cc=msvc --cpu=x86 --disable-shared --disable-asm
+pushd %~dp0
+configure.py --os=windows --cc=msvc --cpu=x86 --disable-shared --disable-asm %DEBUG_BUILD%
 
 REM Build Botan and check it
 nmake
 nmake check
+popd

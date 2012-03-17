@@ -3,7 +3,7 @@
 
 #if defined __cplusplus
 #include <QtXml>
-#include <liel.h>
+#include <synteza.h>
 #endif
 
 #endif // STABLE_H

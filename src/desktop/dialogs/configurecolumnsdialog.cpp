@@ -1,7 +1,7 @@
 #include "configurecolumnsdialog.h"
 #include "ui_configurecolumnsdialog.h"
-#include "entrytablewidget.h"
-#include "entryviewindexes.h"
+#include "widgets/entryviewindexes.h"
+#include "widgets/entrytablewidget.h"
 
 /*!
     \class ConfigureColumnsDialog

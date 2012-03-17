@@ -26,67 +26,81 @@ win32:DEFINES += WINVER=0x0500
 
 PRECOMPILED_HEADER = stable.h
 HEADERS += \
-    mainwindow.h \
-    entryeditdialog.h \
-    groupeditdialog.h \
-    preferencesdialog.h \
-    silverlockpreferences.h \
-    groupbrowserwidget.h \
-    entrytablewidget.h \
-    silverlockpreferences_keys.h \
-    selectgroupdialog.h \
-    searchdatabasedialog.h \
+    databaseprinter.h \
+    databaseprinterfields.h \
     documentstate.h \
-    configurecolumnsdialog.h \
-    entryviewindexes.h \
-    databaseauthenticationdialog.h \
-    aboutdialog.h \
-    licensedialog.h \
-    updatedialog.h \
-    guardeddialog.h \
+    mainwindow.h \
+    silverlockpreferences.h \
+    silverlockpreferences_keys.h \
     stable.h \
-    inactivityeventfilter.h \
-    databaseprintdialog.h \
     version.h \
-    newdatabasewizard.h
+    dialogs/aboutdialog.h \
+    dialogs/configurecolumnsdialog.h \
+    dialogs/databaseauthenticationdialog.h \
+    dialogs/databaseprintpreviewdialog.h \
+    dialogs/entryeditdialog.h \
+    dialogs/groupeditdialog.h \
+    dialogs/guardeddialog.h \
+    dialogs/licensedialog.h \
+    dialogs/newdatabasewizard.h \
+    dialogs/preferencesdialog.h \
+    dialogs/searchdatabasedialog.h \
+    dialogs/selectgroupdialog.h \
+    dialogs/updatedialog.h \
+    widgets/entrytablewidget.h \
+    widgets/entryviewindexes.h \
+    widgets/expandingspacerwidget.h \
+    widgets/groupbrowserwidget.h \
+    widgets/itoolbarsearchwidget.h \
+    widgets/toolbarsearchwidget.h \
+    silverlockapplication.h \
+    applicationmenu.h
 SOURCES += \
+    databaseprinter.cpp \
+    databaseprinterfields.cpp \
+    documentstate.cpp \
     main.cpp \
     mainwindow.cpp \
-    entryeditdialog.cpp \
-    groupeditdialog.cpp \
-    preferencesdialog.cpp \
     silverlockpreferences.cpp \
-    groupbrowserwidget.cpp \
-    entrytablewidget.cpp \
-    selectgroupdialog.cpp \
-    searchdatabasedialog.cpp \
-    documentstate.cpp \
-    configurecolumnsdialog.cpp \
-    databaseauthenticationdialog.cpp \
-    aboutdialog.cpp \
-    licensedialog.cpp \
-    updatedialog.cpp \
-    guardeddialog.cpp \
-    inactivityeventfilter.cpp \
-    entryeditdialog_helper.cpp \
-    databaseprintdialog.cpp \
-    newdatabasewizard.cpp
+    dialogs/aboutdialog.cpp \
+    dialogs/configurecolumnsdialog.cpp \
+    dialogs/databaseauthenticationdialog.cpp \
+    dialogs/databaseprintpreviewdialog.cpp \
+    dialogs/entryeditdialog.cpp \
+    dialogs/entryeditdialog_helper.cpp \
+    dialogs/groupeditdialog.cpp \
+    dialogs/guardeddialog.cpp \
+    dialogs/licensedialog.cpp \
+    dialogs/newdatabasewizard.cpp \
+    dialogs/preferencesdialog.cpp \
+    dialogs/searchdatabasedialog.cpp \
+    dialogs/selectgroupdialog.cpp \
+    dialogs/updatedialog.cpp \
+    widgets/entrytablewidget.cpp \
+    widgets/expandingspacerwidget.cpp \
+    widgets/groupbrowserwidget.cpp \
+    widgets/itoolbarsearchwidget.cpp \
+    widgets/toolbarsearchwidget.cpp \
+    silverlockapplication.cpp \
+    applicationmenu.cpp \
+    mainwindow_menuhandlers.cpp
 FORMS += \
-	mainwindow.ui \
-    entryeditdialog.ui \
-    groupeditdialog.ui \
-    preferencesdialog.ui \
-    groupbrowserwidget.ui \
-    entrytablewidget.ui \
-    selectgroupdialog.ui \
-    searchdatabasedialog.ui \
-    configurecolumnsdialog.ui \
-    databaseauthenticationdialog.ui \
-    aboutdialog.ui \
-    licensedialog.ui \
-    updatedialog.ui \
-    databaseprintdialog.ui \
-    newdatabasewizard.ui
+    mainwindow.ui \
+    dialogs/aboutdialog.ui \
+    dialogs/configurecolumnsdialog.ui \
+    dialogs/databaseauthenticationdialog.ui \
+    dialogs/databaseprintpreviewdialog.ui \
+    dialogs/entryeditdialog.ui \
+    dialogs/groupeditdialog.ui \
+    dialogs/licensedialog.ui \
+    dialogs/newdatabasewizard.ui \
+    dialogs/preferencesdialog.ui \
+    dialogs/searchdatabasedialog.ui \
+    dialogs/selectgroupdialog.ui \
+    dialogs/updatedialog.ui \
+    widgets/entrytablewidget.ui \
+    widgets/groupbrowserwidget.ui \
+    widgets/toolbarsearchwidget.ui
 RESOURCES += \
     resources.qrc \
     ../../res/globalresources.qrc
@@ -98,6 +112,23 @@ OTHER_FILES += \
     silverlock.manifest \
     Info.plist
 
+# Mac-specific sources
+macx {
+    HEADERS += \
+        mac/icocoaeventreceiver.h \
+        mac/macloginitemsmanager.h \
+        mac/mactoolbarsearchwidget.h
+    OBJECTIVE_HEADERS += \
+        mac/cocoaeventlistener.h \
+        mac/machelpers.h
+    OBJECTIVE_SOURCES += \
+        mac/cocoaeventlistener.mm \
+        mac/icocoaeventreceiver.mm \
+        mac/machelpers.mm \
+        mac/macloginitemsmanager.mm \
+        mac/mactoolbarsearchwidget.mm
+}
+
 # --------------------------------------------------
 # This section contains all libraries that the
 # project links to, first system libraries, and then
@@ -107,14 +138,14 @@ OTHER_FILES += \
 win32:LIBS += -luser32
 macx:LIBS += -framework CoreFoundation -framework Cocoa
 
-!include(../3rdparty/temp/qtsolutions/qtsingleapplication/src/qtsingleapplication.pri) {
-    error("Could not find the qtsingleapplication.pri file! Have you run configure in the 3rdparty directory?")
-}
+win32:TEMP_BUILDDIR = temp-win32-gcc
+win32-msvc*:TEMP_BUILDDIR = temp-win32-msvc
+macx:TEMP_BUILDDIR = temp-mac64
+linux-g++:TEMP_BUILDDIR = temp-linux32
 
 SILVERLOCKLIB_PATH = ../libqt
-LIEL_PATH = ../3rdparty/temp/liel/qt/liel
-BOTAN_PATH = ../3rdparty/temp/botan
-win32-msvc*:BOTAN_PATH = $$BOTAN_PATH-msvc
+SYNTEZA_PATH = ../3rdparty/$$TEMP_BUILDDIR/synteza/qt
+BOTAN_PATH = ../3rdparty/$$TEMP_BUILDDIR/botan
 
 # Silverlock support library
 
@@ -128,17 +159,17 @@ DEPENDPATH += $$PWD/$$SILVERLOCKLIB_PATH
 
 macx:PRE_TARGETDEPS += $$OUT_PWD/$$SILVERLOCKLIB_PATH/libsilverlocklib.a
 
-# LIEL library
+# Synteza library
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$LIEL_PATH/release/ -lliel
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$LIEL_PATH/debug/ -lliel
-else:symbian: LIBS += -lliel
-else:unix: LIBS += -L$$OUT_PWD/$$LIEL_PATH/ -lliel
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/release/ -lsynteza
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/debug/ -lsynteza
+else:symbian: LIBS += -lsynteza
+else:unix: LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/ -lsynteza
 
-INCLUDEPATH += $$PWD/$$LIEL_PATH
-DEPENDPATH += $$PWD/$$LIEL_PATH
+INCLUDEPATH += $$PWD/$$SYNTEZA_PATH
+DEPENDPATH += $$PWD/$$SYNTEZA_PATH
 
-macx:PRE_TARGETDEPS += $$OUT_PWD/$$LIEL_PATH/libliel.a
+macx:PRE_TARGETDEPS += $$OUT_PWD/$$SYNTEZA_PATH/libsynteza.a
 
 # Botan library
 

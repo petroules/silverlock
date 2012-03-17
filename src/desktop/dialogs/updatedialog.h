@@ -1,7 +1,7 @@
 #ifndef UPDATEDIALOG_H
 #define UPDATEDIALOG_H
 
-#include <liel.h>
+#include <synteza.h>
 #include <QtGui>
 #include <QtNetwork>
 
@@ -17,7 +17,10 @@ class UpdateDialog : public QDialog
 public:
     explicit UpdateDialog(QWidget *parent = NULL);
     ~UpdateDialog();
-	static bool automaticUpdatesSupported();
+    static bool automaticUpdatesSupported();
+
+public slots:
+    void check();
 
 private:
     Ui::UpdateDialog *ui;

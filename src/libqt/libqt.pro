@@ -70,7 +70,6 @@ linux-g++:TEMP_BUILDDIR = temp-linux32
 
 SYNTEZA_PATH = ../3rdparty/$$TEMP_BUILDDIR/synteza/qt
 BOTAN_PATH = ../3rdparty/$$TEMP_BUILDDIR/botan
-win32-msvc*:BOTAN_PATH = $$BOTAN_PATH-msvc
 
 # Synteza library
 

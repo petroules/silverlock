@@ -30,6 +30,7 @@ fi
 
 # Configure Botan using its Python configure script
 # Here we want to make sure to select x86 processor as building 64-bit Qt-based Petroules apps is not yet supported except on Mac OS X since Cocoa is built as 64-bit by default and all new Macs use 64-bit processors
+pushd $(dirname $0)
 ./configure.py $MINGW_OS --cpu=$CPU_TYPE --disable-shared --disable-asm $DEBUG_BUILD
 
 # Build Botan and check it
@@ -40,3 +41,5 @@ make check
 if [ -f "/msys.bat" ]; then
 	mv libbotan.a botan$TARGET_SUFFIX.lib
 fi
+
+popd

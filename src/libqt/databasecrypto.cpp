@@ -86,7 +86,7 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, in
     {
         const BlockCipher* cipher_proto = global_state().algorithm_factory().prototype_block_cipher(algo);
         const u32bit key_len = cipher_proto->maximum_keylength();
-        const u32bit iv_len = cipher_proto->block_size();
+        const u32bit iv_len = cipher_proto->block_size(); // TODO: AES block size is always 128 bit, verify this
         const bool compressed = compressionLevel != 0;
         const u32bit iterations = 8192;
 
@@ -229,10 +229,16 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
         std::string salt_str = in.readLine().toStdString();
         std::string mac_str = in.readLine().toStdString();
 
+        //std::cout << "Salt in file: " << salt_str << std::endl;
+        //std::cout << "MAC in file: " << mac_str << std::endl;
+
         const BlockCipher* cipher_proto = global_state().algorithm_factory().prototype_block_cipher(algo);
         const u32bit key_len = cipher_proto->maximum_keylength();
         const u32bit iv_len = cipher_proto->block_size();
         const u32bit iterations = 8192;
+
+        //std::cout << "Key length: " << key_len << " bytes" << std::endl;
+        //std::cout << "IV length: " << iv_len << " bytes" << std::endl;
 
         SecureVector<Botan::byte> salt = b64_decode(salt_str);
 
@@ -240,6 +246,10 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
         SymmetricKey bc_key = pbkdf->derive_key(key_len, "BLK" + passphrase, &salt[0], salt.size(), iterations);
         InitializationVector iv = pbkdf->derive_key(iv_len, "IVL" + passphrase, &salt[0], salt.size(), iterations);
         SymmetricKey mac_key = pbkdf->derive_key(16, "MAC" + passphrase, &salt[0], salt.size(), iterations);
+
+        //std::cout << "BC Key: " << bc_key.as_string() << std::endl;
+        //std::cout << "IV: " << iv.as_string() << std::endl;
+        //std::cout << "MAC: " << mac_key.as_string() << std::endl;
 
         Pipe pipe(
             new Base64_Decoder,
@@ -257,7 +267,9 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
 
         // Read the message authentication code from the pipe
         // and verify that it matches what was in the file
-        if (pipe.read_all_as_string(1) != mac_str)
+        std::string generatedMacStr = pipe.read_all_as_string(1);
+        //std::cout << generatedMacStr << std::endl;
+        if (generatedMacStr != mac_str)
         {
             if (error)
             {
@@ -269,6 +281,7 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
 
         // No errors were encountered; return the decrypted data
         SecureVector<Botan::byte> rawDecryptedData = pipe.read_all(0);
+        //qDebug() << rawDecryptedData.size();
         QByteArray qDecryptedData(rawDecryptedData.size(), '\0');
         for (int i = 0; i < qDecryptedData.size(); i++)
         {
@@ -277,8 +290,9 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
 
         return QString::fromUtf8(qUncompress(qDecryptedData));
     }
-    catch (Algorithm_Not_Found)
+    catch (Algorithm_Not_Found &e)
     {
+        std::cout << __FUNCTION__ << e.what() << std::endl;
         if (error)
         {
             *error = UnknownError;

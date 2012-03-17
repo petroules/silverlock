@@ -19,10 +19,13 @@ class GroupBrowserWidget : public QWidget
 public:
     explicit GroupBrowserWidget(QWidget *parent = NULL);
     ~GroupBrowserWidget();
+    Database* database() const;
+    void setDatabase(Database *database);
     bool multiselect() const;
     void setMultiselect(bool on);
     QUuid selectedUuid() const;
     QList<QUuid> selectedUuids() const;
+    bool isDatabaseSelected() const;
     void populate(Database *const database);
 
 public slots:
@@ -40,6 +43,7 @@ signals:
 private:
     void populate(QTreeWidgetItem *item, Group *const group);
     Ui::GroupBrowserWidget *ui;
+    Database *mDatabase;
 };
 
 #endif // GROUPBROWSERWIDGET_H

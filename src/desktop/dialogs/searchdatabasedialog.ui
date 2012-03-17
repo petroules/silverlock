@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>SearchDatabaseDialog</class>
  <widget class="QDialog" name="SearchDatabaseDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>381</width>
-    <height>248</height>
+    <width>465</width>
+    <height>271</height>
    </rect>
   </property>
   <property name="windowTitle">

@@ -1,55 +1,55 @@
-#include "databaseprintdialog.h"
-#include "ui_databaseprintdialog.h"
+#include "databaseprintpreviewdialog.h"
+#include "ui_databaseprintpreviewdialog.h"
 #include <silverlocklib.h>
+#include <synteza.h>
 
 /*!
-    \class DatabasePrintDialog
+    \class DatabasePrintPreviewDialog
 
-    The DatabasePrintDialog class provides a dialog allowing the user to configure print options
-    for the database.
+    The DatabasePrintPreviewDialog class provides a dialog allowing the user to configure print options
+    for the database and previews the results.
  */
 
 /*!
-    Constructs a new DatabasePrintDialog using the information in \a database to generate a preview.
+    Constructs a new DatabasePrintPreviewDialog using the information in \a database to generate a preview.
 
     \param database The database to preview.
     \param parent The parent widget of the dialog.
  */
-DatabasePrintDialog::DatabasePrintDialog(Database *database, QWidget *parent) :
+DatabasePrintPreviewDialog::DatabasePrintPreviewDialog(Database *database, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DatabasePrintDialog)
+    ui(new Ui::DatabasePrintPreviewDialog), m_database(database)
 {
     this->ui->setupUi(this);
-    this->m_database = database;
     this->updatePreview();
 }
 
 /*!
     Destroys the dialog.
  */
-DatabasePrintDialog::~DatabasePrintDialog()
+DatabasePrintPreviewDialog::~DatabasePrintPreviewDialog()
 {
     delete this->ui;
 }
 
 /*!
-    Displays a print dialog (QPrintDialog) allowing the user to print the database, hiding the
-    DatabasePrintDialog in the process.
+    Gets the selection of fields that the user elected to include in the printout.
  */
-void DatabasePrintDialog::print()
+DatabasePrinterFields DatabasePrintPreviewDialog::databasePrinterFields() const
 {
-#ifndef QT_NO_PRINTER
-    QPrinter printer;
-    QTextDocument document;
-    document.setHtml(this->groupText(this->m_database));
-    document.print(&printer);
-
-    QPrintDialog dialog(&printer, this);
-    this->hide();
-    dialog.exec();
-#else
-    QMessageBox::critical(this, tr("No print support"), tr("This computer or device does not support printing."));
-#endif
+    DatabasePrinterFields fields;
+    fields.title = this->ui->titleCheckBox->isChecked();
+    fields.username = this->ui->usernameCheckBox->isChecked();
+    fields.password = this->ui->passwordCheckBox->isChecked();
+    fields.url = this->ui->urlCheckBox->isChecked();
+    fields.notes = this->ui->notesCheckBox->isChecked();
+    fields.recoveryInfo = this->ui->recoveryInfoCheckBox->isChecked();
+    fields.customFields = this->ui->customFieldsCheckBox->isChecked();
+    fields.uuid = this->ui->uuidCheckBox->isChecked();
+    fields.creationTime = this->ui->creationTimeCheckBox->isChecked();
+    fields.accessTime = this->ui->accessTimeCheckBox->isChecked();
+    fields.modificationTime = this->ui->modificationTimeCheckBox->isChecked();
+    return fields;
 }
 
 /*!
@@ -59,7 +59,7 @@ void DatabasePrintDialog::print()
     will cause all checkboxes to be selected; #clear-all will cause all the checkbox selections
     to be cleared. Any other value will do nothing.
  */
-void DatabasePrintDialog::selectionLinkActivated(const QString &link)
+void DatabasePrintPreviewDialog::selectionLinkActivated(const QString &link)
 {
     if (link == "#select-all")
     {
@@ -77,7 +77,7 @@ void DatabasePrintDialog::selectionLinkActivated(const QString &link)
     \param select If this parameter is \c true, all checkboxes will be selected. If it is \c false,
     all checkbox selections will be cleared.
  */
-void DatabasePrintDialog::selectAll(bool select)
+void DatabasePrintPreviewDialog::selectAll(bool select)
 {
     this->ui->titleCheckBox->setChecked(select);
     this->ui->usernameCheckBox->setChecked(select);
@@ -95,148 +95,44 @@ void DatabasePrintDialog::selectAll(bool select)
 /*!
     Updates the database print preview.
  */
-void DatabasePrintDialog::updatePreview()
+void DatabasePrintPreviewDialog::updatePreview()
 {
-    QString preview;
+    QString html;
+
+    // If the user elected to preview their *actual* database, print it to HTML
     if (this->ui->showActualCheckBox->isChecked())
     {
-        preview += this->groupText(this->m_database);
+        DatabasePrinter printer(this->m_database);
+        html = printer.toHtml(this->databasePrinterFields());
     }
     else
     {
-        Group *group = new Group(tr("My Group"));
+        // Otherwise we'll generate a mock preview for security reasons
+        Database mockDatabase(tr("My Database"), "g00dPa$$w0rd%");
 
-        Entry *entry = new Entry("Google", group);
-        entry->setUsername("john.doe");
-        entry->setPassword("!$uper$ecretPa$$w0rd~");
-        entry->setUrl(QUrl("http://www.google.com/"));
-        entry->setNotes(tr("This is my Google account!\n\nI created it on 2008-09-19 & have been using it since."));
-        entry->insertRecoveryInfo(tr("What is your mother's maiden name?"), "Doe");
-        entry->insertRecoveryInfo(tr("What is your favourite colour?"), "Blue");
-        entry->insertCustomField("PIN", "0123");
+        Group mockGroup(tr("My Group"), &mockDatabase);
 
-        preview += this->groupText(group);
+        Entry mockEntry("Google", &mockGroup);
+        mockEntry.setUsername("john.doe");
+        mockEntry.setPassword("!$uper$ecretPa$$w0rd~");
+        mockEntry.setUrl(QUrl("http://www.google.com/"));
+        mockEntry.setNotes(tr("This is my Google account!\n\nI created it on 2008-09-19 & have been using it since."));
+        mockEntry.insertRecoveryInfo(tr("What is your mother's maiden name?"), "Doe");
+        mockEntry.insertRecoveryInfo(tr("What is your favourite colour?"), "Blue");
+        mockEntry.insertCustomField("PIN", "0123");
+
+        // Print the mock database to HTML
+        DatabasePrinter printer(&mockDatabase);
+        html = printer.toHtml(this->databasePrinterFields());
     }
 
-    this->ui->textBrowser->setHtml(preview);
-}
-
-/*!
-    Gets an HTML-encoded string representing \a group and its child nodes (both groups and entries).
-
-    \param group The group to get an HTML representation of.
- */
-QString DatabasePrintDialog::groupText(const Group *group) const
-{
-    if (!group)
+    // Send the database HTML to the preview pane
+    if (!html.isEmpty())
     {
-        return QString();
+        this->ui->textBrowser->setHtml(html);
     }
-
-    QString preview;
-    preview += QString("<h1>%1</h1>").arg(group->title());
-
-    QStringList entries;
-    foreach (Entry *entry, group->entries())
+    else
     {
-        entries.append(this->entryText(entry));
+        this->ui->textBrowser->setText(tr("There is no database present to preview."));
     }
-
-    preview += entries.join("<hr />");
-
-    foreach (Group *group, group->groups())
-    {
-        preview += this->groupText(group);
-    }
-
-    return preview;
-}
-
-/*!
-    Gets an HTML-encoded string representing \a entry.
-
-    \param entry The entry to get an HTML representation of.
- */
-QString DatabasePrintDialog::entryText(const Entry *entry) const
-{
-    if (!entry)
-    {
-        return QString();
-    }
-
-    QString preview;
-    if (this->ui->titleCheckBox->isChecked() && !entry->title().isEmpty())
-    {
-        preview += QString(tr("<b>Title:</b> %1")).arg(Qt::escape(entry->title())) + "<br />";
-    }
-
-    if (this->ui->usernameCheckBox->isChecked() && !entry->username().isEmpty())
-    {
-        preview += QString(tr("<b>Username:</b> %1")).arg(Qt::escape(entry->username())) + "<br />";
-    }
-
-    if (this->ui->passwordCheckBox->isChecked() && !entry->password().isEmpty())
-    {
-        preview += QString(tr("<b>Password:</b> %1")).arg(Qt::escape(entry->password())) + "<br />";
-    }
-
-    if (this->ui->urlCheckBox->isChecked() && !entry->url().isEmpty())
-    {
-        preview += QString("<b>URL:</b> %1").arg(Qt::escape(entry->url().toString())) + "<br />";
-    }
-
-    if (this->ui->notesCheckBox->isChecked() && !entry->notes().isEmpty())
-    {
-        preview += QString(tr("<b>Notes:</b> %1")).arg(Qt::escape(entry->notes())
-            .replace(QRegExp("((?:https?|ftp)://\\S+)"), "<a href=\"\\1\">\\1</a>")
-            .replace("\n", "<br />")) + "<br />";
-    }
-
-    if (this->ui->recoveryInfoCheckBox->isChecked() && !entry->recoveryInfo().isEmpty())
-    {
-        QStringList recovery;
-        QMapIterator<QString, QString> i(entry->recoveryInfo());
-        while (i.hasNext())
-        {
-            i.next();
-            recovery.append(QString("<em>%1</em> %2").arg(Qt::escape(i.key())).arg(Qt::escape(i.value())));
-        }
-
-        preview += QString(tr("<b>Recovery info:</b><br />%1")).arg(recovery.join("<br />")) + "<br />";
-    }
-
-    if (this->ui->customFieldsCheckBox->isChecked() && !entry->customFields().isEmpty())
-    {
-        QStringList customFields;
-        QMapIterator<QString, QString> i(entry->customFields());
-        while (i.hasNext())
-        {
-            i.next();
-            customFields.append(QString("<em>%1</em> %2").arg(Qt::escape(i.key())).arg(Qt::escape(i.value())));
-        }
-
-        preview += QString(tr("<b>Custom fields:</b><br />%1")).arg(customFields.join("<br />")) + "<br />";
-    }
-
-    if (this->ui->uuidCheckBox->isChecked())
-    {
-        preview += QString("<b>UUID:</b> <code>%1</code>").arg(Qt::escape(entry->uuid().toString())) + "<br />";
-    }
-
-    if (this->ui->creationTimeCheckBox->isChecked())
-    {
-        preview += QString("<b>Created</b>: %1").arg(Qt::escape(entry->created().toLocalTime().toString(Qt::SystemLocaleLongDate))) + "<br />";
-    }
-
-    if (this->ui->accessTimeCheckBox->isChecked())
-    {
-        preview += QString("<b>Accessed</b>: %1").arg(Qt::escape(entry->accessed().toLocalTime().toString(Qt::SystemLocaleLongDate))) + "<br />";
-    }
-
-    if (this->ui->modificationTimeCheckBox->isChecked())
-    {
-        preview += QString("<b>Modified</b>: %1").arg(Qt::escape(entry->modified().toLocalTime().toString(Qt::SystemLocaleLongDate))) + "<br />";
-    }
-
-    return preview;
 }

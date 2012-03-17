@@ -14,7 +14,7 @@ class DatabaseAuthenticationDialog : public GuardedDialog
     Q_PROPERTY(QString password READ password WRITE setPassword)
 
 public:
-    explicit DatabaseAuthenticationDialog(QWidget *parent = NULL);
+    explicit DatabaseAuthenticationDialog(const QString &fileName, QWidget *parent = NULL);
     ~DatabaseAuthenticationDialog();
     QString password() const;
     void setPassword(const QString &password);

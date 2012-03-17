@@ -1,6 +1,7 @@
 #include "updatedialog.h"
 #include "ui_updatedialog.h"
 #include "silverlockpreferences.h"
+#include <synteza.h>
 #include <QtXml>
 
 /*!
@@ -23,8 +24,6 @@ UpdateDialog::UpdateDialog(QWidget *parent) :
 
     QObject::connect(this->m_network, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(sslErrors(QNetworkReply*,QList<QSslError>)));
     QObject::connect(this->m_network, SIGNAL(finished(QNetworkReply*)), this, SLOT(checkReplyFinished(QNetworkReply*)));
-    QNetworkReply *reply = this->m_network->get(QNetworkRequest(ApplicationInfo::url(ApplicationInfo::ApplicationUpdate)));
-    QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(checkError(QNetworkReply::NetworkError)));
 }
 
 /*!
@@ -41,26 +40,44 @@ UpdateDialog::~UpdateDialog()
     delete this->ui;
 }
 
+/*!
+    Returns a value indicating whether the built-in automatic update
+    mechanism is available on the current platform and configuration.
+ */
 bool UpdateDialog::automaticUpdatesSupported()
 {
 #ifdef Q_WS_MAC
-    QDir dir = QDir(QCoreApplication::applicationDirPath());
-    dir.cdUp();
-    dir.cdUp();
-    QString bundleName = dir.dirName();
-    dir.cdUp();
+    // Get the name of the application bundle and the directory that the application bundle resides in
+    QDir bundleDir = QDir(QCoreApplication::applicationDirPath());
+    bundleDir.cdUp();
+    bundleDir.cdUp();
+    QString bundleName = bundleDir.dirName();
+    bundleDir.cdUp();
 
+    // Verify that the bundle is code signed
     QProcess proc;
-    proc.setWorkingDirectory(dir.path());
+    proc.setWorkingDirectory(bundleDir.path());
     proc.start(QString("codesign --verify %1").arg(bundleName));
     proc.waitForFinished();
 
+    // If the output from codesign says the object is not signed,
+    // we're not running in the Mac App Store and can use our own automatic updates
+    // Otherwise we let the Mac App Store keep the application up to date
     return proc.readAllStandardError().endsWith(".app: code object is not signed\n");
 #elif (defined(Q_WS_WIN) && !defined(Q_WS_WINCE)) || (defined(Q_OS_LINUX) && defined(Q_WS_X11))
+    // Windows and Linux/X11 support automatic updates by default
     return true;
 #else
+    // Any other/unknown platforms do not
     return false;
 #endif
+}
+
+void UpdateDialog::check()
+{
+    this->ui->stackedWidget->setCurrentWidget(this->ui->checkingPage);
+    QNetworkReply *reply = this->m_network->get(QNetworkRequest(qiApp->url(IntegratedApplication::ApplicationUpdate)));
+    QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(checkError(QNetworkReply::NetworkError)));
 }
 
 void UpdateDialog::sslErrors(QNetworkReply *reply, QList<QSslError> errors)
@@ -75,9 +92,9 @@ void UpdateDialog::sslErrors(QNetworkReply *reply, QList<QSslError> errors)
     }
 
     QString sslErrorString = sslErrors.join("</li><li>");
-    int ret = QMessageBox::warning(this, tr("SSL Errors"),
+    int ret = NativeDialogs::warning(this, tr("SSL Errors"),
         tr("<p>SSL Errors for %1</p><ul><li>%2</li></ul><p>Do you want to ignore these errors?</p>")
-            .arg(reply->url().toString()).arg(sslErrorString), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+        .arg(reply->url().toString()).arg(sslErrorString), tr("You should only ignore these errors if you are certain this message is in error."), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
     if (ret == QMessageBox::Yes)
     {
         reply->ignoreSslErrors();
@@ -96,7 +113,7 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
         QDomElement release = doc.documentElement().firstChildElement();
         while (!release.isNull())
         {
-            if (release.attribute("Platform") == ApplicationInfo::platformCode())
+            if (release.attribute("Platform") == qiApp->platformCode())
             {
                 QDomElement releaseChild = release.firstChildElement();
                 while (!releaseChild.isNull())
@@ -141,12 +158,12 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
         }
         else
         {
-            this->setError(tr("Your version of Silverlock appears to be newer than the latest available version. Please contact <a href=\"http://www.petroules.com/\">Petroules</a> for further assistance."));
+            this->setError(tr("Your version of %1 appears to be newer than the latest available version. Please contact <a href=\"http://www.petroules.com/\">Petroules</a> for further assistance.").arg(qiApp->applicationName()));
         }
     }
     else
     {
-        QString error = tr("Unable to determine the latest version of Silverlock.");
+        QString error = tr("Unable to determine the latest version of %1.").arg(qiApp->applicationName());
         if (!reply->errorString().isEmpty())
         {
             error += " " + reply->errorString();
@@ -158,7 +175,7 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
 
 void UpdateDialog::checkError(QNetworkReply::NetworkError error)
 {
-    this->setError(QString(tr("A network error was encountered when attempting to determine the latest version of Silverlock. The error returned was: %1")).arg(error));
+    this->setError(tr("A network error was encountered when attempting to determine the latest version of %1. The error returned was: %2").arg(qiApp->applicationName(), error));
 }
 
 void UpdateDialog::setError(const QString &error)
@@ -167,13 +184,13 @@ void UpdateDialog::setError(const QString &error)
     this->show();
 
     this->ui->stackedWidget->setCurrentWidget(this->ui->errorPage);
-    this->ui->errorLabel->setText(QString(tr("An error occurred during the update process:\n\n%1")).arg(error));
+    this->ui->errorLabel->setText(tr("An error occurred during the update process:\n\n%1").arg(error));
 }
 
 void UpdateDialog::setAlreadyLatest(const QVersion &version)
 {
     this->ui->stackedWidget->setCurrentWidget(this->ui->alreadyLatestPage);
-    this->ui->updateCheckCompletedLabel->setText(QString(tr("Congratulations, you are running the latest version of Silverlock (<b>%1</b>)! There is no need to update.")).arg(version.toString()));
+    this->ui->updateCheckCompletedLabel->setText(tr("Congratulations, you are running the latest version of %1 (<b>%2</b>)! There is no need to update.").arg(qiApp->applicationName(), version.toString()));
 }
 
 void UpdateDialog::setUpdateAvailable(const QVersion &newVersion, const QVersion &currentVersion)
@@ -182,7 +199,7 @@ void UpdateDialog::setUpdateAvailable(const QVersion &newVersion, const QVersion
     this->show();
 
     this->ui->stackedWidget->setCurrentWidget(this->ui->updateAvailablePage);
-    this->ui->updateAvailableLabel->setText(QString(tr("An update to version <b>%1</b> is available! You are running version <b>%2</b>. It is strongly recommended that you upgrade now. Continue?")).arg(newVersion.toString()).arg(currentVersion.toString()));
+    this->ui->updateAvailableLabel->setText(tr("An update to version <b>%1</b> is available! You are running version <b>%2</b>. It is strongly recommended that you upgrade now. Continue?").arg(newVersion.toString(), currentVersion.toString()));
 }
 
 void UpdateDialog::acceptUpgrade()
@@ -218,7 +235,7 @@ void UpdateDialog::acceptUpgrade()
 
 void UpdateDialog::downloadProgress(qint64 received, qint64 total)
 {
-    this->ui->downloadingLabel->setText(QString(tr("Downloading Silverlock version <b>%1</b> from %2")).arg(this->m_newVersion.toString()).arg(this->m_downloadUrl.toString()));
+    this->ui->downloadingLabel->setText(tr("Downloading %1 version <b>%2</b> from %3").arg(qiApp->applicationName(), this->m_newVersion.toString(), this->m_downloadUrl.toString()));
 
     this->ui->progressBar->setTextVisible(true);
     this->ui->progressBar->setValue(received);
@@ -274,13 +291,11 @@ void UpdateDialog::on_cancelCheckingPushButton_clicked()
         this->m_network = NULL;
     }
 
-    this->setEnabled(false);
     this->reject();
 }
 
 void UpdateDialog::on_alreadyLatestPushButton_clicked()
 {
-    this->setEnabled(false);
     this->reject();
 }
 
@@ -291,7 +306,6 @@ void UpdateDialog::on_acceptUpgradePushButton_clicked()
 
 void UpdateDialog::on_rejectUpgradePushButton_clicked()
 {
-    this->setEnabled(false);
     this->reject();
 }
 
@@ -303,7 +317,6 @@ void UpdateDialog::on_cancelDownloadPushButton_clicked()
         this->m_download = NULL;
     }
 
-    this->setEnabled(false);
     this->reject();
 }
 
@@ -311,29 +324,28 @@ void UpdateDialog::on_installPushButton_clicked()
 {
     QApplication::closeAllWindows();
 	
-	QString nativeFilePath = QDir::toNativeSeparators(this->m_file);
+    QString nativeFilePath = QDir::toNativeSeparators(this->m_file);
 
     QProcess process;
 #ifdef Q_WS_WIN
-	QStringList args;
-	args << "/i";
-	args << nativeFilePath;
+    QStringList args;
+    args << "/i";
+    args << nativeFilePath;
     if (!process.startDetached("msiexec", QStringList(args)))
 #elif defined(Q_WS_MAC)
     if (!process.startDetached("open", QStringList(nativeFilePath)))
 #elif defined(Q_OS_LINUX)
     if (!process.startDetached("xdg-open", QStringList(nativeFilePath)))
 #else
-	#error "Implement automatic updater for this platform!"
+#error "Implement automatic updater for this platform!"
 #endif
     {
-        QMessageBox::critical(this, tr("Error"), QString(tr("Failed to start the installer process. The error returned was: %1")).arg(process.errorString()));
+        NativeDialogs::critical(this, tr("Error"), QString(tr("Failed to start the installer process. The error returned was: %1")).arg(process.errorString()));
         this->reject();
     }
 }
 
 void UpdateDialog::on_acknowledgeErrorPushButton_clicked()
 {
-    this->setEnabled(false);
     this->reject();
 }

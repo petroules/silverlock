@@ -13,7 +13,7 @@
 
     \param parent The parent widget of the dialog.
  */
-DatabaseAuthenticationDialog::DatabaseAuthenticationDialog(QWidget *parent) :
+DatabaseAuthenticationDialog::DatabaseAuthenticationDialog(const QString &fileName, QWidget *parent) :
     GuardedDialog(parent),
     ui(new Ui::DatabaseAuthenticationDialog)
 {
@@ -21,6 +21,13 @@ DatabaseAuthenticationDialog::DatabaseAuthenticationDialog(QWidget *parent) :
 
     // Hide the password by default
     this->ui->revealToolButton->setChecked(true);
+
+    // Set the information message
+    QFileInfo file(fileName);
+    if (file.exists())
+    {
+        this->ui->encryptedMessageLabel->setText(this->ui->encryptedMessageLabel->text().arg(file.fileName()));
+    }
 }
 
 /*!

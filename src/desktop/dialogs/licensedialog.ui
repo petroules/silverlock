@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>LicenseDialog</class>
  <widget class="QDialog" name="LicenseDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -38,8 +41,8 @@ Herein are the licenses for Silverlock and each of the projects it is linked wit
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>622</width>
-        <height>359</height>
+        <width>616</width>
+        <height>292</height>
        </rect>
       </property>
       <attribute name="label">
@@ -78,8 +81,8 @@ Contact: Petroules Corporation (&lt;a href=&quot;mailto:support@petroules.com&qu
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>310</width>
-        <height>134</height>
+        <width>410</width>
+        <height>158</height>
        </rect>
       </property>
       <attribute name="label">
@@ -118,8 +121,8 @@ Contact: Petroules Corporation (&lt;a href=&quot;mailto:support@petroules.com&qu
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>319</width>
-        <height>274</height>
+        <width>428</width>
+        <height>298</height>
        </rect>
       </property>
       <attribute name="label">
@@ -168,8 +171,8 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>403</width>
-        <height>134</height>
+        <width>552</width>
+        <height>158</height>
        </rect>
       </property>
       <attribute name="label">
@@ -208,8 +211,8 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>154</width>
-        <height>495</height>
+        <width>205</width>
+        <height>570</height>
        </rect>
       </property>
       <attribute name="label">
@@ -253,8 +256,8 @@ Contact: Nokia Corporation (&lt;a href=&quot;mailto:qt-info@nokia.com&quot;&gt;q
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>622</width>
-        <height>359</height>
+        <width>121</width>
+        <height>292</height>
        </rect>
       </property>
       <attribute name="label">

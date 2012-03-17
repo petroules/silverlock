@@ -1,4 +1,5 @@
 #include "guardeddialog.h"
+#include <synteza.h>
 
 /*!
     \class GuardedDialog
@@ -13,8 +14,8 @@
 
     \param parent The parent widget of the dialog.
  */
-GuardedDialog::GuardedDialog(QWidget *parent) :
-    QDialog(parent)
+GuardedDialog::GuardedDialog(QWidget *parent, Qt::WindowFlags f) :
+    QDialog(parent, f)
 {
 }
 
@@ -39,7 +40,7 @@ void GuardedDialog::accept()
 
     if (errors.count() > 0)
     {
-        QMessageBox::critical(this, tr("Error"), errors.join("\n\n"));
+        NativeDialogs::critical(this, tr("Error"), errors.join("\n\n"));
         return;
     }
 
@@ -48,8 +49,8 @@ void GuardedDialog::accept()
         // Ensures the user is appropriately questioned
         warnings.append(tr("Are you sure you wish to continue anyways?"));
 
-        if (QMessageBox::warning(this, tr("Warning"), warnings.join("\n\n"),
-            QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
+        if (NativeDialogs::warning(this, tr("Warning"), warnings.join("\n\n"), QString(),
+            QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
         {
             return;
         }
@@ -57,7 +58,7 @@ void GuardedDialog::accept()
 
     if (information.count() > 0)
     {
-        QMessageBox::information(this, tr("Information"), information.join("\n\n"));
+        NativeDialogs::information(this, tr("Information"), information.join("\n\n"));
     }
 
     this->save();

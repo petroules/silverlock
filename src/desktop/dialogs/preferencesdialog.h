@@ -29,7 +29,6 @@ private:
     void restoreDefaults();
 
     Ui::PreferencesDialog *ui;
-    SilverlockPreferences *m_preferences;
 
 private slots:
     void on_removeAssocPushButton_clicked();

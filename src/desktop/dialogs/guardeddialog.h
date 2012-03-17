@@ -8,7 +8,7 @@ class GuardedDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit GuardedDialog(QWidget *parent = NULL);
+    explicit GuardedDialog(QWidget *parent = NULL, Qt::WindowFlags f = 0);
     virtual ~GuardedDialog();
 
 protected:

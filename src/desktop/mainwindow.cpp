@@ -1,21 +1,25 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <silverlocklib.h>
-#include <liel.h>
-#include "aboutdialog.h"
-#include "entryeditdialog.h"
-#include "groupeditdialog.h"
-#include "preferencesdialog.h"
-#include "searchdatabasedialog.h"
-#include "selectgroupdialog.h"
+#include <synteza.h>
+#include "silverlockapplication.h"
 #include "silverlockpreferences.h"
-#include "configurecolumnsdialog.h"
-#include "databaseauthenticationdialog.h"
-#include "updatedialog.h"
-#include "inactivityeventfilter.h"
-#include "databaseprintdialog.h"
-#include "newdatabasewizard.h"
-#include <qtsingleapplication.h>
+#include "dialogs/aboutdialog.h"
+#include "dialogs/configurecolumnsdialog.h"
+#include "dialogs/databaseauthenticationdialog.h"
+#include "dialogs/databaseprintpreviewdialog.h"
+#include "dialogs/entryeditdialog.h"
+#include "dialogs/groupeditdialog.h"
+#include "dialogs/newdatabasewizard.h"
+#include "dialogs/preferencesdialog.h"
+#include "dialogs/searchdatabasedialog.h"
+#include "dialogs/selectgroupdialog.h"
+#include "dialogs/updatedialog.h"
+#include "widgets/expandingspacerwidget.h"
+#include "widgets/toolbarsearchwidget.h"
+#ifdef Q_WS_MAC
+#include "mac/mactoolbarsearchwidget.h"
+#endif
 
 /*!
     \class MainWindow
@@ -29,9 +33,9 @@
     \param filter The event filter used to detect user idle.
     \param parent The parent widget of the dialog.
  */
-MainWindow::MainWindow(InactivityEventFilter *filter, QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow), m_nodeCountStatusLabel(NULL), m_searchBox(NULL), m_searchButton(NULL),
+    ui(new Ui::MainWindow), m_nodeCountStatusLabel(NULL), m_toolbarSearch(NULL),
     m_lockIdleTimerValue(0), m_exitIdleTimerValue(0), widgetsAndToolbarsAction(NULL)
 {
     this->ui->setupUi(this);
@@ -44,7 +48,7 @@ MainWindow::MainWindow(InactivityEventFilter *filter, QWidget *parent) :
     this->setupMenuIcons();
     SilverlockPreferences::instance().restoreWindowSettings(this);
 
-    QObject::connect(this->m_filter = filter, SIGNAL(resetIdleTimer(QObject*)), SLOT(resetIdleTimer(QObject*)));
+    QObject::connect(qApp, SIGNAL(resetIdleTimer(QObject*)), SLOT(resetIdleTimer(QObject*)));
 }
 
 /*!
@@ -80,10 +84,19 @@ MainWindow::~MainWindow()
     }
 }
 
+GroupBrowserWidget* MainWindow::groupBrowser() const
+{
+    return this->ui->groupBrowser;
+}
+
+EntryTableWidget* MainWindow::entryTable() const
+{
+    return this->ui->entryTable;
+}
+
 void MainWindow::updateSingleInstance(MainWindow *mw)
 {
-    QCoreApplication *app = QCoreApplication::instance();
-    QtSingleApplication *singleApp = qobject_cast<QtSingleApplication*>(app);
+    IntegratedApplication *singleApp = qiApp;
     if (singleApp)
     {
         // Remove any previous messageReceived signal handler and reconnect it to the specified MainWindow
@@ -110,13 +123,17 @@ void MainWindow::changeEvent(QEvent* e)
             break;
         case QEvent::WindowStateChange:
             {
+                // The window was minimized...
                 if (this->windowState() & Qt::WindowMinimized)
                 {
+                    // If the user selected 'lock when minimizing' in preferences, lock the workspace
                     if (SilverlockPreferences::instance().lockWhenMinimizing())
                     {
                         this->lockWorkspace();
                     }
 
+                    // If the user selected 'minimize to tray' in preferences, hide the window entirely
+                    // It can be reactivated by clicking the tray icon
                     if (SilverlockPreferences::instance().minimizeToTray())
                     {
                         QTimer::singleShot(250, this, SLOT(hide()));
@@ -124,6 +141,14 @@ void MainWindow::changeEvent(QEvent* e)
                 }
 
                 break;
+            }
+        case QEvent::Resize:
+            {
+                // Update geometry of select subwidgets
+                if (this->ui->standardToolBar)
+                {
+                    this->ui->standardToolBar->updateGeometry();
+                }
             }
         default:
             break;
@@ -148,6 +173,27 @@ void MainWindow::closeEvent(QCloseEvent *event)
         SilverlockPreferences::instance().saveWindowSettings(this);
 
         event->accept();
+    }
+    else
+    {
+        event->ignore();
+    }
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->setAccepted(SilverlockApplication::isDesktopFileManagerDrop(event->mimeData()));
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    QStringList files;
+
+    if (SilverlockApplication::isDesktopFileManagerDrop(event->mimeData(), &files))
+    {
+        event->accept();
+        qsApp->addQueuedFiles(files);
+        QTimer::singleShot(50, qsApp, SLOT(openQueuedFiles()));
     }
     else
     {
@@ -201,17 +247,19 @@ void MainWindow::setupSignals()
  */
 void MainWindow::setupUiAdditional()
 {
-    // Add the toolbar search box and button and connect their slots appropriately
-    this->ui->standardToolBar->addWidget(this->m_searchBox = new QLineEdit(this));
-    this->m_searchBox->setSizePolicy(QSizePolicy::Preferred, this->m_searchBox->sizePolicy().verticalPolicy());
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
-    this->m_searchBox->setPlaceholderText(tr("Enter search terms"));
+    // Add spacer and search widget to toolbar
+    this->ui->standardToolBar->addWidget(new ExpandingSpacerWidget());
+    this->ui->standardToolBar->addWidget(this->m_toolbarSearch =
+#ifdef Q_WS_MAC
+        new MacToolbarSearchWidget()
+#else
+        new ToolbarSearchWidget()
 #endif
-    this->ui->standardToolBar->addWidget(this->m_searchButton = new QPushButton(tr("Search"), this));
-    this->m_searchButton->setSizePolicy(QSizePolicy::Preferred, this->m_searchButton->sizePolicy().verticalPolicy());
-    QObject::connect(this->m_searchBox, SIGNAL(returnPressed()), this->m_searchButton, SLOT(click()));
-    QObject::connect(this->m_searchButton, SIGNAL(clicked()), SLOT(toolbarSearch()));
+    );
 
+    QObject::connect(this->m_toolbarSearch, SIGNAL(searchRequested(QString)), SLOT(toolbarSearch(QString)));
+
+    // Create the system tray icon
     QSystemTrayIcon *icon = new QSystemTrayIcon(this);
     icon->setIcon(this->windowIcon());
     icon->setToolTip(this->windowTitle());
@@ -227,7 +275,6 @@ void MainWindow::setupUiAdditional()
     this->m_idleTimer->start(1000);
 
     this->setAttribute(Qt::WA_DeleteOnClose);
-    this->setUnifiedTitleAndToolBarOnMac(true);
 
     this->statusBar()->showMessage(tr("Ready"));
     this->statusBar()->addPermanentWidget(this->m_nodeCountStatusLabel = new QLabel(this));
@@ -336,7 +383,7 @@ void MainWindow::handleMessage(const QString &message)
     // If there was a message, we need to load a file..
     if (!message.isEmpty())
     {
-        this->loadFileInWindow(message);
+        qsApp->openFile(message);
     }
     else
     {
@@ -346,7 +393,7 @@ void MainWindow::handleMessage(const QString &message)
             QStringList list = SilverlockPreferences::instance().recentFileList();
             if (list.count() > 0)
             {
-                this->loadFileInWindow(list.first());
+                qsApp->openFile(list.first());
             }
         }
     }
@@ -385,663 +432,52 @@ void MainWindow::resetIdleTimer(QObject *object)
     this->m_exitIdleTimerValue = 0;
 }
 
-void MainWindow::on_actionNew_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        MainWindow *other = new MainWindow(this->m_filter);
-        other->move(this->x() + 40, this->y() + 40);
-        other->show();
-    }
-    else
-    {
-        NewDatabaseWizard wizard(this);
-        if (wizard.exec() == QDialog::Accepted)
-        {
-            this->m_documentState.load(wizard.database());
-            this->ui->groupBrowser->populate(wizard.database());
-            this->setCurrentFile(QString());
-
-            // Call this here so the user doesn't accidentally close
-            // the window without saving their new database
-            this->databaseWasModified();
-        }
-    }
-}
-
-void MainWindow::on_actionOpen_triggered()
-{
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open"), QString(), tr("Silverlock databases (*.sdbx)"));
-    if (!fileName.isEmpty())
-    {
-        this->loadFileInWindow(fileName);
-    }
-}
-
-void MainWindow::on_actionClose_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        this->closeFile();
-    }
-}
-
-bool MainWindow::save()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        // If the open document doesn't have a file name set, prompt for one
-        if (this->m_documentState.isUntitled())
-        {
-            return this->saveAs();
-        }
-        else
-        {
-            // Otherwise go ahead and save the file
-            return this->saveFile(this->m_documentState.currentFile());
-        }
-    }
-
-    return true;
-}
-
-bool MainWindow::saveAs()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        // Prompt the user for a file name, and if it was empty, bail out
-        QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"),
-            this->m_documentState.currentFile(), tr("Silverlock databases (*.sdbx);;XML documents (*.xml)"));
-        if (fileName.isEmpty())
-        {
-            return false;
-        }
-
-        // Check if the user is using encryption...
-        bool encrypt = !fileName.endsWith(".xml", Qt::CaseInsensitive);
-        if (!encrypt)
-        {
-            if (QMessageBox::warning(this, tr("Warning"), tr("<p><b>It is recommended that only advanced users select this option.</b></p><p>If you save the database in XML format, the contents will not be encrypted and any user with access to the file will be able to view the information in your database. It is strongly recommended that you save your files in Silverlock's SDBX format instead.</p><p>Are you sure you want save in the XML format?</p>"),
-                QMessageBox::Yes, QMessageBox::No) == QMessageBox::No)
-            {
-                return false;
-            }
-        }
-
-        // Otherwise save the file normally
-        return this->saveFile(fileName, encrypt);
-    }
-
-    return true;
-}
-
-void MainWindow::on_actionChangeDatabasePassword_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-        if (db)
-        {
-            QDialog *dialog = new GroupEditDialog(db, this);
-            if (dialog->exec() == QDialog::Accepted)
-            {
-                this->ui->groupBrowser->populate(db);
-                this->populateEntryTable(NULL);
-            }
-
-            delete dialog;
-        }
-    }
-}
-
-void MainWindow::on_actionPrint_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        DatabasePrintDialog dialog(this->m_documentState.database(), this);
-        dialog.print();
-    }
-}
-
-void MainWindow::on_actionPrintPreview_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        DatabasePrintDialog dialog(this->m_documentState.database(), this);
-        dialog.exec();
-    }
-}
-
 void MainWindow::openRecentFile()
 {
     QAction *action = qobject_cast<QAction*>(sender());
     if (action)
     {
-        this->loadFileInWindow(action->data().toString());
+        qsApp->openFile(action->data().toString());
     }
 }
 
-void MainWindow::lockWorkspace()
+void MainWindow::showPrintDialog(const DatabasePrinterFields &fields)
 {
-    if (this->m_documentState.hasDocument() && !this->m_documentState.isLocked() && this->maybeSave())
+#ifndef QT_NO_PRINTER
+    if (!this->m_documentState.hasDocument())
     {
-        this->m_documentState.lock();
-        this->lockWorkspace(true);
+        return;
     }
+
+    DatabasePrinter databasePrinter(this->m_documentState.database());
+    QTextDocument *document = databasePrinter.toTextDocument(fields);
+
+    QPrinter printer;
+    NativePrintDialog dialog(&printer, this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        document->print(&printer);
+    }
+
+    delete document;
+#else
+    NativeDialogs::critical(this, tr("No print support"), tr("This computer or device does not support printing."));
+#endif
 }
 
-void MainWindow::unlockWorkspace()
-{
-    if (this->m_documentState.hasDocument() && this->m_documentState.isLocked())
-    {
-        this->lockWorkspace(false);
-        this->m_documentState.unlock();
-    }
-}
-
-void MainWindow::lockWorkspace(bool lock)
-{
-    // May contain sensitive terms
-    this->m_searchBox->setEchoMode(lock ? QLineEdit::NoEcho : QLineEdit::Normal);
-    this->ui->mainPage->setEnabled(!lock);
-    this->ui->unlockPage->setEnabled(lock);
-    this->m_nodeCountStatusLabel->setVisible(!lock);
-    this->ui->stackedWidget->setCurrentWidget(lock ? this->ui->unlockPage : this->ui->mainPage);
-
-    this->ui->groupBrowser->setVisible(!lock);
-    this->ui->infoView->setVisible(!lock);
-
-    this->ui->groupsDockWidget->setVisible(!lock);
-    this->ui->infoDockWidget->setVisible(!lock);
-
-    if (lock)
-    {
-        // Focus to the enter password line edit
-        this->ui->unlockWorkspacePasswordLineEdit->setFocus();
-        this->ui->unlockWorkspacePasswordLineEdit->setEchoMode(QLineEdit::Password);
-        this->ui->unlockWorkspaceRevealToolButton->setChecked(true);
-
-        if (SilverlockPreferences::instance().minimizeAfterLock())
-        {
-            this->setWindowState(Qt::WindowMinimized);
-        }
-    }
-}
-
-void MainWindow::toolbarSearch()
+void MainWindow::toolbarSearch(QString terms)
 {
     SearchParameters params;
-    params.searchPattern = this->m_searchBox->text();
-    this->m_searchBox->clear();
+    params.searchPattern = terms;
     if (!params.searchPattern.isEmpty() && this->m_documentState.hasDocument())
     {
         QList<Entry*> entries = this->m_documentState.database()->findEntries(params);
         this->populateWithSearchResults(entries, params.searchPattern);
     }
-    else
+    else if (this->m_documentState.hasDocument())
     {
-        QMessageBox::critical(this, tr("Error"), tr("You have not entered a search pattern."));
+        this->populateEntryTable(NULL);
     }
-}
-
-void MainWindow::on_actionExit_triggered()
-{
-    QApplication::closeAllWindows();
-}
-
-void MainWindow::on_actionCopyFieldValue_triggered()
-{
-    if (this->ui->entryTable->hasFocus())
-    {
-        // Make sure setting the clipboard here doesn't immediately stop our timer
-        QObject::disconnect(QApplication::clipboard(), SIGNAL(dataChanged()), this->m_clearClipboardTimer, SLOT(stop()));
-
-        QApplication::clipboard()->setText(this->ui->entryTable->selectedFieldText());
-        if (SilverlockPreferences::instance().autoClearClipboardEnabled())
-        {
-            // We connect this slot so that if the user copies something ELSE
-            // while the timer is running, do NOT clear that new data
-            QObject::connect(QApplication::clipboard(), SIGNAL(dataChanged()), this->m_clearClipboardTimer, SLOT(stop()));
-
-            this->m_clearClipboardTimer->start(SilverlockPreferences::instance().autoClearClipboard() * 1000);
-        }
-
-        if (SilverlockPreferences::instance().minimizeAfterClipboard())
-        {
-            this->setWindowState(Qt::WindowMinimized);
-        }
-    }
-}
-
-void MainWindow::clearClipboard()
-{
-    QApplication::clipboard()->clear();
-    this->m_clearClipboardTimer->stop();
-}
-
-void MainWindow::on_actionDefaultBrowser_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        QList<QUuid> uuids = this->ui->entryTable->selectedUuids();
-        if (uuids.count() == 1)
-        {
-            Entry *entry = db->findEntry(uuids.first());
-            if (entry)
-            {
-                QDesktopServices::openUrl(entry->url());
-            }
-        }
-    }
-}
-
-void MainWindow::on_actionInternetExplorer_triggered()
-{
-#ifdef Q_WS_WIN
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        QList<QUuid> uuids = this->ui->entryTable->selectedUuids();
-        if (uuids.count() == 1)
-        {
-            Entry *entry = db->findEntry(uuids.first());
-            if (entry)
-            {
-                QProcess process;
-                QStringList args;
-                args << entry->url().toString();
-                process.startDetached(QString("C:/Program Files/Internet Explorer/iexplore.exe"), args);
-            }
-        }
-    }
-#endif
-}
-
-
-void MainWindow::on_actionMoveEntries_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        QList<QUuid> uuids = this->ui->entryTable->selectedUuids();
-        if (uuids.count() > 0)
-        {
-            // All this makes sure all the entries have the same parent,
-            // and there's no reason they shouldn't, but we'll check anyways
-            Group *firstParent = NULL;
-            foreach (QUuid uuid, uuids)
-            {
-                Entry *entry = db->findEntry(uuid);
-                if (entry)
-                {
-                    if (!firstParent)
-                    {
-                        firstParent = entry->parentNode();
-                    }
-
-                    if (entry->parentNode() != firstParent)
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    return;
-                }
-            }
-
-            SelectGroupDialog dialog(this);
-            dialog.populate(db);
-            if (dialog.exec() == QDialog::Accepted)
-            {
-                Group *group = db->findGroup(dialog.selectedUuid(), true);
-                if (group && group != firstParent)
-                {
-                    foreach (QUuid uuid, uuids)
-                    {
-                        Entry *entry = db->findEntry(uuid);
-                        if (entry)
-                        {
-                            entry->setParentNode(group);
-                        }
-                    }
-
-                    this->populateEntryTable(firstParent);
-                }
-            }
-        }
-    }
-}
-
-void MainWindow::on_actionDuplicateEntries_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        QList<QUuid> uuids = this->ui->entryTable->selectedUuids();
-        foreach (QUuid uuid, uuids)
-        {
-            Entry *entry = db->findEntry(uuid);
-            if (entry)
-            {
-                Group *parent = entry->parentNode();
-                if (parent)
-                {
-                    Entry *copy = entry->createCopy();
-                    copy->setTitle(copy->title() + tr(" - Copy"));
-                    copy->setParentNode(parent);
-
-                    this->populateEntryTable(parent);
-                }
-            }
-        }
-    }
-}
-
-void MainWindow::on_actionEditEntry_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        QUuid uuid = this->ui->entryTable->selectedUuid();
-        if (!uuid.isNull())
-        {
-            Entry *entry = db->findEntry(uuid);
-            if (entry)
-            {
-                EntryEditDialog dialog(entry, this);
-                if (dialog.exec() == QDialog::Accepted)
-                {
-                    this->ui->groupBrowser->populate(db);
-                    this->populateEntryTable(entry->parentNode());
-                    this->populateInfoView(entry);
-                }
-            }
-        }
-    }
-}
-
-void MainWindow::on_actionDeleteEntries_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        int result = QMessageBox::warning(this, tr("Delete Entries"),
-            tr("Are you sure you want to delete the selected entries?"),
-            QMessageBox::Yes, QMessageBox::No);
-        if (result == QMessageBox::Yes)
-        {
-            Group *parent = NULL;
-
-            QList<QUuid> uuids = this->ui->entryTable->selectedUuids();
-            foreach (QUuid uuid, uuids)
-            {
-                Entry* entry = db->findEntry(uuid);
-                if (entry)
-                {
-                    parent = entry->parentNode();
-                    delete entry;
-                }
-            }
-
-            this->populateEntryTable(parent);
-        }
-    }
-}
-
-void MainWindow::on_actionAddSubgroup_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        QUuid uuid = this->ui->groupBrowser->selectedUuid();
-        if (!uuid.isNull())
-        {
-            Group *group = db->findGroup(uuid, true);
-            if (group)
-            {
-                Group *newGroup = new Group();
-
-                GroupEditDialog dialog(newGroup, this);
-                if (dialog.exec() == QDialog::Accepted)
-                {
-                    newGroup->setParentNode(group);
-
-                    this->ui->groupBrowser->populate(db);
-                    this->populateEntryTable(group);
-                }
-                else
-                {
-                    delete newGroup;
-                }
-            }
-        }
-    }
-}
-
-void MainWindow::on_actionAddEntry_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        QUuid uuid = this->ui->groupBrowser->selectedUuid();
-        if (!uuid.isNull())
-        {
-            Group *group = db->findGroup(uuid, true);
-            if (group)
-            {
-                Entry *newEntry = new Entry();
-
-                EntryEditDialog dialog(newEntry, this);
-                if (dialog.exec() == QDialog::Accepted)
-                {
-                    newEntry->setParentNode(group);
-
-                    this->ui->groupBrowser->populate(db);
-                    this->populateEntryTable(group);
-                }
-                else
-                {
-                    delete newEntry;
-                }
-            }
-        }
-    }
-}
-
-void MainWindow::on_actionMoveGroup_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        QList<QUuid> uuids = this->ui->groupBrowser->selectedUuids();
-        if (uuids.count() == 1)
-        {
-            Group *sourceGroup = db->findGroup(uuids.first());
-            if (sourceGroup)
-            {
-                SelectGroupDialog dialog(this);
-                dialog.populate(db);
-                if (dialog.exec() == QDialog::Accepted)
-                {
-                    if (sourceGroup->findGroup(dialog.selectedUuid(), true))
-                    {
-                        QMessageBox::critical(this, tr("Error"), tr("A group cannot be moved to itself or one of its subgroups."));
-                    }
-                    else
-                    {
-                        Group *targetGroup = db->findGroup(dialog.selectedUuid(), true);
-                        if (targetGroup)
-                        {
-                            if (sourceGroup->parentNode() == targetGroup)
-                            {
-                                QMessageBox::critical(this, tr("Error"), tr("The source and destination group are the same."));
-                            }
-                            else
-                            {
-                                sourceGroup->setParentNode(targetGroup);
-                                this->ui->groupBrowser->populate(db);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-void MainWindow::on_actionEditGroup_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        QUuid uuid = this->ui->groupBrowser->selectedUuid();
-        if (!uuid.isNull())
-        {
-            Group *group = db->findGroup(uuid, true);
-            if (group)
-            {
-                QDialog *dialog = new GroupEditDialog(group, this);
-                if (dialog->exec() == QDialog::Accepted)
-                {
-                    this->ui->groupBrowser->populate(db);
-                    this->populateEntryTable(group);
-                }
-
-                delete dialog;
-            }
-        }
-    }
-}
-
-void MainWindow::on_actionDeleteGroups_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        int result = QMessageBox::warning(this, tr("Delete Groups"),
-            tr("Are you sure you want to delete the selected groups?"),
-            QMessageBox::Yes, QMessageBox::No);
-        if (result == QMessageBox::Yes)
-        {
-            QList<QUuid> uuids = this->ui->groupBrowser->selectedUuids();
-            foreach (QUuid uuid, uuids)
-            {
-                Group* group = db->findGroup(uuid);
-                if (group)
-                {
-                    delete group;
-                }
-            }
-
-            this->ui->groupBrowser->populate(db);
-        }
-    }
-}
-
-void MainWindow::on_actionFind_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        SearchDatabaseDialog dialog(this->m_documentState.database(), this);
-        if (dialog.exec() == QDialog::Accepted)
-        {
-            this->populateWithSearchResults(dialog.entriesFound(), dialog.searchParameters()->searchPattern);
-        }
-    }
-}
-
-void MainWindow::on_actionFindInGroup_triggered()
-{
-    if (this->m_documentState.hasDocument())
-    {
-        Group *group = this->m_documentState.database()->findGroup(this->ui->groupBrowser->selectedUuid(), true);
-
-        SearchDatabaseDialog dialog(group, this);
-        if (dialog.exec() == QDialog::Accepted)
-        {
-            this->populateWithSearchResults(dialog.entriesFound(), dialog.searchParameters()->searchPattern);
-        }
-    }
-}
-
-void MainWindow::on_actionAlwaysOnTop_triggered(bool checked)
-{
-    WindowManager::setTopMost(this, checked);
-}
-
-void MainWindow::on_actionCenterToScreen_triggered()
-{
-    WindowManager::centerMainWindow(this);
-}
-
-void MainWindow::on_actionConfigureColumns_triggered()
-{
-    ConfigureColumnsDialog dialog(this->ui->entryTable, this);
-    dialog.exec();
-}
-
-void MainWindow::on_actionFullScreen_triggered(bool checked)
-{
-    if (checked)
-    {
-        this->setUnifiedTitleAndToolBarOnMac(false);
-        this->showFullScreen();
-    }
-    else
-    {
-        this->showNormal();
-        this->setUnifiedTitleAndToolBarOnMac(true);
-    }
-}
-
-void MainWindow::on_actionPreferences_triggered()
-{
-    PreferencesDialog preferences(this);
-    if (preferences.exec())
-    {
-        // Update recent file actions in case they were cleared
-        this->updateRecentFileActionsAll();
-    }
-}
-
-void MainWindow::on_actionHelpContents_triggered()
-{
-    QDesktopServices::openUrl(ApplicationInfo::url(ApplicationInfo::ApplicationHelp));
-}
-
-void MainWindow::on_actionWebsite_triggered()
-{
-    QDesktopServices::openUrl(ApplicationInfo::url(ApplicationInfo::ApplicationHomePage));
-}
-
-void MainWindow::on_actionDonate_triggered()
-{
-    QDesktopServices::openUrl(ApplicationInfo::url(ApplicationInfo::OrganizationDonations));
-}
-
-void MainWindow::on_actionCheckForUpdates_triggered()
-{
-    UpdateDialog dialog(this);
-    dialog.exec();
-}
-
-void MainWindow::on_actionAboutSilverlock_triggered()
-{
-    AboutDialog dialog(this);
-    dialog.exec();
 }
 
 /*!
@@ -1139,25 +575,6 @@ void MainWindow::on_entryTable_itemSelectionChanged()
     }
 }
 
-/*!
-    Determines whether the database node is in the current group browser selection.
- */
-bool MainWindow::isDatabaseSelected()
-{
-    bool isDatabaseSelected = false;
-    if (this->m_documentState.hasDocument())
-    {
-        Database *db = this->m_documentState.database();
-
-        foreach (QUuid uuid, this->ui->groupBrowser->selectedUuids())
-        {
-            isDatabaseSelected = dynamic_cast<Database*>(db->findGroup(uuid, true));
-        }
-    }
-
-    return isDatabaseSelected;
-}
-
 void MainWindow::updateMenus()
 {
     this->ui->actionAlwaysOnTop->setChecked(WindowManager::isTopMost(this));
@@ -1171,7 +588,7 @@ void MainWindow::updateMenus()
 void MainWindow::updateInterfaceState()
 {
     // A few variables to reduce verbosity
-    const bool isDatabaseSelected = this->isDatabaseSelected();
+    const bool isDatabaseSelected = this->groupBrowser()->isDatabaseSelected();
     const int groups = this->ui->groupBrowser->selectedUuids().count();
     const int entries = this->ui->entryTable->selectedUuids().count();
     const bool hasDocument = this->m_documentState.hasDocument();
@@ -1209,8 +626,7 @@ void MainWindow::updateInterfaceState()
 
     this->ui->actionConfigureColumns->setEnabled(!locked);
 
-    this->m_searchBox->setEnabled(hasDocument && !locked);
-    this->m_searchButton->setEnabled(hasDocument && !locked);
+    this->m_toolbarSearch->setEnabled(hasDocument && !locked);
 
     // Update the main widgets
     this->ui->groupBrowser->setEnabled(hasDocument && !locked);
@@ -1373,7 +789,7 @@ bool MainWindow::maybeSave()
     {
         if (SilverlockPreferences::instance().autoSaveOnClose() && !this->m_documentState.isUntitled())
         {
-            return this->save();
+            return this->saveFile();
         }
 
         QMessageBox::StandardButtons buttons = QMessageBox::Discard | QMessageBox::Cancel;
@@ -1386,11 +802,11 @@ bool MainWindow::maybeSave()
             buttons |= QMessageBox::Save;
         }
 
-        QMessageBox::StandardButton ret = QMessageBox::warning(this, tr("Save Changes"),
-            tr("The database has been modified.\nDo you want to save your changes?"), buttons);
+        QMessageBox::StandardButton ret = NativeDialogs::warning(this, tr("Save Changes"), tr("Do you want to save the changes you made in the database \"%1\"?").arg(this->m_documentState.currentFile()),
+            tr("Your changes will be lost if you don't save them."), buttons);
         if (ret == QMessageBox::Save)
         {
-            return this->save();
+            return this->saveFile();
         }
         else if (ret == QMessageBox::Cancel)
         {
@@ -1399,42 +815,6 @@ bool MainWindow::maybeSave()
     }
 
     return true;
-}
-
-void MainWindow::loadFileInWindow(const QString &fileName)
-{
-    // If this file is already open in another window, show that window
-    MainWindow *existing = this->findMainWindow(fileName);
-    if (existing)
-    {
-        existing->show();
-        existing->raise();
-        existing->activateWindow();
-        return;
-    }
-
-    // If this window does not have a file loaded and hasn't been modified,
-    // open the file in this window
-    if (!this->m_documentState.hasDocument())
-    {
-        this->loadFile(fileName);
-    }
-    else
-    {
-        // Otherwise create a new window to open it
-        MainWindow *other = new MainWindow(this->m_filter);
-        other->loadFile(fileName);
-
-        // If it didn't load successfully, bail out
-        if (!other->m_documentState.hasDocument())
-        {
-            delete other;
-            return;
-        }
-
-        other->move(this->x() + 40, this->y() + 40);
-        other->show();
-    }
 }
 
 /*!
@@ -1449,11 +829,11 @@ void MainWindow::loadFile(const QString &fileName)
         QFile file(fileName);
         if (!file.open(QIODevice::ReadOnly))
         {
-            QMessageBox::critical(this, tr("Error"), tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
+            NativeDialogs::critical(this, tr("Error"), tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
             return;
         }
 
-        DatabaseAuthenticationDialog dialog(this);
+        DatabaseAuthenticationDialog dialog(file.fileName(), this);
         if (dialog.exec() == QDialog::Accepted)
         {
             QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1472,7 +852,7 @@ void MainWindow::loadFile(const QString &fileName)
             else
             {
                 QApplication::restoreOverrideCursor();
-                QMessageBox::critical(this, tr("Error"), reader.errorString());
+                NativeDialogs::critical(this, tr("Error"), reader.errorString());
             }
         }
     }
@@ -1491,7 +871,7 @@ bool MainWindow::saveFile(const QString &fileName, bool encrypt)
         QFile file(fileName);
         if (!file.open(QIODevice::WriteOnly))
         {
-            QMessageBox::critical(this, tr("Error"), tr("Cannot write file %1:\n%2").arg(fileName).arg(file.errorString()));
+            NativeDialogs::critical(this, tr("Error"), tr("Cannot write file %1:\n%2").arg(fileName).arg(file.errorString()));
             return false;
         }
 
@@ -1516,14 +896,14 @@ bool MainWindow::saveFile(const QString &fileName, bool encrypt)
         {
             // Otherwise show a failure message
             QApplication::restoreOverrideCursor();
-            QMessageBox::critical(this, tr("Error"), tr("Cannot write file %1").arg(fileName));
+            NativeDialogs::critical(this, tr("Error"), tr("Cannot write file %1").arg(fileName));
         }
     }
 
     return false;
 }
 
-QString MainWindow::closeFile()
+QString MainWindow::closeFileInternal()
 {
     if (this->m_documentState.hasDocument())
     {
@@ -1631,34 +1011,6 @@ QString MainWindow::strippedName(const QString &fullFileName)
     return QFileInfo(fullFileName).fileName();
 }
 
-/*!
-    Finds the window which has the file with the specified file name open.
-    Returns NULL if the file is not opened by any window.
-
-    \param fileName The name of the file to find the open window of.
- */
-MainWindow* MainWindow::findMainWindow(const QString &fileName)
-{
-    QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
-
-    // This could happen if the file didn't exist - otherwise we could get a false positive!
-    if (canonicalFilePath.isEmpty())
-    {
-        return NULL;
-    }
-
-    foreach (QWidget *widget, qApp->topLevelWidgets())
-    {
-        MainWindow *mainWin = qobject_cast<MainWindow*>(widget);
-        if (mainWin && mainWin->m_documentState.currentFile() == canonicalFilePath)
-        {
-            return mainWin;
-        }
-    }
-
-    return NULL;
-}
-
 void MainWindow::on_unlockWorkspacePushButton_clicked()
 {
     if (this->m_documentState.hasDocument())
@@ -1671,7 +1023,7 @@ void MainWindow::on_unlockWorkspacePushButton_clicked()
         }
         else
         {
-            QMessageBox::critical(this, tr("Error"), tr("The password you entered is incorrect. Please verify that you have entered it correctly."));
+            NativeDialogs::critical(this, tr("Error"), tr("The password you entered is incorrect. Please verify that you have entered it correctly."));
         }
     }
 }

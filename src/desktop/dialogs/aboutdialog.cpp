@@ -2,7 +2,7 @@
 #include "ui_aboutdialog.h"
 #include "licensedialog.h"
 #include <databasecrypto.h>
-#include <liel.h>
+#include <synteza.h>
 
 /*!
     \class AboutDialog
@@ -22,16 +22,16 @@ AboutDialog::AboutDialog(QWidget *parent) :
     this->ui->setupUi(this);
 
     // Set window title to "About ApplicationName"
-    this->setWindowTitle(this->windowTitle().arg(QApplication::applicationName()));
+    this->setWindowTitle(this->windowTitle().arg(qiApp->applicationName()));
 
     // Set the application and organization names on the labels
     this->ui->labelApplication->setText(this->ui->labelApplication->text()
-        .arg(QApplication::applicationName())
-        .arg(QApplication::applicationVersion()));
+        .arg(qiApp->applicationName())
+        .arg(qiApp->applicationVersion()));
     this->ui->labelInfo->setText(this->ui->labelInfo->text()
-        .arg(ApplicationInfo::copyrightLink())
-        .arg(ApplicationInfo::trademarks())
-        .arg(QApplication::applicationName()));
+        .arg(qiApp->copyrightLink())
+        .arg(qiApp->trademarks())
+        .arg(qiApp->applicationName()));
 }
 
 /*!
@@ -76,7 +76,7 @@ void AboutDialog::displayBuildInformationDialog()
                                 "<ul>"
                                 "<li>Qt %4</li>"
                                 "<li>Qt Solutions %5</li>"
-                                "<li>LIEL %6</li>"
+                                "<li>Synteza %6</li>"
                                 "<li>Botan %7</li>"
                                 "</ul>"
                                 "<p>Running on %8 with a %9 processor.</p>")
@@ -85,10 +85,10 @@ void AboutDialog::displayBuildInformationDialog()
         .arg(PlatformInformation::compilerString())
         .arg(qVersion())
         .arg("2.6")
-        .arg(LIEL_VERSION_STR)
+        .arg(SYNTEZA_VERSION_STR)
         .arg(DatabaseCrypto::botanVersion())
         .arg(osString)
         .arg(PlatformInformation::byteOrder());
 
-    QMessageBox::information(this, "Build Information", buildInfo);
+    NativeDialogs::information(this, tr("Build Information"), buildInfo);
 }

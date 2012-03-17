@@ -7,6 +7,7 @@ NewDatabaseWizard::NewDatabaseWizard(QWidget *parent) :
     ui(new Ui::NewDatabaseWizard)
 {
     this->ui->setupUi(this);
+    this->setOptions(0);
     this->passwordChanged(QString());
 }
 

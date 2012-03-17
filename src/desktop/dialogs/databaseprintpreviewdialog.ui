@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DatabasePrintDialog</class>
- <widget class="QDialog" name="DatabasePrintDialog">
+ <class>DatabasePrintPreviewDialog</class>
+ <widget class="QDialog" name="DatabasePrintPreviewDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -210,7 +213,7 @@
   <connection>
    <sender>selectionLabel</sender>
    <signal>linkActivated(QString)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>selectionLinkActivated(QString)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -226,7 +229,7 @@
   <connection>
    <sender>titleCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -242,7 +245,7 @@
   <connection>
    <sender>urlCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -258,7 +261,7 @@
   <connection>
    <sender>usernameCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -274,7 +277,7 @@
   <connection>
    <sender>passwordCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -290,7 +293,7 @@
   <connection>
    <sender>notesCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -306,7 +309,7 @@
   <connection>
    <sender>recoveryInfoCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -322,7 +325,7 @@
   <connection>
    <sender>customFieldsCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -338,7 +341,7 @@
   <connection>
    <sender>uuidCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -354,7 +357,7 @@
   <connection>
    <sender>creationTimeCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -370,7 +373,7 @@
   <connection>
    <sender>accessTimeCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -386,7 +389,7 @@
   <connection>
    <sender>modificationTimeCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -402,7 +405,7 @@
   <connection>
    <sender>showActualCheckBox</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>updatePreview()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -418,7 +421,7 @@
   <connection>
    <sender>cancelPushButton</sender>
    <signal>clicked()</signal>
-   <receiver>DatabasePrintDialog</receiver>
+   <receiver>DatabasePrintPreviewDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -434,8 +437,8 @@
   <connection>
    <sender>printPushButton</sender>
    <signal>clicked()</signal>
-   <receiver>DatabasePrintDialog</receiver>
-   <slot>print()</slot>
+   <receiver>DatabasePrintPreviewDialog</receiver>
+   <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>866</x>
@@ -451,6 +454,5 @@
  <slots>
   <slot>selectionLinkActivated(QString)</slot>
   <slot>updatePreview()</slot>
-  <slot>print()</slot>
  </slots>
 </ui>

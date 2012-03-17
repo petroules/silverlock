@@ -1,6 +1,9 @@
 #include "silverlockpreferences.h"
 #include "silverlockpreferences_keys.h"
 #include "mainwindow.h"
+#ifdef Q_WS_MAC
+#include "mac/macloginitemsmanager.h"
+#endif
 
 SilverlockPreferences* SilverlockPreferences::m_instance = NULL;
 SilverlockPreferences* SilverlockPreferences::m_defaults = NULL;
@@ -155,6 +158,9 @@ void SilverlockPreferences::save()
 
     \note File associations will NOT be affected by this method; those settings can be adjusted by
     \a isFileAssociationSet and \a setFileAssociationActive.
+
+    \note Run at startup/login will NOT be affected by this method; that can be adjusted with the
+    \a setRunAtStartup method.
  */
 void SilverlockPreferences::restoreDefaults()
 {
@@ -169,7 +175,6 @@ void SilverlockPreferences::restoreDefaults()
     this->setMinimizeToTray(false);
     this->setMinimizeAfterClipboard(false);
     this->setMinimizeAfterLock(false);
-    this->setRunAtStartup(false);
     this->setOpenLastDatabase(false);
     this->setUpdateOnStartup(true);
     this->setAutoSaveOnClose(false);
@@ -306,7 +311,7 @@ void SilverlockPreferences::setMinimizeAfterLock(bool minimize)
  */
 bool SilverlockPreferences::runAtStartupSupported()
 {
-#ifdef Q_WS_WIN
+#if defined(Q_WS_WIN) || defined(Q_WS_MAC)
     return true;
 #elif defined(Q_OS_LINUX)
     return !SilverlockPreferences::startupFile().isEmpty();
@@ -320,7 +325,6 @@ bool SilverlockPreferences::runAtStartup() const
     if (!SilverlockPreferences::runAtStartupSupported())
     {
         qWarning() << "Run at startup is not supported on this platform and configuration.";
-        return false;
     }
 
 #ifdef Q_WS_WIN
@@ -329,8 +333,13 @@ bool SilverlockPreferences::runAtStartup() const
     // If we're running on Windows, set the check box if the registry contains the correct key set to the running application's path
     QSettings reg(KEY_WIN_STARTUP_PATH, QSettings::NativeFormat);
     return reg.contains(KEY_WIN_STARTUP_NAME) && reg.value(KEY_WIN_STARTUP_NAME).toString().compare(path, Qt::CaseInsensitive) == 0;
+#elif defined(Q_WS_MAC)    
+    MacLoginItemsManager manager;
+    return manager.containsRunningApplication();
 #elif defined(Q_OS_LINUX)
     return QFile::exists(SilverlockPreferences::startupFile());
+#else
+    return false;
 #endif
 }
 
@@ -352,6 +361,20 @@ void SilverlockPreferences::setRunAtStartup(bool run)
     else
     {
         settings.remove(KEY_WIN_STARTUP_NAME);
+    }
+#elif defined(Q_WS_MAC)
+    if (QFile::exists(SilverlockPreferences::macLoginItemsFile()))
+    {
+        MacLoginItemsManager manager;
+
+        if (run && !SilverlockPreferences::runAtStartup())
+        {
+            manager.appendRunningApplication();
+        }
+        else if (!run && SilverlockPreferences::runAtStartup())
+        {
+            manager.removeRunningApplication();
+        }
     }
 #elif defined(Q_OS_LINUX)
     switch (LinuxSystemInfo::desktopEnvironment())
@@ -517,7 +540,10 @@ void SilverlockPreferences::saveWindowSettings(MainWindow *mainWindow)
 void SilverlockPreferences::restoreWindowSettings(MainWindow *mainWindow)
 {
     // Turn this off for now since we might be restoring to fullscreen
-    mainWindow->setUnifiedTitleAndToolBarOnMac(false);
+    if (mainWindow->unifiedTitleAndToolBarOnMac())
+    {
+        mainWindow->setUnifiedTitleAndToolBarOnMac(false);
+    }
 
     QSettings settings;
     mainWindow->restoreGeometry(settings.value(KEY_MAIN_WINDOW_GEOMETRY).toByteArray());
@@ -529,7 +555,7 @@ void SilverlockPreferences::restoreWindowSettings(MainWindow *mainWindow)
     // to normal window state
 
     // If the main window is not in fullscreen mode, turn on the special toolbar
-    if (!mainWindow->isFullScreen())
+    if (!mainWindow->isFullScreen() && !mainWindow->unifiedTitleAndToolBarOnMac())
     {
         mainWindow->setUnifiedTitleAndToolBarOnMac(true);
     }
@@ -562,6 +588,7 @@ void SilverlockPreferences::setUpdateInstallerPath(const QString &path)
 
 // Platform-specific methods...
 #ifdef Q_WS_WIN
+
 /*!
     Gets the path of the running application with native separators and enclosed in quotes, suitable
     for entry into the Windows registry.
@@ -570,7 +597,19 @@ QString SilverlockPreferences::applicationPathForRegistry()
 {
     return QString("\"%1\"").arg(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
 }
+
+#elif defined(Q_WS_MAC)
+
+/*!
+    Gets the property list file for login items on Mac OS X.
+ */
+QString SilverlockPreferences::macLoginItemsFile()
+{
+    return QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + "/Library/Preferences/loginwindow.plist";
+}
+
 #elif defined(Q_OS_LINUX)
+
 /*!
     Gets the absolute path of the run-at-startup file for the current desktop environment.
 
@@ -598,4 +637,5 @@ QString SilverlockPreferences::startupFileFor(LinuxSystemInfo::DesktopEnvironmen
             return QString();
     }
 }
+
 #endif

@@ -3,12 +3,16 @@
 
 #include <QtGui>
 #include "documentstate.h"
+#include "databaseprinterfields.h"
 
 class Database;
 class Entry;
 class Group;
 class SilverlockPreferences;
 class InactivityEventFilter;
+class IToolbarSearchWidget;
+class GroupBrowserWidget;
+class EntryTableWidget;
 
 namespace Ui
 {
@@ -19,12 +23,18 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    friend class SilverlockApplication;
+
 public:
-    MainWindow(InactivityEventFilter *filter, QWidget *parent = NULL);
+    MainWindow(QWidget *parent = NULL);
     ~MainWindow();
     void loadFile(const QString &fileName);
+    QString closeFileInternal();
     QByteArray saveEntryTableState() const;
     bool restoreEntryTableState(const QByteArray &state);
+
+    GroupBrowserWidget* groupBrowser() const;
+    EntryTableWidget* entryTable() const;
 
 public slots:
     void handleMessage(const QString &message);
@@ -35,6 +45,8 @@ signals:
 protected:
     void changeEvent(QEvent *e);
     void closeEvent(QCloseEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 
 protected slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -50,13 +62,10 @@ private:
     QTimer *m_clearClipboardTimer;
     QTimer *m_idleTimer;
 
-    QLineEdit *m_searchBox;
-    QPushButton *m_searchButton;
+    IToolbarSearchWidget *m_toolbarSearch;
 
     qint32 m_lockIdleTimerValue;
     qint32 m_exitIdleTimerValue;
-
-    InactivityEventFilter *m_filter;
 
     QAction *widgetsAndToolbarsAction;
 
@@ -72,46 +81,44 @@ private:
     void populateEntryTable(Group *const group);
     void populateInfoView(Entry *const entry);
     bool maybeSave();
-    void loadFileInWindow(const QString &fileName);
     bool saveFile(const QString &fileName, bool encrypt = true);
-    QString closeFile();
     void setCurrentFile(const QString &fileName);
     void clearCurrentFile();
     void updateRecentFileActionsAll();
     void updateRecentFileActions();
     QString strippedName(const QString &fullFileName);
-    MainWindow* findMainWindow(const QString &fileName);
 
 private slots:
-    void on_actionFindInGroup_triggered();
-    void on_actionNew_triggered();
-    void on_actionOpen_triggered();
-    void on_actionClose_triggered();
-    bool save();
-    bool saveAs();
-    void on_actionChangeDatabasePassword_triggered();
-    void on_actionPrint_triggered();
-    void on_actionPrintPreview_triggered();
+    void showPrintDialog(const DatabasePrinterFields &fields = DatabasePrinterFields());
+    void findInGroup();
+    void newFile();
+    void openFile();
+    void closeFile();
+    bool saveFile();
+    bool saveFileAs();
+    void changeDatabasePassword();
+    void print();
+    void printPreview();
     void openRecentFile();
     void lockWorkspace();
     void unlockWorkspace();
     void lockWorkspace(bool lock);
-    void toolbarSearch();
+    void toolbarSearch(QString);
     void on_actionExit_triggered();
-    void on_actionCopyFieldValue_triggered();
+    void copyEntryFieldValue();
     void clearClipboard();
-    void on_actionDefaultBrowser_triggered();
-    void on_actionInternetExplorer_triggered();
-    void on_actionMoveEntries_triggered();
-    void on_actionDuplicateEntries_triggered();
-    void on_actionEditEntry_triggered();
-    void on_actionDeleteEntries_triggered();
-    void on_actionAddSubgroup_triggered();
-    void on_actionAddEntry_triggered();
-    void on_actionMoveGroup_triggered();
-    void on_actionEditGroup_triggered();
-    void on_actionDeleteGroups_triggered();
-    void on_actionFind_triggered();
+    void openEntryUrl();
+    void openEntryUrlIE();
+    void moveEntries();
+    void duplicateEntries();
+    void editEntries();
+    void deleteEntries();
+    void addGroupSubgroup();
+    void addGroupEntry();
+    void moveGroups();
+    void editGroups();
+    void deleteGroups();
+    void find();
     void on_actionAlwaysOnTop_triggered(bool checked);
     void on_actionCenterToScreen_triggered();
     void on_actionConfigureColumns_triggered();
@@ -127,7 +134,6 @@ private slots:
     void on_entryTable_customContextMenuRequested(QPoint pos);
     void on_groupBrowser_itemSelectionChanged();
     void on_entryTable_itemSelectionChanged();
-    bool isDatabaseSelected();
     void updateMenus();
     void updateInterfaceState();
     void databaseWasModified();

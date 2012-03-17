@@ -17,7 +17,7 @@
  */
 GroupBrowserWidget::GroupBrowserWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::GroupBrowserWidget)
+    ui(new Ui::GroupBrowserWidget), mDatabase(NULL)
 {
     this->ui->setupUi(this);
     this->ui->treeBrowser->sortByColumn(0, Qt::AscendingOrder);
@@ -32,6 +32,16 @@ GroupBrowserWidget::GroupBrowserWidget(QWidget *parent) :
 GroupBrowserWidget::~GroupBrowserWidget()
 {
     delete this->ui;
+}
+
+Database* GroupBrowserWidget::database() const
+{
+    return this->mDatabase;
+}
+
+void GroupBrowserWidget::setDatabase(Database *database)
+{
+    this->mDatabase = database;
 }
 
 /*!
@@ -91,6 +101,29 @@ QList<QUuid> GroupBrowserWidget::selectedUuids() const
     }
 
     return uuids;
+}
+
+/*!
+    Determines whether the database node is in the current selection (not necessarily the only selection).
+ */
+bool GroupBrowserWidget::isDatabaseSelected() const
+{
+    // No database loaded? Then nothing is selected
+    if (!this->mDatabase)
+    {
+        return false;
+    }
+
+    // For each selection, check if it's a database and return true if so
+    foreach (QUuid uuid, this->selectedUuids())
+    {
+        if (dynamic_cast<Database*>(this->mDatabase->findGroup(uuid, true)))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /*!

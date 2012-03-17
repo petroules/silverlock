@@ -1,6 +1,7 @@
 #include "preferencesdialog.h"
 #include "ui_preferencesdialog.h"
 #include "silverlockpreferences.h"
+#include <synteza.h>
 
 /*!
     \class PreferencesDialog
@@ -21,13 +22,9 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     this->ui->setupUi(this);
     this->load();
 
+    // If run at startup is not enabled on this platform, disable the checkbox and display a message to the user
     this->ui->runAtStartupCheckBox->setEnabled(SilverlockPreferences::runAtStartupSupported());
     this->ui->noRunAtStartupLabel->setVisible(!SilverlockPreferences::runAtStartupSupported());
-#ifdef Q_WS_MAC
-    // Mac OS X users can right click the dock icon for "run at startup"... there's nothing else
-    // on the system tab for Mac users at this point so no reason for them to see it
-    this->ui->noRunAtStartupLabel->setText(tr("To tell Silverlock to automatically run when you start your computer or log in to your account, right click the Silverlock icon in the Dock and select \"Open at Login\"."));
-#endif
 
     // TODO: To be restored in a future version (perhaps Silverlock 1.2?)
     this->ui->fileAssociationsGroupBox->setEnabled(false);
@@ -49,7 +46,8 @@ PreferencesDialog::~PreferencesDialog()
  */
 void PreferencesDialog::updateFileAssociationState()
 {
-    bool set = this->m_preferences->isFileAssociationSet();
+    SilverlockPreferences &prefs = SilverlockPreferences::instance();
+    bool set = prefs.isFileAssociationSet();
     this->ui->createAssocPushButton->setEnabled(!set);
     this->ui->removeAssocPushButton->setEnabled(set);
     this->ui->fileAssociationStatusLabel->setText(QString("File associations are currently <b>%1</b>").arg(set ? "enabled" : "disabled"));
@@ -156,9 +154,9 @@ void PreferencesDialog::getMessages(QStringList &errors, QStringList &warnings, 
  */
 void PreferencesDialog::on_buttonBox_clicked(QAbstractButton* button)
 {
-    if (this->m_preferences && this->ui->buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole)
+    if (this->ui->buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole)
     {
-        if (QMessageBox::warning(this, tr("Warning"), tr("Are you sure you wish to reset all preferences to their default settings?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+        if (NativeDialogs::warning(this, tr("Warning"), tr("Are you sure you wish to reset all preferences to their default settings?"), QString(), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
         {
             this->restoreDefaults();
         }
@@ -172,7 +170,8 @@ void PreferencesDialog::on_buttonBox_clicked(QAbstractButton* button)
  */
 void PreferencesDialog::on_createAssocPushButton_clicked()
 {
-    this->m_preferences->setFileAssociationActive(true);
+    SilverlockPreferences &prefs = SilverlockPreferences::instance();
+    prefs.setFileAssociationActive(true);
     this->updateFileAssociationState();
 }
 
@@ -183,6 +182,7 @@ void PreferencesDialog::on_createAssocPushButton_clicked()
  */
 void PreferencesDialog::on_removeAssocPushButton_clicked()
 {
-    this->m_preferences->setFileAssociationActive(false);
+    SilverlockPreferences &prefs = SilverlockPreferences::instance();
+    prefs.setFileAssociationActive(false);
     this->updateFileAssociationState();
 }

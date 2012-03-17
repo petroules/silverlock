@@ -1,34 +1,30 @@
-#ifndef DATABASEPRINTDIALOG_H
-#define DATABASEPRINTDIALOG_H
+#ifndef DATABASEPRINTPREVIEWDIALOG_H
+#define DATABASEPRINTPREVIEWDIALOG_H
 
 #include <QtGui>
+#include "databaseprinter.h"
 
 namespace Ui
 {
-    class DatabasePrintDialog;
+    class DatabasePrintPreviewDialog;
 }
 
 class Database;
 class Entry;
 class Group;
 
-class DatabasePrintDialog : public QDialog
+class DatabasePrintPreviewDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DatabasePrintDialog(Database *database, QWidget *parent = NULL);
-    ~DatabasePrintDialog();
-
-public slots:
-    void print();
+    explicit DatabasePrintPreviewDialog(Database *database, QWidget *parent = NULL);
+    ~DatabasePrintPreviewDialog();
+    DatabasePrinterFields databasePrinterFields() const;
 
 private:
-    Ui::DatabasePrintDialog *ui;
+    Ui::DatabasePrintPreviewDialog *ui;
     Database *m_database;
-
-    QString groupText(const Group *group) const;
-    QString entryText(const Entry *entry) const;
 
 private slots:
     void selectionLinkActivated(const QString &link);
@@ -36,4 +32,4 @@ private slots:
     void updatePreview();
 };
 
-#endif // DATABASEPRINTDIALOG_H
+#endif // DATABASEPRINTPREVIEWDIALOG_H
