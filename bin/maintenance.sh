@@ -26,6 +26,8 @@ function update-petroules-utilities()
 	pushd `dirname "$DEP_PETROULES_UTILITIES_DIR"` >/dev/null
 	git clone git://github.com/petroules/petroules-utilities-qt.git
 	popd >/dev/null
+
+	rm -rf "$DEP_PETROULES_UTILITIES_DIR/.git"
 }
 
 # Appends the specified text to both the botan_all source file and header
