@@ -4,7 +4,7 @@
 #include "databasecrypto.h"
 #include "entry.h"
 #include "group.h"
-#include <synteza.h>
+#include <petroules-utilities.h>
 
 /*!
     \class DatabaseReader

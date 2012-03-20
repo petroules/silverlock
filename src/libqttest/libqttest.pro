@@ -1,38 +1,41 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2011-06-12T21:32:16
-#
-#-------------------------------------------------
+# --------------------------------------------------
+# This section contains project configuration
+# directives such as the required Qt modules, the
+# project template, and any variables that need to
+# be defined.
+# --------------------------------------------------
 
-QT       += testlib xml
-
+QT += testlib xml
+TEMPLATE = app
 TARGET = tst_libqttesttest
 CONFIG   += console
 CONFIG   -= app_bundle
 
-TEMPLATE = app
-
-
-SOURCES += tst_libqttesttest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
+# --------------------------------------------------
+# This section contains all the main code/resource
+# files that make up the target, including:
+# * precompiled header (.pch)
+# * headers (.h)
+# * sources (.c, .cpp, .m, .mm, ...)
+# * forms (.ui)
+# * resources (.qrc)
+# * translations (.tr)
+# * any other files belonging in the OTHER_FILES var
+# --------------------------------------------------
 
+SOURCES += tst_libqttesttest.cpp
 
-
-
-
-
-
-
-win32:TEMP_BUILDDIR = temp-win32-gcc
-win32-msvc*:TEMP_BUILDDIR = temp-win32-msvc
-macx:TEMP_BUILDDIR = temp-mac64
-linux-g++:TEMP_BUILDDIR = temp-linux32
+# --------------------------------------------------
+# This section contains all libraries that the
+# project links to, first system libraries, and then
+# libraries in the project build tree.
+# --------------------------------------------------
 
 SILVERLOCKLIB_PATH = ../libqt
-SYNTEZA_PATH = ../3rdparty/$$TEMP_BUILDDIR/synteza/qt
-BOTAN_PATH = ../3rdparty/$$TEMP_BUILDDIR/botan
-win32-msvc*:BOTAN_PATH = $$BOTAN_PATH-msvc
+PETROULESUTILITIES_PATH = ../petroules-utilities-qt/src
+QTSOLUTIONS_PATH = $$PETROULESUTILITIES_PATH/../lib/qtsingleapplication/src
 
 # Silverlock support library
 
@@ -46,28 +49,16 @@ DEPENDPATH += $$PWD/$$SILVERLOCKLIB_PATH
 
 macx:PRE_TARGETDEPS += $$OUT_PWD/$$SILVERLOCKLIB_PATH/libsilverlocklib.a
 
-# Synteza library
+# Petroules Utilities library
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/release/ -lsynteza
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/debug/ -lsynteza
-else:symbian: LIBS += -lsynteza
-else:unix: LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/ -lsynteza
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$PETROULESUTILITIES_PATH/release/ -lpetroules-utilities
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$PETROULESUTILITIES_PATH/debug/ -lpetroules-utilities
+else:symbian: LIBS += -lpetroules-utilities
+else:unix: LIBS += -L$$OUT_PWD/$$PETROULESUTILITIES_PATH/ -lpetroules-utilities
 
-INCLUDEPATH += $$PWD/$$SYNTEZA_PATH
-DEPENDPATH += $$PWD/$$SYNTEZA_PATH
+# We have to make sure we include the QtSingleApplication headers
+# path because it will get indirectly included from THIS project
+INCLUDEPATH += $$PWD/$$PETROULESUTILITIES_PATH $$PWD/$$QTSOLUTIONS_PATH
+DEPENDPATH += $$PWD/$$PETROULESUTILITIES_PATH $$PWD/$$QTSOLUTIONS_PATH
 
-macx:PRE_TARGETDEPS += $$OUT_PWD/$$SYNTEZA_PATH/libsynteza.a
-
-# Botan library
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotand
-else:symbian: LIBS += -lbotan
-else:unix: LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
-
-INCLUDEPATH += $$PWD/$$BOTAN_PATH/build/include
-DEPENDPATH += $$PWD/$$BOTAN_PATH/build/include
-
-win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botan.lib
-else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botand.lib
-else:unix:!symbian: PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/libbotan.a
+macx:PRE_TARGETDEPS += $$OUT_PWD/$$PETROULESUTILITIES_PATH/libpetroules-utilities.a

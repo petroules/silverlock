@@ -1,7 +1,7 @@
 #ifndef UPDATEDIALOG_H
 #define UPDATEDIALOG_H
 
-#include <synteza.h>
+#include <petroules-utilities.h>
 #include <QtGui>
 #include <QtNetwork>
 

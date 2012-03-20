@@ -1,5 +1,5 @@
 /*
-* Botan 1.10.1 Amalgamation
+* Botan 1.10.2 Amalgamation
 * (C) 1999-2011 Jack Lloyd and others
 *
 * Distributed under the terms of the Botan license
@@ -1152,8 +1152,7 @@ void bigint_comba_mul16(word z[32], const word x[16], const word y[16]);
 void bigint_comba_sqr4(word out[8], const word in[4]);
 void bigint_comba_sqr6(word out[12], const word in[6]);
 void bigint_comba_sqr8(word out[16], const word in[8]);
-void bigint_comba_sqr8(word out[32], const word in[16]);
-void bigint_comba_sqr16(word out[64], const word in[32]);
+void bigint_comba_sqr16(word out[32], const word in[16]);
 
 }
 
@@ -5761,7 +5760,7 @@ bool matches(DataSource& source, const std::string& extra,
 }
 /*
 * Core Engine
-* (C) 1999-2007 Jack Lloyd
+* (C) 1999-2007,2011 Jack Lloyd
 *
 * Distributed under the terms of the Botan license
 */
@@ -5927,8 +5926,8 @@ Keyed_Filter* get_cipher_mode(const BlockCipher* block_cipher,
 * Get a cipher object
 */
 Keyed_Filter* Core_Engine::get_cipher(const std::string& algo_spec,
-                                         Cipher_Dir direction,
-                                         Algorithm_Factory& af)
+                                      Cipher_Dir direction,
+                                      Algorithm_Factory& af)
    {
    std::vector<std::string> algo_parts = split_on(algo_spec, '/');
    if(algo_parts.empty())
@@ -5945,8 +5944,12 @@ Keyed_Filter* Core_Engine::get_cipher(const std::string& algo_spec,
    if(!block_cipher)
       return 0;
 
-   if(algo_parts.size() != 2 && algo_parts.size() != 3)
-      return 0;
+   if(algo_parts.size() >= 4)
+      return 0; // 4 part mode, not something we know about
+
+   if(algo_parts.size() < 2)
+      throw Lookup_Error("Cipher specification '" + algo_spec +
+                         "' is missing mode identifier");
 
    std::string mode = algo_parts[1];
 
@@ -6165,6 +6168,9 @@ Core_Engine::mod_exp(const BigInt& n, Power_Mod::Usage_Hints hints) const
 #if defined(BOTAN_HAS_BLOWFISH)
 #endif
 
+#if defined(BOTAN_HAS_CAMELLIA)
+#endif
+
 #if defined(BOTAN_HAS_CAST)
 #endif
 
@@ -6252,6 +6258,11 @@ BlockCipher* Core_Engine::find_block_cipher(const SCAN_Name& request,
 #if defined(BOTAN_HAS_BLOWFISH)
    if(request.algo_name() == "Blowfish")
       return new Blowfish;
+#endif
+
+#if defined(BOTAN_HAS_CAMELLIA)
+   if(request.algo_name() == "Camellia")
+      return new Camellia;
 #endif
 
 #if defined(BOTAN_HAS_CAST)
@@ -7273,7 +7284,7 @@ void Buffered_Filter::write(const byte input[], size_t input_size)
 void Buffered_Filter::end_msg()
    {
    if(buffer_pos < final_minimum)
-      throw std::runtime_error("Buffered_Operation::final - not enough input");
+      throw std::runtime_error("Buffered filter end_msg without enough input");
 
    size_t spare_blocks = (buffer_pos - final_minimum) / main_block_mod;
 
@@ -11141,6 +11152,16 @@ void set_default_dl_groups(Library_State& config)
          "Nf2tRM/S10+SCL4lj/MklDMo9nMpwP//////////"
          "-----END X942 DH PARAMETERS-----");
 
+   config.set("dl", "modp/srp/1024",
+         "-----BEGIN X942 DH PARAMETERS-----"
+         "MIIBCgKBgQDurwq5rbON1pwz+Ar6j8XoYHJhh3X/PAueojFMnCVldtZ033SW6oHT"
+         "ODtIE9aSxuDg1djiULmL5I5JXB1gidrRXcfXtGFU1rbOjvStabFdSYJVmyl7zxiF"
+         "xSn1ZmYOV+xo7bw8BXJswC/Uy/SXbqqa/VE4/oN2Q1ufxh0vwOsG4wIBAgKBgHdX"
+         "hVzW2cbrThn8BX1H4vQwOTDDuv+eBc9RGKZOErK7azpvukt1QOmcHaQJ60ljcHBq"
+         "7HEoXMXyRySuDrBE7Wiu4+vaMKprW2dHela02K6kwSrNlL3njELilPqzMwcr9jR2"
+         "3h4CuTZgF+pl+ku3VU1+qJx/Qbshrc/jDpfgdYNx"
+         "-----END X942 DH PARAMETERS-----");
+
    config.set("dl", "modp/ietf/1536",
          "-----BEGIN X942 DH PARAMETERS-----"
          "MIIBigKBwQD//////////8kP2qIhaMI0xMZii4DcHNEpAk4IimfMdAILvqY7E5si"
@@ -11167,6 +11188,21 @@ void set_default_dl_groups(Library_State& config)
          "JJQzKPZyLZ7hAD5cULHfgsxtJBsOKunNNIsf1H6SZ6/Bsq6R7lHWyw4xeasQQqld"
          "z2qUg7hLSzazhhqnJV5MAni6NgRlDBC+GUgvIxcbZx3xzzuWDAdDAc2TwdF2A9FH"
          "2uKu+DemKWTvFeX7SqwLjBzKpL51SrVyiukTDEx9AogKuUctRVZVNH//////////"
+         "-----END X942 DH PARAMETERS-----");
+
+   config.set("dl", "modp/srp/2048",
+         "-----BEGIN X942 DH PARAMETERS-----"
+         "MIICDAKCAQEArGvbQTJKmpvxZt5eE4lYL69ytmUZh+4H/DGSlD21YFCjcynLtKCZ"
+         "7YGT4HV3Z6E91SMSq0sDMQ3Nf0ip2gT9UOgIOWntt2ewz2CVF5oWOrNmGgX71fqq"
+         "6CkYqZYvC5O4Vfl5k+yXXuqoDXQK2/T/dHNZ0EHVwz6nHSgeRGsUdzvKl7Q6I/uA"
+         "Fna9IHpDbGSB8dK5B4cXRhpbnTLmiPh3SFRFI7UksNV9Xqd6J3XS7PoDLPvb9S+z"
+         "eGFgJ5AE5Xrmr4dOcwPOUymczAQce8MI2CpWmPOo0MOCca41+Onb+7aUtcgD2J96"
+         "5DXeI21SX1R1m2XjcvzWjvIPpxEfnkr/cwIBAgKCAQBWNe2gmSVNTfizby8JxKwX"
+         "17lbMozD9wP+GMlKHtqwKFG5lOXaUEz2wMnwOruz0J7qkYlVpYGYhua/pFTtAn6o"
+         "dAQctPbbs9hnsEqLzQsdWbMNAv3q/VV0FIxUyxeFydwq/LzJ9kuvdVQGugVt+n+6"
+         "OazoIOrhn1OOlA8iNYo7neVL2h0R/cALO16QPSG2MkD46VyDw4ujDS3OmXNEfDuk"
+         "KiKR2pJYar6vU70Tuul2fQGWfe36l9m8MLATyAJyvXNXw6c5gecplM5mAg494YRs"
+         "FStMedRoYcE41xr8dO3920pa5AHsT71yGu8RtqkvqjrNsvG5fmtHeQfTiI/PJX+5"
          "-----END X942 DH PARAMETERS-----");
 
    config.set("dl", "modp/ietf/3072",
@@ -13255,7 +13291,7 @@ void bigint_linmul3(word z[], const word x[], size_t x_size, word y)
 }
 /*
 * Comba Multiplication and Squaring
-* (C) 1999-2007 Jack Lloyd
+* (C) 1999-2007,2011 Jack Lloyd
 *
 * Distributed under the terms of the Botan license
 */
@@ -13272,30 +13308,30 @@ void bigint_comba_sqr4(word z[8], const word x[4])
    {
    word w2 = 0, w1 = 0, w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], x[0]);
-   z[0] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 0], x[ 0]);
+   z[ 0] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[1]);
-   z[1] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[ 1]);
+   z[ 1] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[2]);
-   word3_muladd(&w2, &w1, &w0, x[1], x[1]);
-   z[2] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 0], x[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], x[ 1]);
+   z[ 2] = w2; w2 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[3]);
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[2]);
-   z[3] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 3]);
+   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 2]);
+   z[ 3] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[3]);
-   word3_muladd(&w2, &w1, &w0, x[2], x[2]);
-   z[4] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 1], x[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], x[ 2]);
+   z[ 4] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[2], x[3]);
-   z[5] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 2], x[ 3]);
+   z[ 5] = w2; w2 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[3], x[3]);
-   z[6] = w0;
-   z[7] = w1;
+   word3_muladd(&w2, &w1, &w0, x[ 3], x[ 3]);
+   z[ 6] = w0;
+   z[ 7] = w1;
    }
 
 /*
@@ -13305,36 +13341,36 @@ void bigint_comba_mul4(word z[8], const word x[4], const word y[4])
    {
    word w2 = 0, w1 = 0, w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[0]);
-   z[0] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 0]);
+   z[ 0] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[0]);
-   z[1] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 0]);
+   z[ 1] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[0]);
-   z[2] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 0], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[ 1]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 0]);
+   z[ 2] = w2; w2 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[0]);
-   z[3] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 3]);
+   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 2]);
+   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 1]);
+   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 0]);
+   z[ 3] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[1], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[1]);
-   z[4] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], y[ 2]);
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[ 1]);
+   z[ 4] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[2], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[2]);
-   z[5] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 3]);
+   word3_muladd(&w1, &w0, &w2, x[ 3], y[ 2]);
+   z[ 5] = w2; w2 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[3], y[3]);
-   z[6] = w0;
-   z[7] = w1;
+   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 3]);
+   z[ 6] = w0;
+   z[ 7] = w1;
    }
 
 /*
@@ -13344,49 +13380,49 @@ void bigint_comba_sqr6(word z[12], const word x[6])
    {
    word w2 = 0, w1 = 0, w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], x[0]);
-   z[0] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 0], x[ 0]);
+   z[ 0] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[1]);
-   z[1] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[ 1]);
+   z[ 1] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[2]);
-   word3_muladd(&w2, &w1, &w0, x[1], x[1]);
-   z[2] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 0], x[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], x[ 1]);
+   z[ 2] = w2; w2 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[3]);
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[2]);
-   z[3] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 3]);
+   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 2]);
+   z[ 3] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[4]);
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[3]);
-   word3_muladd(&w2, &w1, &w0, x[2], x[2]);
-   z[4] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[ 4]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 1], x[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], x[ 2]);
+   z[ 4] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[5]);
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[4]);
-   word3_muladd_2(&w2, &w1, &w0, x[2], x[3]);
-   z[5] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 0], x[ 5]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 1], x[ 4]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 2], x[ 3]);
+   z[ 5] = w2; w2 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[5]);
-   word3_muladd_2(&w2, &w1, &w0, x[2], x[4]);
-   word3_muladd(&w2, &w1, &w0, x[3], x[3]);
-   z[6] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 5]);
+   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[ 4]);
+   word3_muladd(&w2, &w1, &w0, x[ 3], x[ 3]);
+   z[ 6] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[2], x[5]);
-   word3_muladd_2(&w2, &w1, &w0, x[3], x[4]);
-   z[7] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 2], x[ 5]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 3], x[ 4]);
+   z[ 7] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[3], x[5]);
-   word3_muladd(&w2, &w1, &w0, x[4], x[4]);
-   z[8] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 3], x[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], x[ 4]);
+   z[ 8] = w2; w2 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[4], x[5]);
-   z[9] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w2, &w1, &w0, x[ 4], x[ 5]);
+   z[ 9] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[5], x[5]);
-   z[10] = w0;
-   z[11] = w1;
+   word3_muladd(&w0, &w2, &w1, x[ 5], x[ 5]);
+   z[10] = w1;
+   z[11] = w2;
    }
 
 /*
@@ -13396,64 +13432,64 @@ void bigint_comba_mul6(word z[12], const word x[6], const word y[6])
    {
    word w2 = 0, w1 = 0, w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[0]);
-   z[0] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 0]);
+   z[ 0] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[0]);
-   z[1] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 0]);
+   z[ 1] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[0]);
-   z[2] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 0], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[ 1]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 0]);
+   z[ 2] = w2; w2 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[0]);
-   z[3] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 3]);
+   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 2]);
+   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 1]);
+   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 0]);
+   z[ 3] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[0]);
-   z[4] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[ 4]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], y[ 2]);
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[ 0]);
+   z[ 4] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[0]);
-   z[5] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 0], y[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[ 4]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 3]);
+   word3_muladd(&w1, &w0, &w2, x[ 3], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], y[ 1]);
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[ 0]);
+   z[ 5] = w2; w2 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[1], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[1]);
-   z[6] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 5]);
+   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 4]);
+   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 3]);
+   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 2]);
+   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 1]);
+   z[ 6] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[2], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[2]);
-   z[7] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 2], y[ 5]);
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[ 4]);
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 5], y[ 2]);
+   z[ 7] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[3], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[3]);
-   z[8] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 3], y[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], y[ 4]);
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[ 3]);
+   z[ 8] = w2; w2 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[4], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[4]);
-   z[9] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 5]);
+   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 4]);
+   z[ 9] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[5], y[5]);
-   z[10] = w0;
-   z[11] = w1;
+   word3_muladd(&w0, &w2, &w1, x[ 5], y[ 5]);
+   z[10] = w1;
+   z[11] = w2;
    }
 
 /*
@@ -13463,72 +13499,72 @@ void bigint_comba_sqr8(word z[16], const word x[8])
    {
    word w2 = 0, w1 = 0, w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], x[0]);
-   z[0] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 0], x[ 0]);
+   z[ 0] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[1]);
-   z[1] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[ 1]);
+   z[ 1] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[2]);
-   word3_muladd(&w2, &w1, &w0, x[1], x[1]);
-   z[2] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 0], x[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], x[ 1]);
+   z[ 2] = w2; w2 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[3]);
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[2]);
-   z[3] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 3]);
+   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 2]);
+   z[ 3] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[4]);
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[3]);
-   word3_muladd(&w2, &w1, &w0, x[2], x[2]);
-   z[4] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[ 4]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 1], x[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], x[ 2]);
+   z[ 4] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[5]);
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[4]);
-   word3_muladd_2(&w2, &w1, &w0, x[2], x[3]);
-   z[5] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 0], x[ 5]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 1], x[ 4]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 2], x[ 3]);
+   z[ 5] = w2; w2 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[6]);
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[5]);
-   word3_muladd_2(&w2, &w1, &w0, x[2], x[4]);
-   word3_muladd(&w2, &w1, &w0, x[3], x[3]);
-   z[6] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 6]);
+   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 5]);
+   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[ 4]);
+   word3_muladd(&w2, &w1, &w0, x[ 3], x[ 3]);
+   z[ 6] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[0], x[7]);
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[6]);
-   word3_muladd_2(&w2, &w1, &w0, x[2], x[5]);
-   word3_muladd_2(&w2, &w1, &w0, x[3], x[4]);
-   z[7] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[ 7]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 1], x[ 6]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 2], x[ 5]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 3], x[ 4]);
+   z[ 7] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[1], x[7]);
-   word3_muladd_2(&w2, &w1, &w0, x[2], x[6]);
-   word3_muladd_2(&w2, &w1, &w0, x[3], x[5]);
-   word3_muladd(&w2, &w1, &w0, x[4], x[4]);
-   z[8] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 1], x[ 7]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 2], x[ 6]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 3], x[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], x[ 4]);
+   z[ 8] = w2; w2 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[2], x[7]);
-   word3_muladd_2(&w2, &w1, &w0, x[3], x[6]);
-   word3_muladd_2(&w2, &w1, &w0, x[4], x[5]);
-   z[9] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[ 7]);
+   word3_muladd_2(&w2, &w1, &w0, x[ 3], x[ 6]);
+   word3_muladd_2(&w2, &w1, &w0, x[ 4], x[ 5]);
+   z[ 9] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[3], x[7]);
-   word3_muladd_2(&w2, &w1, &w0, x[4], x[6]);
-   word3_muladd(&w2, &w1, &w0, x[5], x[5]);
-   z[10] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 3], x[ 7]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 4], x[ 6]);
+   word3_muladd(&w0, &w2, &w1, x[ 5], x[ 5]);
+   z[10] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[4], x[7]);
-   word3_muladd_2(&w2, &w1, &w0, x[5], x[6]);
-   z[11] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 4], x[ 7]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 5], x[ 6]);
+   z[11] = w2; w2 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[5], x[7]);
-   word3_muladd(&w2, &w1, &w0, x[6], x[6]);
-   z[12] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w2, &w1, &w0, x[ 5], x[ 7]);
+   word3_muladd(&w2, &w1, &w0, x[ 6], x[ 6]);
+   z[12] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[6], x[7]);
-   z[13] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 6], x[ 7]);
+   z[13] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[7], x[7]);
-   z[14] = w0;
-   z[15] = w1;
+   word3_muladd(&w1, &w0, &w2, x[ 7], x[ 7]);
+   z[14] = w2;
+   z[15] = w0;
    }
 
 /*
@@ -13538,100 +13574,100 @@ void bigint_comba_mul8(word z[16], const word x[8], const word y[8])
    {
    word w2 = 0, w1 = 0, w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[0]);
-   z[0] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 0]);
+   z[ 0] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[0]);
-   z[1] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 0]);
+   z[ 1] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[0]);
-   z[2] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 0], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[ 1]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 0]);
+   z[ 2] = w2; w2 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[0]);
-   z[3] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 3]);
+   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 2]);
+   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 1]);
+   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 0]);
+   z[ 3] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[0]);
-   z[4] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[ 4]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], y[ 2]);
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[ 0]);
+   z[ 4] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[0]);
-   z[5] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 0], y[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[ 4]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 3]);
+   word3_muladd(&w1, &w0, &w2, x[ 3], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], y[ 1]);
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[ 0]);
+   z[ 5] = w2; w2 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[6]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[6], y[0]);
-   z[6] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 6]);
+   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 5]);
+   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 4]);
+   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 3]);
+   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 2]);
+   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 1]);
+   word3_muladd(&w2, &w1, &w0, x[ 6], y[ 0]);
+   z[ 6] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[0], y[7]);
-   word3_muladd(&w2, &w1, &w0, x[1], y[6]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[6], y[1]);
-   word3_muladd(&w2, &w1, &w0, x[7], y[0]);
-   z[7] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[ 7]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 6]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], y[ 5]);
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[ 4]);
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 5], y[ 2]);
+   word3_muladd(&w0, &w2, &w1, x[ 6], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[ 7], y[ 0]);
+   z[ 7] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[1], y[7]);
-   word3_muladd(&w2, &w1, &w0, x[2], y[6]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[6], y[2]);
-   word3_muladd(&w2, &w1, &w0, x[7], y[1]);
-   z[8] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[ 7]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 6]);
+   word3_muladd(&w1, &w0, &w2, x[ 3], y[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], y[ 4]);
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[ 3]);
+   word3_muladd(&w1, &w0, &w2, x[ 6], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 7], y[ 1]);
+   z[ 8] = w2; w2 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[2], y[7]);
-   word3_muladd(&w2, &w1, &w0, x[3], y[6]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[6], y[3]);
-   word3_muladd(&w2, &w1, &w0, x[7], y[2]);
-   z[9] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 7]);
+   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 6]);
+   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 5]);
+   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 4]);
+   word3_muladd(&w2, &w1, &w0, x[ 6], y[ 3]);
+   word3_muladd(&w2, &w1, &w0, x[ 7], y[ 2]);
+   z[ 9] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[3], y[7]);
-   word3_muladd(&w2, &w1, &w0, x[4], y[6]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[6], y[4]);
-   word3_muladd(&w2, &w1, &w0, x[7], y[3]);
-   z[10] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[ 7]);
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[ 6]);
+   word3_muladd(&w0, &w2, &w1, x[ 5], y[ 5]);
+   word3_muladd(&w0, &w2, &w1, x[ 6], y[ 4]);
+   word3_muladd(&w0, &w2, &w1, x[ 7], y[ 3]);
+   z[10] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[4], y[7]);
-   word3_muladd(&w2, &w1, &w0, x[5], y[6]);
-   word3_muladd(&w2, &w1, &w0, x[6], y[5]);
-   word3_muladd(&w2, &w1, &w0, x[7], y[4]);
-   z[11] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 4], y[ 7]);
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[ 6]);
+   word3_muladd(&w1, &w0, &w2, x[ 6], y[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 7], y[ 4]);
+   z[11] = w2; w2 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[5], y[7]);
-   word3_muladd(&w2, &w1, &w0, x[6], y[6]);
-   word3_muladd(&w2, &w1, &w0, x[7], y[5]);
-   z[12] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 7]);
+   word3_muladd(&w2, &w1, &w0, x[ 6], y[ 6]);
+   word3_muladd(&w2, &w1, &w0, x[ 7], y[ 5]);
+   z[12] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[6], y[7]);
-   word3_muladd(&w2, &w1, &w0, x[7], y[6]);
-   z[13] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 6], y[ 7]);
+   word3_muladd(&w0, &w2, &w1, x[ 7], y[ 6]);
+   z[13] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[7], y[7]);
-   z[14] = w0;
-   z[15] = w1;
+   word3_muladd(&w1, &w0, &w2, x[ 7], y[ 7]);
+   z[14] = w2;
+   z[15] = w0;
    }
 
 /*
@@ -13642,70 +13678,70 @@ void bigint_comba_sqr16(word z[32], const word x[16])
    word w2 = 0, w1 = 0, w0 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[ 0], x[ 0]);
-   z[ 0] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[ 0] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 1]);
-   z[ 1] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[ 1]);
+   z[ 1] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], x[ 1]);
-   z[ 2] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 0], x[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], x[ 1]);
+   z[ 2] = w2; w2 = 0;
 
    word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 3]);
    word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 2]);
-   z[ 3] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[ 3] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 4]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], x[ 2]);
-   z[ 4] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[ 4]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 1], x[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], x[ 2]);
+   z[ 4] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 5]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 4]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[ 3]);
-   z[ 5] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 0], x[ 5]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 1], x[ 4]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 2], x[ 3]);
+   z[ 5] = w2; w2 = 0;
 
    word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 6]);
    word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 5]);
    word3_muladd_2(&w2, &w1, &w0, x[ 2], x[ 4]);
    word3_muladd(&w2, &w1, &w0, x[ 3], x[ 3]);
-   z[ 6] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[ 6] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 7]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 6]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[ 5]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 3], x[ 4]);
-   z[ 7] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[ 7]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 1], x[ 6]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 2], x[ 5]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 3], x[ 4]);
+   z[ 7] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 8]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 7]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[ 6]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 3], x[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], x[ 4]);
-   z[ 8] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 0], x[ 8]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 1], x[ 7]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 2], x[ 6]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 3], x[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], x[ 4]);
+   z[ 8] = w2; w2 = 0;
 
    word3_muladd_2(&w2, &w1, &w0, x[ 0], x[ 9]);
    word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 8]);
    word3_muladd_2(&w2, &w1, &w0, x[ 2], x[ 7]);
    word3_muladd_2(&w2, &w1, &w0, x[ 3], x[ 6]);
    word3_muladd_2(&w2, &w1, &w0, x[ 4], x[ 5]);
-   z[ 9] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[ 9] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[10]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[ 9]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[ 8]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 3], x[ 7]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 4], x[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], x[ 5]);
-   z[10] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[10]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 1], x[ 9]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 2], x[ 8]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 3], x[ 7]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 4], x[ 6]);
+   word3_muladd(&w0, &w2, &w1, x[ 5], x[ 5]);
+   z[10] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[11]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[10]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[ 9]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 3], x[ 8]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 4], x[ 7]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 5], x[ 6]);
-   z[11] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 0], x[11]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 1], x[10]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 2], x[ 9]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 3], x[ 8]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 4], x[ 7]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 5], x[ 6]);
+   z[11] = w2; w2 = 0;
 
    word3_muladd_2(&w2, &w1, &w0, x[ 0], x[12]);
    word3_muladd_2(&w2, &w1, &w0, x[ 1], x[11]);
@@ -13714,26 +13750,26 @@ void bigint_comba_sqr16(word z[32], const word x[16])
    word3_muladd_2(&w2, &w1, &w0, x[ 4], x[ 8]);
    word3_muladd_2(&w2, &w1, &w0, x[ 5], x[ 7]);
    word3_muladd(&w2, &w1, &w0, x[ 6], x[ 6]);
-   z[12] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[12] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[13]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[12]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[11]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 3], x[10]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 4], x[ 9]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 5], x[ 8]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 6], x[ 7]);
-   z[13] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 0], x[13]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 1], x[12]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 2], x[11]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 3], x[10]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 4], x[ 9]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 5], x[ 8]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 6], x[ 7]);
+   z[13] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 0], x[14]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[13]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[12]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 3], x[11]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 4], x[10]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 5], x[ 9]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 6], x[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], x[ 7]);
-   z[14] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 0], x[14]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 1], x[13]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 2], x[12]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 3], x[11]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 4], x[10]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 5], x[ 9]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 6], x[ 8]);
+   word3_muladd(&w1, &w0, &w2, x[ 7], x[ 7]);
+   z[14] = w2; w2 = 0;
 
    word3_muladd_2(&w2, &w1, &w0, x[ 0], x[15]);
    word3_muladd_2(&w2, &w1, &w0, x[ 1], x[14]);
@@ -13743,26 +13779,26 @@ void bigint_comba_sqr16(word z[32], const word x[16])
    word3_muladd_2(&w2, &w1, &w0, x[ 5], x[10]);
    word3_muladd_2(&w2, &w1, &w0, x[ 6], x[ 9]);
    word3_muladd_2(&w2, &w1, &w0, x[ 7], x[ 8]);
-   z[15] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[15] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 1], x[15]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[14]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 3], x[13]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 4], x[12]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 5], x[11]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 6], x[10]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 7], x[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], x[ 8]);
-   z[16] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 1], x[15]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 2], x[14]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 3], x[13]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 4], x[12]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 5], x[11]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 6], x[10]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 7], x[ 9]);
+   word3_muladd(&w0, &w2, &w1, x[ 8], x[ 8]);
+   z[16] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 2], x[15]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 3], x[14]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 4], x[13]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 5], x[12]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 6], x[11]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 7], x[10]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 8], x[ 9]);
-   z[17] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 2], x[15]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 3], x[14]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 4], x[13]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 5], x[12]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 6], x[11]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 7], x[10]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 8], x[ 9]);
+   z[17] = w2; w2 = 0;
 
    word3_muladd_2(&w2, &w1, &w0, x[ 3], x[15]);
    word3_muladd_2(&w2, &w1, &w0, x[ 4], x[14]);
@@ -13771,70 +13807,70 @@ void bigint_comba_sqr16(word z[32], const word x[16])
    word3_muladd_2(&w2, &w1, &w0, x[ 7], x[11]);
    word3_muladd_2(&w2, &w1, &w0, x[ 8], x[10]);
    word3_muladd(&w2, &w1, &w0, x[ 9], x[ 9]);
-   z[18] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[18] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 4], x[15]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 5], x[14]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 6], x[13]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 7], x[12]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 8], x[11]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 9], x[10]);
-   z[19] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 4], x[15]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 5], x[14]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 6], x[13]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 7], x[12]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 8], x[11]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 9], x[10]);
+   z[19] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 5], x[15]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 6], x[14]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 7], x[13]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 8], x[12]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 9], x[11]);
-   word3_muladd(&w2, &w1, &w0, x[10], x[10]);
-   z[20] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 5], x[15]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 6], x[14]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 7], x[13]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 8], x[12]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 9], x[11]);
+   word3_muladd(&w1, &w0, &w2, x[10], x[10]);
+   z[20] = w2; w2 = 0;
 
    word3_muladd_2(&w2, &w1, &w0, x[ 6], x[15]);
    word3_muladd_2(&w2, &w1, &w0, x[ 7], x[14]);
    word3_muladd_2(&w2, &w1, &w0, x[ 8], x[13]);
    word3_muladd_2(&w2, &w1, &w0, x[ 9], x[12]);
    word3_muladd_2(&w2, &w1, &w0, x[10], x[11]);
-   z[21] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[21] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 7], x[15]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 8], x[14]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 9], x[13]);
-   word3_muladd_2(&w2, &w1, &w0, x[10], x[12]);
-   word3_muladd(&w2, &w1, &w0, x[11], x[11]);
-   z[22] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[ 7], x[15]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 8], x[14]);
+   word3_muladd_2(&w0, &w2, &w1, x[ 9], x[13]);
+   word3_muladd_2(&w0, &w2, &w1, x[10], x[12]);
+   word3_muladd(&w0, &w2, &w1, x[11], x[11]);
+   z[22] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[ 8], x[15]);
-   word3_muladd_2(&w2, &w1, &w0, x[ 9], x[14]);
-   word3_muladd_2(&w2, &w1, &w0, x[10], x[13]);
-   word3_muladd_2(&w2, &w1, &w0, x[11], x[12]);
-   z[23] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[ 8], x[15]);
+   word3_muladd_2(&w1, &w0, &w2, x[ 9], x[14]);
+   word3_muladd_2(&w1, &w0, &w2, x[10], x[13]);
+   word3_muladd_2(&w1, &w0, &w2, x[11], x[12]);
+   z[23] = w2; w2 = 0;
 
    word3_muladd_2(&w2, &w1, &w0, x[ 9], x[15]);
    word3_muladd_2(&w2, &w1, &w0, x[10], x[14]);
    word3_muladd_2(&w2, &w1, &w0, x[11], x[13]);
    word3_muladd(&w2, &w1, &w0, x[12], x[12]);
-   z[24] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[24] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[10], x[15]);
-   word3_muladd_2(&w2, &w1, &w0, x[11], x[14]);
-   word3_muladd_2(&w2, &w1, &w0, x[12], x[13]);
-   z[25] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[10], x[15]);
+   word3_muladd_2(&w0, &w2, &w1, x[11], x[14]);
+   word3_muladd_2(&w0, &w2, &w1, x[12], x[13]);
+   z[25] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[11], x[15]);
-   word3_muladd_2(&w2, &w1, &w0, x[12], x[14]);
-   word3_muladd(&w2, &w1, &w0, x[13], x[13]);
-   z[26] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[11], x[15]);
+   word3_muladd_2(&w1, &w0, &w2, x[12], x[14]);
+   word3_muladd(&w1, &w0, &w2, x[13], x[13]);
+   z[26] = w2; w2 = 0;
 
    word3_muladd_2(&w2, &w1, &w0, x[12], x[15]);
    word3_muladd_2(&w2, &w1, &w0, x[13], x[14]);
-   z[27] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[27] = w0; w0 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[13], x[15]);
-   word3_muladd(&w2, &w1, &w0, x[14], x[14]);
-   z[28] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w0, &w2, &w1, x[13], x[15]);
+   word3_muladd(&w0, &w2, &w1, x[14], x[14]);
+   z[28] = w1; w1 = 0;
 
-   word3_muladd_2(&w2, &w1, &w0, x[14], x[15]);
-   z[29] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd_2(&w1, &w0, &w2, x[14], x[15]);
+   z[29] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[15], x[15]);
    z[30] = w0;
@@ -13849,37 +13885,37 @@ void bigint_comba_mul16(word z[32], const word x[16], const word y[16])
    word w2 = 0, w1 = 0, w0 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[ 0], y[ 0]);
-   z[0] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[ 0] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 1]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 0]);
-   z[1] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 0]);
+   z[ 1] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 1]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 0]);
-   z[2] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 0], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[ 1]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 0]);
+   z[ 2] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[ 0], y[ 3]);
    word3_muladd(&w2, &w1, &w0, x[ 1], y[ 2]);
    word3_muladd(&w2, &w1, &w0, x[ 2], y[ 1]);
    word3_muladd(&w2, &w1, &w0, x[ 3], y[ 0]);
-   z[3] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[ 3] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 4]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 1]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 0]);
-   z[4] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[ 4]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], y[ 2]);
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[ 0]);
+   z[ 4] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 4]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 1]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 0]);
-   z[5] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 0], y[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[ 4]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 3]);
+   word3_muladd(&w1, &w0, &w2, x[ 3], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], y[ 1]);
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[ 0]);
+   z[ 5] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[ 0], y[ 6]);
    word3_muladd(&w2, &w1, &w0, x[ 1], y[ 5]);
@@ -13888,28 +13924,28 @@ void bigint_comba_mul16(word z[32], const word x[16], const word y[16])
    word3_muladd(&w2, &w1, &w0, x[ 4], y[ 2]);
    word3_muladd(&w2, &w1, &w0, x[ 5], y[ 1]);
    word3_muladd(&w2, &w1, &w0, x[ 6], y[ 0]);
-   z[6] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[ 6] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 7]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 4]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[ 6], y[ 1]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[ 0]);
-   z[7] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[ 7]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 6]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], y[ 5]);
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[ 4]);
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 5], y[ 2]);
+   word3_muladd(&w0, &w2, &w1, x[ 6], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[ 7], y[ 0]);
+   z[ 7] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 0], y[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 7]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 4]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[ 6], y[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[ 1]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[ 0]);
-   z[8] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 0], y[ 8]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[ 7]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 6]);
+   word3_muladd(&w1, &w0, &w2, x[ 3], y[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], y[ 4]);
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[ 3]);
+   word3_muladd(&w1, &w0, &w2, x[ 6], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[ 7], y[ 1]);
+   word3_muladd(&w1, &w0, &w2, x[ 8], y[ 0]);
+   z[ 8] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[ 0], y[ 9]);
    word3_muladd(&w2, &w1, &w0, x[ 1], y[ 8]);
@@ -13921,34 +13957,34 @@ void bigint_comba_mul16(word z[32], const word x[16], const word y[16])
    word3_muladd(&w2, &w1, &w0, x[ 7], y[ 2]);
    word3_muladd(&w2, &w1, &w0, x[ 8], y[ 1]);
    word3_muladd(&w2, &w1, &w0, x[ 9], y[ 0]);
-   z[9] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[ 9] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 0], y[10]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 7]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[ 6], y[ 4]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[ 9], y[ 1]);
-   word3_muladd(&w2, &w1, &w0, x[10], y[ 0]);
-   z[10] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[10]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[ 9]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], y[ 8]);
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[ 7]);
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[ 6]);
+   word3_muladd(&w0, &w2, &w1, x[ 5], y[ 5]);
+   word3_muladd(&w0, &w2, &w1, x[ 6], y[ 4]);
+   word3_muladd(&w0, &w2, &w1, x[ 7], y[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[ 8], y[ 2]);
+   word3_muladd(&w0, &w2, &w1, x[ 9], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[10], y[ 0]);
+   z[10] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 0], y[11]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[10]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[ 3], y[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 7]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[ 6], y[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[ 4]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[ 9], y[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[10], y[ 1]);
-   word3_muladd(&w2, &w1, &w0, x[11], y[ 0]);
-   z[11] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 0], y[11]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[10]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[ 9]);
+   word3_muladd(&w1, &w0, &w2, x[ 3], y[ 8]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], y[ 7]);
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[ 6]);
+   word3_muladd(&w1, &w0, &w2, x[ 6], y[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[ 7], y[ 4]);
+   word3_muladd(&w1, &w0, &w2, x[ 8], y[ 3]);
+   word3_muladd(&w1, &w0, &w2, x[ 9], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[10], y[ 1]);
+   word3_muladd(&w1, &w0, &w2, x[11], y[ 0]);
+   z[11] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[ 0], y[12]);
    word3_muladd(&w2, &w1, &w0, x[ 1], y[11]);
@@ -13963,40 +13999,40 @@ void bigint_comba_mul16(word z[32], const word x[16], const word y[16])
    word3_muladd(&w2, &w1, &w0, x[10], y[ 2]);
    word3_muladd(&w2, &w1, &w0, x[11], y[ 1]);
    word3_muladd(&w2, &w1, &w0, x[12], y[ 0]);
-   z[12] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[12] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 0], y[13]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[12]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[11]);
-   word3_muladd(&w2, &w1, &w0, x[ 3], y[10]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[ 6], y[ 7]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[ 9], y[ 4]);
-   word3_muladd(&w2, &w1, &w0, x[10], y[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[11], y[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[12], y[ 1]);
-   word3_muladd(&w2, &w1, &w0, x[13], y[ 0]);
-   z[13] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 0], y[13]);
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[12]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], y[11]);
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[10]);
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[ 9]);
+   word3_muladd(&w0, &w2, &w1, x[ 5], y[ 8]);
+   word3_muladd(&w0, &w2, &w1, x[ 6], y[ 7]);
+   word3_muladd(&w0, &w2, &w1, x[ 7], y[ 6]);
+   word3_muladd(&w0, &w2, &w1, x[ 8], y[ 5]);
+   word3_muladd(&w0, &w2, &w1, x[ 9], y[ 4]);
+   word3_muladd(&w0, &w2, &w1, x[10], y[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[11], y[ 2]);
+   word3_muladd(&w0, &w2, &w1, x[12], y[ 1]);
+   word3_muladd(&w0, &w2, &w1, x[13], y[ 0]);
+   z[13] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 0], y[14]);
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[13]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[12]);
-   word3_muladd(&w2, &w1, &w0, x[ 3], y[11]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[10]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[ 6], y[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[ 7]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[ 9], y[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[10], y[ 4]);
-   word3_muladd(&w2, &w1, &w0, x[11], y[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[12], y[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[13], y[ 1]);
-   word3_muladd(&w2, &w1, &w0, x[14], y[ 0]);
-   z[14] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 0], y[14]);
+   word3_muladd(&w1, &w0, &w2, x[ 1], y[13]);
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[12]);
+   word3_muladd(&w1, &w0, &w2, x[ 3], y[11]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], y[10]);
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[ 9]);
+   word3_muladd(&w1, &w0, &w2, x[ 6], y[ 8]);
+   word3_muladd(&w1, &w0, &w2, x[ 7], y[ 7]);
+   word3_muladd(&w1, &w0, &w2, x[ 8], y[ 6]);
+   word3_muladd(&w1, &w0, &w2, x[ 9], y[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[10], y[ 4]);
+   word3_muladd(&w1, &w0, &w2, x[11], y[ 3]);
+   word3_muladd(&w1, &w0, &w2, x[12], y[ 2]);
+   word3_muladd(&w1, &w0, &w2, x[13], y[ 1]);
+   word3_muladd(&w1, &w0, &w2, x[14], y[ 0]);
+   z[14] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[ 0], y[15]);
    word3_muladd(&w2, &w1, &w0, x[ 1], y[14]);
@@ -14014,40 +14050,40 @@ void bigint_comba_mul16(word z[32], const word x[16], const word y[16])
    word3_muladd(&w2, &w1, &w0, x[13], y[ 2]);
    word3_muladd(&w2, &w1, &w0, x[14], y[ 1]);
    word3_muladd(&w2, &w1, &w0, x[15], y[ 0]);
-   z[15] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[15] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 1], y[15]);
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[14]);
-   word3_muladd(&w2, &w1, &w0, x[ 3], y[13]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[12]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[11]);
-   word3_muladd(&w2, &w1, &w0, x[ 6], y[10]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[ 9], y[ 7]);
-   word3_muladd(&w2, &w1, &w0, x[10], y[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[11], y[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[12], y[ 4]);
-   word3_muladd(&w2, &w1, &w0, x[13], y[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[14], y[ 2]);
-   word3_muladd(&w2, &w1, &w0, x[15], y[ 1]);
-   z[16] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 1], y[15]);
+   word3_muladd(&w0, &w2, &w1, x[ 2], y[14]);
+   word3_muladd(&w0, &w2, &w1, x[ 3], y[13]);
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[12]);
+   word3_muladd(&w0, &w2, &w1, x[ 5], y[11]);
+   word3_muladd(&w0, &w2, &w1, x[ 6], y[10]);
+   word3_muladd(&w0, &w2, &w1, x[ 7], y[ 9]);
+   word3_muladd(&w0, &w2, &w1, x[ 8], y[ 8]);
+   word3_muladd(&w0, &w2, &w1, x[ 9], y[ 7]);
+   word3_muladd(&w0, &w2, &w1, x[10], y[ 6]);
+   word3_muladd(&w0, &w2, &w1, x[11], y[ 5]);
+   word3_muladd(&w0, &w2, &w1, x[12], y[ 4]);
+   word3_muladd(&w0, &w2, &w1, x[13], y[ 3]);
+   word3_muladd(&w0, &w2, &w1, x[14], y[ 2]);
+   word3_muladd(&w0, &w2, &w1, x[15], y[ 1]);
+   z[16] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 2], y[15]);
-   word3_muladd(&w2, &w1, &w0, x[ 3], y[14]);
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[13]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[12]);
-   word3_muladd(&w2, &w1, &w0, x[ 6], y[11]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[10]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[ 9], y[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[10], y[ 7]);
-   word3_muladd(&w2, &w1, &w0, x[11], y[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[12], y[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[13], y[ 4]);
-   word3_muladd(&w2, &w1, &w0, x[14], y[ 3]);
-   word3_muladd(&w2, &w1, &w0, x[15], y[ 2]);
-   z[17] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 2], y[15]);
+   word3_muladd(&w1, &w0, &w2, x[ 3], y[14]);
+   word3_muladd(&w1, &w0, &w2, x[ 4], y[13]);
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[12]);
+   word3_muladd(&w1, &w0, &w2, x[ 6], y[11]);
+   word3_muladd(&w1, &w0, &w2, x[ 7], y[10]);
+   word3_muladd(&w1, &w0, &w2, x[ 8], y[ 9]);
+   word3_muladd(&w1, &w0, &w2, x[ 9], y[ 8]);
+   word3_muladd(&w1, &w0, &w2, x[10], y[ 7]);
+   word3_muladd(&w1, &w0, &w2, x[11], y[ 6]);
+   word3_muladd(&w1, &w0, &w2, x[12], y[ 5]);
+   word3_muladd(&w1, &w0, &w2, x[13], y[ 4]);
+   word3_muladd(&w1, &w0, &w2, x[14], y[ 3]);
+   word3_muladd(&w1, &w0, &w2, x[15], y[ 2]);
+   z[17] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[ 3], y[15]);
    word3_muladd(&w2, &w1, &w0, x[ 4], y[14]);
@@ -14062,34 +14098,34 @@ void bigint_comba_mul16(word z[32], const word x[16], const word y[16])
    word3_muladd(&w2, &w1, &w0, x[13], y[ 5]);
    word3_muladd(&w2, &w1, &w0, x[14], y[ 4]);
    word3_muladd(&w2, &w1, &w0, x[15], y[ 3]);
-   z[18] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[18] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 4], y[15]);
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[14]);
-   word3_muladd(&w2, &w1, &w0, x[ 6], y[13]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[12]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[11]);
-   word3_muladd(&w2, &w1, &w0, x[ 9], y[10]);
-   word3_muladd(&w2, &w1, &w0, x[10], y[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[11], y[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[12], y[ 7]);
-   word3_muladd(&w2, &w1, &w0, x[13], y[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[14], y[ 5]);
-   word3_muladd(&w2, &w1, &w0, x[15], y[ 4]);
-   z[19] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 4], y[15]);
+   word3_muladd(&w0, &w2, &w1, x[ 5], y[14]);
+   word3_muladd(&w0, &w2, &w1, x[ 6], y[13]);
+   word3_muladd(&w0, &w2, &w1, x[ 7], y[12]);
+   word3_muladd(&w0, &w2, &w1, x[ 8], y[11]);
+   word3_muladd(&w0, &w2, &w1, x[ 9], y[10]);
+   word3_muladd(&w0, &w2, &w1, x[10], y[ 9]);
+   word3_muladd(&w0, &w2, &w1, x[11], y[ 8]);
+   word3_muladd(&w0, &w2, &w1, x[12], y[ 7]);
+   word3_muladd(&w0, &w2, &w1, x[13], y[ 6]);
+   word3_muladd(&w0, &w2, &w1, x[14], y[ 5]);
+   word3_muladd(&w0, &w2, &w1, x[15], y[ 4]);
+   z[19] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 5], y[15]);
-   word3_muladd(&w2, &w1, &w0, x[ 6], y[14]);
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[13]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[12]);
-   word3_muladd(&w2, &w1, &w0, x[ 9], y[11]);
-   word3_muladd(&w2, &w1, &w0, x[10], y[10]);
-   word3_muladd(&w2, &w1, &w0, x[11], y[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[12], y[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[13], y[ 7]);
-   word3_muladd(&w2, &w1, &w0, x[14], y[ 6]);
-   word3_muladd(&w2, &w1, &w0, x[15], y[ 5]);
-   z[20] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 5], y[15]);
+   word3_muladd(&w1, &w0, &w2, x[ 6], y[14]);
+   word3_muladd(&w1, &w0, &w2, x[ 7], y[13]);
+   word3_muladd(&w1, &w0, &w2, x[ 8], y[12]);
+   word3_muladd(&w1, &w0, &w2, x[ 9], y[11]);
+   word3_muladd(&w1, &w0, &w2, x[10], y[10]);
+   word3_muladd(&w1, &w0, &w2, x[11], y[ 9]);
+   word3_muladd(&w1, &w0, &w2, x[12], y[ 8]);
+   word3_muladd(&w1, &w0, &w2, x[13], y[ 7]);
+   word3_muladd(&w1, &w0, &w2, x[14], y[ 6]);
+   word3_muladd(&w1, &w0, &w2, x[15], y[ 5]);
+   z[20] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[ 6], y[15]);
    word3_muladd(&w2, &w1, &w0, x[ 7], y[14]);
@@ -14101,28 +14137,28 @@ void bigint_comba_mul16(word z[32], const word x[16], const word y[16])
    word3_muladd(&w2, &w1, &w0, x[13], y[ 8]);
    word3_muladd(&w2, &w1, &w0, x[14], y[ 7]);
    word3_muladd(&w2, &w1, &w0, x[15], y[ 6]);
-   z[21] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[21] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 7], y[15]);
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[14]);
-   word3_muladd(&w2, &w1, &w0, x[ 9], y[13]);
-   word3_muladd(&w2, &w1, &w0, x[10], y[12]);
-   word3_muladd(&w2, &w1, &w0, x[11], y[11]);
-   word3_muladd(&w2, &w1, &w0, x[12], y[10]);
-   word3_muladd(&w2, &w1, &w0, x[13], y[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[14], y[ 8]);
-   word3_muladd(&w2, &w1, &w0, x[15], y[ 7]);
-   z[22] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[ 7], y[15]);
+   word3_muladd(&w0, &w2, &w1, x[ 8], y[14]);
+   word3_muladd(&w0, &w2, &w1, x[ 9], y[13]);
+   word3_muladd(&w0, &w2, &w1, x[10], y[12]);
+   word3_muladd(&w0, &w2, &w1, x[11], y[11]);
+   word3_muladd(&w0, &w2, &w1, x[12], y[10]);
+   word3_muladd(&w0, &w2, &w1, x[13], y[ 9]);
+   word3_muladd(&w0, &w2, &w1, x[14], y[ 8]);
+   word3_muladd(&w0, &w2, &w1, x[15], y[ 7]);
+   z[22] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[ 8], y[15]);
-   word3_muladd(&w2, &w1, &w0, x[ 9], y[14]);
-   word3_muladd(&w2, &w1, &w0, x[10], y[13]);
-   word3_muladd(&w2, &w1, &w0, x[11], y[12]);
-   word3_muladd(&w2, &w1, &w0, x[12], y[11]);
-   word3_muladd(&w2, &w1, &w0, x[13], y[10]);
-   word3_muladd(&w2, &w1, &w0, x[14], y[ 9]);
-   word3_muladd(&w2, &w1, &w0, x[15], y[ 8]);
-   z[23] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[ 8], y[15]);
+   word3_muladd(&w1, &w0, &w2, x[ 9], y[14]);
+   word3_muladd(&w1, &w0, &w2, x[10], y[13]);
+   word3_muladd(&w1, &w0, &w2, x[11], y[12]);
+   word3_muladd(&w1, &w0, &w2, x[12], y[11]);
+   word3_muladd(&w1, &w0, &w2, x[13], y[10]);
+   word3_muladd(&w1, &w0, &w2, x[14], y[ 9]);
+   word3_muladd(&w1, &w0, &w2, x[15], y[ 8]);
+   z[23] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[ 9], y[15]);
    word3_muladd(&w2, &w1, &w0, x[10], y[14]);
@@ -14131,37 +14167,37 @@ void bigint_comba_mul16(word z[32], const word x[16], const word y[16])
    word3_muladd(&w2, &w1, &w0, x[13], y[11]);
    word3_muladd(&w2, &w1, &w0, x[14], y[10]);
    word3_muladd(&w2, &w1, &w0, x[15], y[ 9]);
-   z[24] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[24] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[10], y[15]);
-   word3_muladd(&w2, &w1, &w0, x[11], y[14]);
-   word3_muladd(&w2, &w1, &w0, x[12], y[13]);
-   word3_muladd(&w2, &w1, &w0, x[13], y[12]);
-   word3_muladd(&w2, &w1, &w0, x[14], y[11]);
-   word3_muladd(&w2, &w1, &w0, x[15], y[10]);
-   z[25] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[10], y[15]);
+   word3_muladd(&w0, &w2, &w1, x[11], y[14]);
+   word3_muladd(&w0, &w2, &w1, x[12], y[13]);
+   word3_muladd(&w0, &w2, &w1, x[13], y[12]);
+   word3_muladd(&w0, &w2, &w1, x[14], y[11]);
+   word3_muladd(&w0, &w2, &w1, x[15], y[10]);
+   z[25] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[11], y[15]);
-   word3_muladd(&w2, &w1, &w0, x[12], y[14]);
-   word3_muladd(&w2, &w1, &w0, x[13], y[13]);
-   word3_muladd(&w2, &w1, &w0, x[14], y[12]);
-   word3_muladd(&w2, &w1, &w0, x[15], y[11]);
-   z[26] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[11], y[15]);
+   word3_muladd(&w1, &w0, &w2, x[12], y[14]);
+   word3_muladd(&w1, &w0, &w2, x[13], y[13]);
+   word3_muladd(&w1, &w0, &w2, x[14], y[12]);
+   word3_muladd(&w1, &w0, &w2, x[15], y[11]);
+   z[26] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[12], y[15]);
    word3_muladd(&w2, &w1, &w0, x[13], y[14]);
    word3_muladd(&w2, &w1, &w0, x[14], y[13]);
    word3_muladd(&w2, &w1, &w0, x[15], y[12]);
-   z[27] = w0; w0 = w1; w1 = w2; w2 = 0;
+   z[27] = w0; w0 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[13], y[15]);
-   word3_muladd(&w2, &w1, &w0, x[14], y[14]);
-   word3_muladd(&w2, &w1, &w0, x[15], y[13]);
-   z[28] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w0, &w2, &w1, x[13], y[15]);
+   word3_muladd(&w0, &w2, &w1, x[14], y[14]);
+   word3_muladd(&w0, &w2, &w1, x[15], y[13]);
+   z[28] = w1; w1 = 0;
 
-   word3_muladd(&w2, &w1, &w0, x[14], y[15]);
-   word3_muladd(&w2, &w1, &w0, x[15], y[14]);
-   z[29] = w0; w0 = w1; w1 = w2; w2 = 0;
+   word3_muladd(&w1, &w0, &w2, x[14], y[15]);
+   word3_muladd(&w1, &w0, &w2, x[15], y[14]);
+   z[29] = w2; w2 = 0;
 
    word3_muladd(&w2, &w1, &w0, x[15], y[15]);
    z[30] = w0;
@@ -15271,8 +15307,6 @@ BigInt sub_mul(const BigInt& a, const BigInt& b, const BigInt& c)
 */
 
 #include <algorithm>
-
-#include <stdio.h>
 
 namespace Botan {
 
@@ -17113,6 +17147,9 @@ BigInt Blinder::unblind(const BigInt& i) const
 #if defined(BOTAN_HAS_ELGAMAL)
 #endif
 
+#if defined(BOTAN_HAS_ECDH)
+#endif
+
 namespace Botan {
 
 Public_Key* make_public_key(const AlgorithmIdentifier& alg_id,
@@ -17160,6 +17197,11 @@ Public_Key* make_public_key(const AlgorithmIdentifier& alg_id,
 #if defined(BOTAN_HAS_GOST_34_10_2001)
    if(alg_name == "GOST-34.10")
       return new GOST_3410_PublicKey(alg_id, key_bits);
+#endif
+
+#if defined(BOTAN_HAS_ECDH)
+   if(alg_name == "ECDH")
+      return new ECDH_PublicKey(alg_id, key_bits);
 #endif
 
    return 0;
@@ -17211,6 +17253,11 @@ Private_Key* make_private_key(const AlgorithmIdentifier& alg_id,
 #if defined(BOTAN_HAS_GOST_34_10_2001)
    if(alg_name == "GOST-34.10")
       return new GOST_3410_PrivateKey(alg_id, key_bits);
+#endif
+
+#if defined(BOTAN_HAS_ECDH)
+   if(alg_name == "ECDH")
+      return new ECDH_PrivateKey(alg_id, key_bits);
 #endif
 
    return 0;
@@ -18636,8 +18683,18 @@ bool caseless_cmp(char a, char b)
 */
 
 
+#if defined(BOTAN_TARGET_CPU_IS_PPC_FAMILY)
+
 #if defined(BOTAN_TARGET_OS_IS_DARWIN)
   #include <sys/sysctl.h>
+#endif
+
+#if defined(BOTAN_TARGET_OS_IS_OPENBSD)
+  #include <sys/param.h>
+  #include <sys/sysctl.h>
+  #include <machine/cpu.h>
+#endif
+
 #endif
 
 #if defined(BOTAN_TARGET_CPU_IS_X86_FAMILY)
@@ -18650,9 +18707,9 @@ bool caseless_cmp(char a, char b)
 #elif defined(BOTAN_BUILD_COMPILER_IS_INTEL)
 
   #include <ia32intrin.h>
-  #define CALL_CPUID(type, out) do { __cpuid(out, type); } while(0);
+  #define CALL_CPUID(type, out) do { __cpuid(out, type); } while(0)
 
-#elif (BOTAN_GCC_VERSION >= 430)
+#elif defined(BOTAN_BUILD_COMPILER_IS_GCC) && (BOTAN_GCC_VERSION >= 430)
 
   // Only available starting in GCC 4.3
   #include <cpuid.h>
@@ -18671,6 +18728,20 @@ namespace {
   #define CALL_CPUID call_gcc_cpuid
 
 }
+
+#elif defined(BOTAN_TARGET_ARCH_IS_X86_64) && \
+   (defined(BOTAN_BUILD_COMPILER_IS_CLANG) || defined(BOTAN_BUILD_COMPILER_IS_GCC))
+
+  /*
+  * We can't safely use this on x86-32 as some 32-bit ABIs use ebx as
+  * a PIC register, and in theory there are some x86-32s still out
+  * there that don't support cpuid at all; it requires strange
+  * contortions to detect them.
+  */
+
+  #define CALL_CPUID(type, out) \
+    asm("cpuid\n\t" : "=a" (out[0]), "=b" (out[1]), "=c" (out[2]), "=d" (out[3]) \
+        : "0" (type))
 
 #else
   #warning "No method of calling CPUID for this compiler"
@@ -18718,10 +18789,14 @@ u32bit get_x86_cache_line_size()
 
 bool altivec_check_sysctl()
    {
-#if defined(BOTAN_TARGET_OS_IS_DARWIN)
+#if defined(BOTAN_TARGET_OS_IS_DARWIN) || defined(BOTAN_TARGET_OS_IS_OPENBSD)
 
+#if defined(BOTAN_TARGET_OS_IS_OPENBSD)
+   int sels[2] = { CTL_MACHDEP, CPU_ALTIVEC };
+#else
    // From Apple's docs
    int sels[2] = { CTL_HW, HW_VECTORUNIT };
+#endif
    int vector_type = 0;
    size_t length = sizeof(vector_type);
    int error = sysctl(sels, 2, &vector_type, &length, NULL, 0);
@@ -18754,6 +18829,7 @@ bool altivec_check_pvr_emul()
    const u16bit PVR_G5_970MP = 0x0044;
    const u16bit PVR_G5_970GX = 0x0045;
    const u16bit PVR_POWER6   = 0x003E;
+   const u16bit PVR_POWER7   = 0x003F;
    const u16bit PVR_CELL_PPU = 0x0070;
 
    // Motorola produced G4s with PVR 0x800[0123C] (at least)
@@ -18773,6 +18849,7 @@ bool altivec_check_pvr_emul()
    altivec_capable |= (pvr == PVR_G5_970MP);
    altivec_capable |= (pvr == PVR_G5_970GX);
    altivec_capable |= (pvr == PVR_POWER6);
+   altivec_capable |= (pvr == PVR_POWER7);
    altivec_capable |= (pvr == PVR_CELL_PPU);
 #endif
 

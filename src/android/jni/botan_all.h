@@ -1,5 +1,5 @@
 /*
-* Botan 1.10.1 Amalgamation
+* Botan 1.10.2 Amalgamation
 * (C) 1999-2011 Jack Lloyd and others
 *
 * Distributed under the terms of the Botan license
@@ -18,21 +18,21 @@
 #include <vector>
 
 /*
-* This file was automatically generated Sat Mar 10 06:54:42 2012 UTC by
-* jakepetroules@Lightning.local running './configure.py --disable-shared --disable-asm --no-autoload --gen-amalgamation --enable-modules=auto_rng,pbkdf2,dev_random,sha1 --os=linux --cpu=arm'
+* This file was automatically generated Tue Mar 20 06:41:24 2012 UTC by
+* jakepetroules@Lightning.local running './configure.py --os=android --cpu=arm --disable-shared --disable-asm --gen-amalgamation --no-autoload --enable-modules=auto_rng,pbkdf2,dev_random,sha1'
 *
 * Target
 *  - Compiler: g++ -O3 -finline-functions 
 *  - Arch: arm/arm
-*  - OS: linux
+*  - OS: android
 */
 
 #define BOTAN_VERSION_MAJOR 1
 #define BOTAN_VERSION_MINOR 10
-#define BOTAN_VERSION_PATCH 1
-#define BOTAN_VERSION_DATESTAMP 20110711
+#define BOTAN_VERSION_PATCH 2
+#define BOTAN_VERSION_DATESTAMP 0
 
-#define BOTAN_VERSION_VC_REVISION "mtn:23a326fa36a31dd39347a8864e1f5740669a905e"
+#define BOTAN_VERSION_VC_REVISION "unknown"
 
 #define BOTAN_DISTRIBUTION_INFO "unspecified"
 
@@ -72,8 +72,7 @@
 #endif
 
 /* Target identification and feature test macros */
-#define BOTAN_TARGET_OS_IS_LINUX
-#define BOTAN_TARGET_OS_HAS_CLOCK_GETTIME
+#define BOTAN_TARGET_OS_IS_ANDROID
 #define BOTAN_TARGET_OS_HAS_DLOPEN
 #define BOTAN_TARGET_OS_HAS_GETTIMEOFDAY
 #define BOTAN_TARGET_OS_HAS_GMTIME_R
@@ -483,9 +482,9 @@ class MemoryRegion
       */
       void swap(MemoryRegion<T>& other);
 
-      ~MemoryRegion() { deallocate(buf, allocated); }
+      virtual ~MemoryRegion() { deallocate(buf, allocated); }
    protected:
-      MemoryRegion() { buf = 0; alloc = 0; used = allocated = 0; }
+      MemoryRegion() : buf(0), used(0), allocated(0), alloc(0) {}
 
       /**
       * Copy constructor
@@ -8675,30 +8674,44 @@ class BOTAN_DLL DER_Encoder
    public:
       SecureVector<byte> get_contents();
 
-      DER_Encoder& start_cons(ASN1_Tag, ASN1_Tag = UNIVERSAL);
+      DER_Encoder& start_cons(ASN1_Tag type_tag,
+                              ASN1_Tag class_tag = UNIVERSAL);
       DER_Encoder& end_cons();
 
-      DER_Encoder& start_explicit(u16bit);
+      DER_Encoder& start_explicit(u16bit type_tag);
       DER_Encoder& end_explicit();
 
-      DER_Encoder& raw_bytes(const byte[], size_t);
-      DER_Encoder& raw_bytes(const MemoryRegion<byte>&);
+      DER_Encoder& raw_bytes(const byte val[], size_t len);
+      DER_Encoder& raw_bytes(const MemoryRegion<byte>& val);
 
       DER_Encoder& encode_null();
-      DER_Encoder& encode(bool);
-      DER_Encoder& encode(size_t);
-      DER_Encoder& encode(const BigInt&);
-      DER_Encoder& encode(const MemoryRegion<byte>&, ASN1_Tag);
-      DER_Encoder& encode(const byte[], size_t, ASN1_Tag);
+      DER_Encoder& encode(bool b);
+      DER_Encoder& encode(size_t s);
+      DER_Encoder& encode(const BigInt& n);
+      DER_Encoder& encode(const MemoryRegion<byte>& v, ASN1_Tag real_type);
+      DER_Encoder& encode(const byte val[], size_t len, ASN1_Tag real_type);
 
-      DER_Encoder& encode(bool, ASN1_Tag, ASN1_Tag = CONTEXT_SPECIFIC);
-      DER_Encoder& encode(size_t, ASN1_Tag, ASN1_Tag = CONTEXT_SPECIFIC);
-      DER_Encoder& encode(const BigInt&, ASN1_Tag,
-                          ASN1_Tag = CONTEXT_SPECIFIC);
-      DER_Encoder& encode(const MemoryRegion<byte>&, ASN1_Tag,
-                          ASN1_Tag, ASN1_Tag = CONTEXT_SPECIFIC);
-      DER_Encoder& encode(const byte[], size_t, ASN1_Tag,
-                          ASN1_Tag, ASN1_Tag = CONTEXT_SPECIFIC);
+      DER_Encoder& encode(bool b,
+                          ASN1_Tag type_tag,
+                          ASN1_Tag class_tag = CONTEXT_SPECIFIC);
+
+      DER_Encoder& encode(size_t s,
+                          ASN1_Tag type_tag,
+                          ASN1_Tag class_tag = CONTEXT_SPECIFIC);
+
+      DER_Encoder& encode(const BigInt& n,
+                          ASN1_Tag type_tag,
+                          ASN1_Tag class_tag = CONTEXT_SPECIFIC);
+
+      DER_Encoder& encode(const MemoryRegion<byte>& v,
+                          ASN1_Tag real_type,
+                          ASN1_Tag type_tag,
+                          ASN1_Tag class_tag = CONTEXT_SPECIFIC);
+
+      DER_Encoder& encode(const byte v[], size_t len,
+                          ASN1_Tag real_type,
+                          ASN1_Tag type_tag,
+                          ASN1_Tag class_tag = CONTEXT_SPECIFIC);
 
       template<typename T>
       DER_Encoder& encode_optional(const T& value, const T& default_value)
@@ -8716,13 +8729,21 @@ class BOTAN_DLL DER_Encoder
          return (*this);
          }
 
-      DER_Encoder& encode(const ASN1_Object&);
-      DER_Encoder& encode_if(bool, DER_Encoder&);
+      DER_Encoder& encode(const ASN1_Object& obj);
+      DER_Encoder& encode_if(bool pred, DER_Encoder& enc);
 
-      DER_Encoder& add_object(ASN1_Tag, ASN1_Tag, const byte[], size_t);
-      DER_Encoder& add_object(ASN1_Tag, ASN1_Tag, const MemoryRegion<byte>&);
-      DER_Encoder& add_object(ASN1_Tag, ASN1_Tag, const std::string&);
-      DER_Encoder& add_object(ASN1_Tag, ASN1_Tag, byte);
+      DER_Encoder& add_object(ASN1_Tag type_tag, ASN1_Tag class_tag,
+                              const byte rep[], size_t length);
+
+      DER_Encoder& add_object(ASN1_Tag type_tag, ASN1_Tag class_tag,
+                              const MemoryRegion<byte>& rep);
+
+      DER_Encoder& add_object(ASN1_Tag type_tag, ASN1_Tag class_tag,
+                              const std::string& str);
+
+      DER_Encoder& add_object(ASN1_Tag type_tag, ASN1_Tag class_tag,
+                              byte val);
+
    private:
       class DER_Sequence
          {
@@ -8736,6 +8757,7 @@ class BOTAN_DLL DER_Encoder
             SecureVector<byte> contents;
             std::vector< SecureVector<byte> > set_contents;
          };
+
       SecureVector<byte> contents;
       std::vector<DER_Sequence> subsequences;
    };

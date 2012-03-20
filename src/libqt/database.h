@@ -3,7 +3,7 @@
 
 #include "silverlocklib_global.h"
 #include "group.h"
-#include <synteza.h>
+#include <petroules-utilities.h>
 #include <QtXml>
 
 class SILVERLOCKLIBSHARED_EXPORT Database : public Group

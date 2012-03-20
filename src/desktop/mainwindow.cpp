@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <silverlocklib.h>
-#include <synteza.h>
+#include <petroules-utilities.h>
 #include "silverlockapplication.h"
 #include "silverlockpreferences.h"
 #include "dialogs/aboutdialog.h"

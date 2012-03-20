@@ -1,7 +1,7 @@
 #include "databaseprintpreviewdialog.h"
 #include "ui_databaseprintpreviewdialog.h"
 #include <silverlocklib.h>
-#include <synteza.h>
+#include <petroules-utilities.h>
 
 /*!
     \class DatabasePrintPreviewDialog

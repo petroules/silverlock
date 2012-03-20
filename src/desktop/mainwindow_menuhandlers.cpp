@@ -11,7 +11,7 @@
 #include "dialogs/selectgroupdialog.h"
 #include "widgets/itoolbarsearchwidget.h"
 #include <silverlocklib.h>
-#include <synteza.h>
+#include <petroules-utilities.h>
 
 void MainWindow::newFile()
 {

@@ -2,7 +2,7 @@
 #include "database.h"
 #include <iostream>
 #include <memory>
-#include <botan/botan.h>
+#include <botan/botan_all.h>
 
 // Little fix for the SecureVector template on MSVC...
 #ifdef min

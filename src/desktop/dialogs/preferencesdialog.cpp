@@ -1,7 +1,7 @@
 #include "preferencesdialog.h"
 #include "ui_preferencesdialog.h"
 #include "silverlockpreferences.h"
-#include <synteza.h>
+#include <petroules-utilities.h>
 
 /*!
     \class PreferencesDialog

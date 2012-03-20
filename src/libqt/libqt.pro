@@ -37,7 +37,8 @@ HEADERS += \
     searchparameters.h \
     databasecrypto.h \
     stable.h \
-    version.h
+    version.h \
+    botan/botan_all.h
 SOURCES += \
     database.cpp \
     entry.cpp \
@@ -46,7 +47,8 @@ SOURCES += \
     databasereader.cpp \
     databasewriter.cpp \
     searchparameters.cpp \
-    databasecrypto.cpp
+    databasecrypto.cpp \
+    botan/botan_all.cpp
 RESOURCES +=
 TRANSLATIONS += \
     tr/silverlocklib_de.ts \
@@ -63,39 +65,22 @@ OTHER_FILES += \
 # Botan needs some stuff from here
 win32:LIBS += -ladvapi32 -luser32
 
-win32:TEMP_BUILDDIR = temp-win32-gcc
-win32-msvc*:TEMP_BUILDDIR = temp-win32-msvc
-macx:TEMP_BUILDDIR = temp-mac64
-linux-g++:TEMP_BUILDDIR = temp-linux32
+PETROULESUTILITIES_PATH = ../petroules-utilities-qt/src
+QTSOLUTIONS_PATH = $$PETROULESUTILITIES_PATH/../lib/qtsingleapplication/src
 
-SYNTEZA_PATH = ../3rdparty/$$TEMP_BUILDDIR/synteza/qt
-BOTAN_PATH = ../3rdparty/$$TEMP_BUILDDIR/botan
+# Petroules Utilities library
 
-# Synteza library
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$PETROULESUTILITIES_PATH/release/ -lpetroules-utilities
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$PETROULESUTILITIES_PATH/debug/ -lpetroules-utilities
+else:symbian:LIBS += -lpetroules-utilities
+else:unix:LIBS += -L$$OUT_PWD/$$PETROULESUTILITIES_PATH/ -lpetroules-utilities
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/release/ -lsynteza
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/debug/ -lsynteza
-else:symbian: LIBS += -lsynteza
-else:unix: LIBS += -L$$OUT_PWD/$$SYNTEZA_PATH/ -lsynteza
+# We have to make sure we include the QtSingleApplication headers
+# path because it will get indirectly included from THIS project
+INCLUDEPATH += $$PWD/$$PETROULESUTILITIES_PATH $$PWD/$$QTSOLUTIONS_PATH
+DEPENDPATH += $$PWD/$$PETROULESUTILITIES_PATH $$PWD/$$QTSOLUTIONS_PATH
 
-INCLUDEPATH += $$PWD/$$SYNTEZA_PATH
-DEPENDPATH += $$PWD/$$SYNTEZA_PATH
-
-macx:PRE_TARGETDEPS += $$OUT_PWD/$$SYNTEZA_PATH/libsynteza.a
-
-# Botan library
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotand
-else:symbian: LIBS += -lbotan
-else:unix: LIBS += -L$$PWD/$$BOTAN_PATH/ -lbotan
-
-INCLUDEPATH += $$PWD/$$BOTAN_PATH/build/include
-DEPENDPATH += $$PWD/$$BOTAN_PATH/build/include
-
-win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botan.lib
-else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/botand.lib
-else:unix:!symbian: PRE_TARGETDEPS += $$PWD/$$BOTAN_PATH/libbotan.a
+macx:PRE_TARGETDEPS += $$OUT_PWD/$$PETROULESUTILITIES_PATH/libpetroules-utilities.a
 
 # --------------------------------------------------
 # This section contains miscellaneous commands such

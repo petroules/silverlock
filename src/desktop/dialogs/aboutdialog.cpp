@@ -2,7 +2,7 @@
 #include "ui_aboutdialog.h"
 #include "licensedialog.h"
 #include <databasecrypto.h>
-#include <synteza.h>
+#include <petroules-utilities.h>
 
 /*!
     \class AboutDialog
@@ -85,7 +85,7 @@ void AboutDialog::displayBuildInformationDialog()
         .arg(PlatformInformation::compilerString())
         .arg(qVersion())
         .arg("2.6")
-        .arg(SYNTEZA_VERSION_STR)
+        .arg(PETROULESUTILITIES_VERSION_STR)
         .arg(DatabaseCrypto::botanVersion())
         .arg(osString)
         .arg(PlatformInformation::byteOrder());

@@ -1,7 +1,7 @@
 #include "updatedialog.h"
 #include "ui_updatedialog.h"
 #include "silverlockpreferences.h"
-#include <synteza.h>
+#include <petroules-utilities.h>
 #include <QtXml>
 
 /*!

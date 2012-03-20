@@ -1,7 +1,7 @@
 #ifndef SILVERLOCKAPPLICATION_H
 #define SILVERLOCKAPPLICATION_H
 
-#include <synteza.h>
+#include <petroules-utilities.h>
 
 class ApplicationMenu;
 class MainWindow;

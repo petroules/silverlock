@@ -6,12 +6,12 @@ Thumbs.db
 .metadata
 
 # Other IDE and build files
-src/*.pro.user
-src/3rdparty/temp-*
-src/3rdparty/make.*
-
-# Qt build directories
+*.pro.user
+*.pro.autosave
 silverlock-build-*
+
+# 3rd party
+src/3rdparty/synteza/.git
 
 # Eclipse build directories
 src/android/bin
