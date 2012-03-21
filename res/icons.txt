@@ -1,0 +1,14 @@
+  36: Android (low DPI)
+  48: Android (medium DPI)
+  57: iPhone, iPod Touch
+  64: Maemo 5 "Fremantle"
+  72: Android (high DPI), iPad, iPad 2
+  80: MeeGo 1.2 "Harmattan" (Maemo 6)
+ 114: iPhone 4 w/ retina display
+ 128: Android (regular)
+ 144: iPad 3
+1024: Used to generate other files
+
+ ico: Windows
+icns: Mac OS X
+ svg: Linux (also the original artwork file)
