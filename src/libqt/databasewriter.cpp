@@ -56,10 +56,16 @@ bool DatabaseWriter::write(const Database *const database, QIODevice &device, bo
     if (encrypt)
     {
         DatabaseCrypto::CryptoStatus status;
-        fileDataString = DatabaseCrypto::encrypt(fileDataString, database->password(), database->compression(), &status);
+        QString extendedErrorInformation;
+        fileDataString = DatabaseCrypto::encrypt(fileDataString, database->password(), database->compression(), &status, &extendedErrorInformation);
         if (status != DatabaseCrypto::NoError)
         {
             this->m_errorString = DatabaseCrypto::statusMessage(status);
+            if (!extendedErrorInformation.isEmpty())
+            {
+                this->m_errorString += " Details: " + extendedErrorInformation;
+            }
+
             return false;
         }
     }

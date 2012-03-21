@@ -18,7 +18,7 @@ public:
     explicit Group(const QString &title = QString(), Group *parent = NULL);
     ~Group();
     const QList<Group*>& groups() const;
-    const QList<Entry*>& entries() const;
+    const QList<Entry*> entries(bool recursive = false) const;
     int countGroups() const;
     int countEntries() const;
     bool containsUuid(const QUuid &uuid) const;

@@ -1,10 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="hello">Hello World, Silverlock!</string>
     <string name="app_name">Silverlock</string>
-    <string name="file_url">File URL:</string>
-    <string name="file_password">File password:</string>
-    <string name="ok">OK</string>
-    <string name="default_url">http://www.jakepetroules.com/files/TestDatabase.sdbx</string>
-    <string name="tests">Tests</string>
+    <string name="ministro_not_found_msg">Can\'t find Ministro service.\nThe application can\'t start.</string>
+    <string name="ministro_needed_msg">This application requires Ministro service. Would you like to install it?</string>
+    <string name="fatal_error_msg">Your application encountered a fatal error and cannot continue.</string>
 </resources>

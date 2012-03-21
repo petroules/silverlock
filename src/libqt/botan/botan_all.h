@@ -23,8 +23,8 @@
 #include <vector>
 
 /*
-* This file was automatically generated Tue Mar 20 06:41:24 2012 UTC by
-* jakepetroules@Lightning.local running './configure.py --os=android --cpu=arm --disable-shared --disable-asm --gen-amalgamation --no-autoload --enable-modules=auto_rng,pbkdf2,dev_random,sha1'
+* This file was automatically generated Wed Mar 21 02:41:27 2012 UTC by
+* jakepetroules@Lightning.local running './configure.py --os=android --cpu=arm --disable-shared --disable-asm --gen-amalgamation --no-autoload --enable-modules=auto_rng,pbkdf2,dev_random,sha1,aes,cbc,pkcs7'
 *
 * Target
 *  - Compiler: g++ -O3 -finline-functions 
@@ -141,6 +141,7 @@
 #define BOTAN_HAS_BIGINT_MATH
 #define BOTAN_HAS_BIGINT_MP
 #define BOTAN_HAS_BLOCK_CIPHER
+#define BOTAN_HAS_CBC
 #define BOTAN_HAS_CIPHER_MODE_PADDING
 #define BOTAN_HAS_CODEC_FILTERS
 #define BOTAN_HAS_CORE_ENGINE
@@ -3773,110 +3774,6 @@ class BOTAN_DLL ASN1_String : public ASN1_Object
 
 namespace Botan {
 
-/**
-* Perform hex encoding
-* @param output an array of at least input_length*2 bytes
-* @param input is some binary data
-* @param input_length length of input in bytes
-* @param uppercase should output be upper or lower case?
-*/
-void BOTAN_DLL hex_encode(char output[],
-                          const byte input[],
-                          size_t input_length,
-                          bool uppercase = true);
-
-/**
-* Perform hex encoding
-* @param input some input
-* @param input_length length of input in bytes
-* @param uppercase should output be upper or lower case?
-* @return hexadecimal representation of input
-*/
-std::string BOTAN_DLL hex_encode(const byte input[],
-                                 size_t input_length,
-                                 bool uppercase = true);
-
-/**
-* Perform hex encoding
-* @param input some input
-* @param uppercase should output be upper or lower case?
-* @return hexadecimal representation of input
-*/
-std::string BOTAN_DLL hex_encode(const MemoryRegion<byte>& input,
-                                 bool uppercase = true);
-
-/**
-* Perform hex decoding
-* @param output an array of at least input_length/2 bytes
-* @param input some hex input
-* @param input_length length of input in bytes
-* @param input_consumed is an output parameter which says how many
-*        bytes of input were actually consumed. If less than
-*        input_length, then the range input[consumed:length]
-*        should be passed in later along with more input.
-* @param ignore_ws ignore whitespace on input; if false, throw an
-                   exception if whitespace is encountered
-* @return number of bytes written to output
-*/
-size_t BOTAN_DLL hex_decode(byte output[],
-                            const char input[],
-                            size_t input_length,
-                            size_t& input_consumed,
-                            bool ignore_ws = true);
-
-/**
-* Perform hex decoding
-* @param output an array of at least input_length/2 bytes
-* @param input some hex input
-* @param input_length length of input in bytes
-* @param ignore_ws ignore whitespace on input; if false, throw an
-                   exception if whitespace is encountered
-* @return number of bytes written to output
-*/
-size_t BOTAN_DLL hex_decode(byte output[],
-                            const char input[],
-                            size_t input_length,
-                            bool ignore_ws = true);
-
-/**
-* Perform hex decoding
-* @param output an array of at least input_length/2 bytes
-* @param input some hex input
-* @param ignore_ws ignore whitespace on input; if false, throw an
-                   exception if whitespace is encountered
-* @return number of bytes written to output
-*/
-size_t BOTAN_DLL hex_decode(byte output[],
-                            const std::string& input,
-                            bool ignore_ws = true);
-
-/**
-* Perform hex decoding
-* @param input some hex input
-* @param input_length the length of input in bytes
-* @param ignore_ws ignore whitespace on input; if false, throw an
-                   exception if whitespace is encountered
-* @return decoded hex output
-*/
-SecureVector<byte> BOTAN_DLL hex_decode(const char input[],
-                                        size_t input_length,
-                                        bool ignore_ws = true);
-
-/**
-* Perform hex decoding
-* @param input some hex input
-* @param ignore_ws ignore whitespace on input; if false, throw an
-                   exception if whitespace is encountered
-* @return decoded hex output
-*/
-SecureVector<byte> BOTAN_DLL hex_decode(const std::string& input,
-                                        bool ignore_ws = true);
-
-}
-
-
-namespace Botan {
-
 #if (BOTAN_MP_WORD_BITS == 8)
   typedef byte word;
 #elif (BOTAN_MP_WORD_BITS == 16)
@@ -4430,6 +4327,127 @@ inline void swap(Botan::BigInt& x, Botan::BigInt& y)
    {
    x.swap(y);
    }
+
+}
+
+
+namespace Botan {
+
+/**
+* BigInt Division
+* @param x an integer
+* @param y a non-zero integer
+* @param q will be set to x / y
+* @param r will be set to x % y
+*/
+void BOTAN_DLL divide(const BigInt& x,
+                      const BigInt& y,
+                      BigInt& q,
+                      BigInt& r);
+
+}
+
+
+namespace Botan {
+
+/**
+* Perform hex encoding
+* @param output an array of at least input_length*2 bytes
+* @param input is some binary data
+* @param input_length length of input in bytes
+* @param uppercase should output be upper or lower case?
+*/
+void BOTAN_DLL hex_encode(char output[],
+                          const byte input[],
+                          size_t input_length,
+                          bool uppercase = true);
+
+/**
+* Perform hex encoding
+* @param input some input
+* @param input_length length of input in bytes
+* @param uppercase should output be upper or lower case?
+* @return hexadecimal representation of input
+*/
+std::string BOTAN_DLL hex_encode(const byte input[],
+                                 size_t input_length,
+                                 bool uppercase = true);
+
+/**
+* Perform hex encoding
+* @param input some input
+* @param uppercase should output be upper or lower case?
+* @return hexadecimal representation of input
+*/
+std::string BOTAN_DLL hex_encode(const MemoryRegion<byte>& input,
+                                 bool uppercase = true);
+
+/**
+* Perform hex decoding
+* @param output an array of at least input_length/2 bytes
+* @param input some hex input
+* @param input_length length of input in bytes
+* @param input_consumed is an output parameter which says how many
+*        bytes of input were actually consumed. If less than
+*        input_length, then the range input[consumed:length]
+*        should be passed in later along with more input.
+* @param ignore_ws ignore whitespace on input; if false, throw an
+                   exception if whitespace is encountered
+* @return number of bytes written to output
+*/
+size_t BOTAN_DLL hex_decode(byte output[],
+                            const char input[],
+                            size_t input_length,
+                            size_t& input_consumed,
+                            bool ignore_ws = true);
+
+/**
+* Perform hex decoding
+* @param output an array of at least input_length/2 bytes
+* @param input some hex input
+* @param input_length length of input in bytes
+* @param ignore_ws ignore whitespace on input; if false, throw an
+                   exception if whitespace is encountered
+* @return number of bytes written to output
+*/
+size_t BOTAN_DLL hex_decode(byte output[],
+                            const char input[],
+                            size_t input_length,
+                            bool ignore_ws = true);
+
+/**
+* Perform hex decoding
+* @param output an array of at least input_length/2 bytes
+* @param input some hex input
+* @param ignore_ws ignore whitespace on input; if false, throw an
+                   exception if whitespace is encountered
+* @return number of bytes written to output
+*/
+size_t BOTAN_DLL hex_decode(byte output[],
+                            const std::string& input,
+                            bool ignore_ws = true);
+
+/**
+* Perform hex decoding
+* @param input some hex input
+* @param input_length the length of input in bytes
+* @param ignore_ws ignore whitespace on input; if false, throw an
+                   exception if whitespace is encountered
+* @return decoded hex output
+*/
+SecureVector<byte> BOTAN_DLL hex_decode(const char input[],
+                                        size_t input_length,
+                                        bool ignore_ws = true);
+
+/**
+* Perform hex decoding
+* @param input some hex input
+* @param ignore_ws ignore whitespace on input; if false, throw an
+                   exception if whitespace is encountered
+* @return decoded hex output
+*/
+SecureVector<byte> BOTAN_DLL hex_decode(const std::string& input,
+                                        bool ignore_ws = true);
 
 }
 
@@ -6396,16 +6414,191 @@ class BOTAN_DLL Engine
 namespace Botan {
 
 /**
-* BigInt Division
-* @param x an integer
-* @param y a non-zero integer
-* @param q will be set to x / y
-* @param r will be set to x % y
+* Block Cipher Mode Padding Method
+* This class is pretty limited, it cannot deal well with
+* randomized padding methods, or any padding method that
+* wants to add more than one block. For instance, it should
+* be possible to define cipher text stealing mode as simply
+* a padding mode for CBC, which happens to consume the last
+* two block (and requires use of the block cipher).
 */
-void BOTAN_DLL divide(const BigInt& x,
-                      const BigInt& y,
-                      BigInt& q,
-                      BigInt& r);
+class BOTAN_DLL BlockCipherModePaddingMethod
+   {
+   public:
+      /**
+      * @param block output buffer
+      * @param size of the block
+      * @param current_position in the last block
+      */
+      virtual void pad(byte block[],
+                       size_t size,
+                       size_t current_position) const = 0;
+
+      /**
+      * @param block the last block
+      * @param size the of the block
+      */
+      virtual size_t unpad(const byte block[],
+                           size_t size) const = 0;
+
+      /**
+      * @param block_size of the cipher
+      * @param position in the current block
+      * @return number of padding bytes that will be appended
+      */
+      virtual size_t pad_bytes(size_t block_size,
+                               size_t position) const;
+
+      /**
+      * @param block_size of the cipher
+      * @return valid block size for this padding mode
+      */
+      virtual bool valid_blocksize(size_t block_size) const = 0;
+
+      /**
+      * @return name of the mode
+      */
+      virtual std::string name() const = 0;
+
+      /**
+      * virtual destructor
+      */
+      virtual ~BlockCipherModePaddingMethod() {}
+   };
+
+/**
+* PKCS#7 Padding
+*/
+class BOTAN_DLL PKCS7_Padding : public BlockCipherModePaddingMethod
+   {
+   public:
+      void pad(byte[], size_t, size_t) const;
+      size_t unpad(const byte[], size_t) const;
+      bool valid_blocksize(size_t) const;
+      std::string name() const { return "PKCS7"; }
+   };
+
+/**
+* ANSI X9.23 Padding
+*/
+class BOTAN_DLL ANSI_X923_Padding : public BlockCipherModePaddingMethod
+   {
+   public:
+      void pad(byte[], size_t, size_t) const;
+      size_t unpad(const byte[], size_t) const;
+      bool valid_blocksize(size_t) const;
+      std::string name() const { return "X9.23"; }
+   };
+
+/**
+* One And Zeros Padding
+*/
+class BOTAN_DLL OneAndZeros_Padding : public BlockCipherModePaddingMethod
+   {
+   public:
+      void pad(byte[], size_t, size_t) const;
+      size_t unpad(const byte[], size_t) const;
+      bool valid_blocksize(size_t) const;
+      std::string name() const { return "OneAndZeros"; }
+   };
+
+/**
+* Null Padding
+*/
+class BOTAN_DLL Null_Padding : public BlockCipherModePaddingMethod
+   {
+   public:
+      void pad(byte[], size_t, size_t) const { return; }
+      size_t unpad(const byte[], size_t size) const { return size; }
+      size_t pad_bytes(size_t, size_t) const { return 0; }
+      bool valid_blocksize(size_t) const { return true; }
+      std::string name() const { return "NoPadding"; }
+   };
+
+}
+
+
+namespace Botan {
+
+/**
+* CBC Encryption
+*/
+class BOTAN_DLL CBC_Encryption : public Keyed_Filter,
+                                 private Buffered_Filter
+   {
+   public:
+      std::string name() const;
+
+      void set_iv(const InitializationVector& iv);
+
+      void set_key(const SymmetricKey& key) { cipher->set_key(key); }
+
+      bool valid_keylength(size_t key_len) const
+         { return cipher->valid_keylength(key_len); }
+
+      bool valid_iv_length(size_t iv_len) const
+         { return (iv_len == cipher->block_size()); }
+
+      CBC_Encryption(BlockCipher* cipher,
+                     BlockCipherModePaddingMethod* padding);
+
+      CBC_Encryption(BlockCipher* cipher,
+                     BlockCipherModePaddingMethod* padding,
+                     const SymmetricKey& key,
+                     const InitializationVector& iv);
+
+      ~CBC_Encryption() { delete cipher; delete padder; }
+   private:
+      void buffered_block(const byte input[], size_t input_length);
+      void buffered_final(const byte input[], size_t input_length);
+
+      void write(const byte input[], size_t input_length);
+      void end_msg();
+
+      BlockCipher* cipher;
+      const BlockCipherModePaddingMethod* padder;
+      SecureVector<byte> state;
+   };
+
+/**
+* CBC Decryption
+*/
+class BOTAN_DLL CBC_Decryption : public Keyed_Filter,
+                                 private Buffered_Filter
+   {
+   public:
+      std::string name() const;
+
+      void set_iv(const InitializationVector& iv);
+
+      void set_key(const SymmetricKey& key) { cipher->set_key(key); }
+
+      bool valid_keylength(size_t key_len) const
+         { return cipher->valid_keylength(key_len); }
+
+      bool valid_iv_length(size_t iv_len) const
+         { return (iv_len == cipher->block_size()); }
+
+      CBC_Decryption(BlockCipher* cipher,
+                     BlockCipherModePaddingMethod* padding);
+
+      CBC_Decryption(BlockCipher* cipher,
+                     BlockCipherModePaddingMethod* padding,
+                     const SymmetricKey& key,
+                     const InitializationVector& iv);
+
+      ~CBC_Decryption() { delete cipher; delete padder; }
+   private:
+      void buffered_block(const byte input[], size_t input_length);
+      void buffered_final(const byte input[], size_t input_length);
+
+      void write(const byte[], size_t);
+      void end_msg();
+
+      BlockCipher* cipher;
+      const BlockCipherModePaddingMethod* padder;
+      SecureVector<byte> state, temp;
+   };
 
 }
 
@@ -6983,113 +7176,6 @@ class BOTAN_DLL X509_DN : public ASN1_Object
 bool BOTAN_DLL operator==(const X509_DN&, const X509_DN&);
 bool BOTAN_DLL operator!=(const X509_DN&, const X509_DN&);
 bool BOTAN_DLL operator<(const X509_DN&, const X509_DN&);
-
-}
-
-
-namespace Botan {
-
-/**
-* Block Cipher Mode Padding Method
-* This class is pretty limited, it cannot deal well with
-* randomized padding methods, or any padding method that
-* wants to add more than one block. For instance, it should
-* be possible to define cipher text stealing mode as simply
-* a padding mode for CBC, which happens to consume the last
-* two block (and requires use of the block cipher).
-*/
-class BOTAN_DLL BlockCipherModePaddingMethod
-   {
-   public:
-      /**
-      * @param block output buffer
-      * @param size of the block
-      * @param current_position in the last block
-      */
-      virtual void pad(byte block[],
-                       size_t size,
-                       size_t current_position) const = 0;
-
-      /**
-      * @param block the last block
-      * @param size the of the block
-      */
-      virtual size_t unpad(const byte block[],
-                           size_t size) const = 0;
-
-      /**
-      * @param block_size of the cipher
-      * @param position in the current block
-      * @return number of padding bytes that will be appended
-      */
-      virtual size_t pad_bytes(size_t block_size,
-                               size_t position) const;
-
-      /**
-      * @param block_size of the cipher
-      * @return valid block size for this padding mode
-      */
-      virtual bool valid_blocksize(size_t block_size) const = 0;
-
-      /**
-      * @return name of the mode
-      */
-      virtual std::string name() const = 0;
-
-      /**
-      * virtual destructor
-      */
-      virtual ~BlockCipherModePaddingMethod() {}
-   };
-
-/**
-* PKCS#7 Padding
-*/
-class BOTAN_DLL PKCS7_Padding : public BlockCipherModePaddingMethod
-   {
-   public:
-      void pad(byte[], size_t, size_t) const;
-      size_t unpad(const byte[], size_t) const;
-      bool valid_blocksize(size_t) const;
-      std::string name() const { return "PKCS7"; }
-   };
-
-/**
-* ANSI X9.23 Padding
-*/
-class BOTAN_DLL ANSI_X923_Padding : public BlockCipherModePaddingMethod
-   {
-   public:
-      void pad(byte[], size_t, size_t) const;
-      size_t unpad(const byte[], size_t) const;
-      bool valid_blocksize(size_t) const;
-      std::string name() const { return "X9.23"; }
-   };
-
-/**
-* One And Zeros Padding
-*/
-class BOTAN_DLL OneAndZeros_Padding : public BlockCipherModePaddingMethod
-   {
-   public:
-      void pad(byte[], size_t, size_t) const;
-      size_t unpad(const byte[], size_t) const;
-      bool valid_blocksize(size_t) const;
-      std::string name() const { return "OneAndZeros"; }
-   };
-
-/**
-* Null Padding
-*/
-class BOTAN_DLL Null_Padding : public BlockCipherModePaddingMethod
-   {
-   public:
-      void pad(byte[], size_t, size_t) const { return; }
-      size_t unpad(const byte[], size_t size) const { return size; }
-      size_t pad_bytes(size_t, size_t) const { return 0; }
-      bool valid_blocksize(size_t) const { return true; }
-      std::string name() const { return "NoPadding"; }
-   };
 
 }
 
@@ -8986,7 +9072,7 @@ class BOTAN_DLL PKCS5_PBKDF2 : public PBKDF
 #include <utility>
 
 /*
-* This file was automatically generated Tue Mar 20 06:41:25 2012 UTC by
+* This file was automatically generated Wed Mar 21 02:41:29 2012 UTC by
 * jakepetroules@Lightning.local running './configure.py --os=mingw --cpu=i686 --disable-shared --disable-asm --gen-amalgamation'
 *
 * Target
@@ -25085,7 +25171,7 @@ class BOTAN_DLL ANSI_X919_MAC : public MessageAuthenticationCode
 #include <utility>
 
 /*
-* This file was automatically generated Tue Mar 20 06:41:26 2012 UTC by
+* This file was automatically generated Wed Mar 21 02:41:31 2012 UTC by
 * jakepetroules@Lightning.local running './configure.py --os=windows --cpu=i686 --disable-shared --disable-asm --gen-amalgamation'
 *
 * Target
@@ -41287,7 +41373,7 @@ class BOTAN_DLL ANSI_X919_MAC : public MessageAuthenticationCode
 #include <utility>
 
 /*
-* This file was automatically generated Tue Mar 20 06:41:28 2012 UTC by
+* This file was automatically generated Wed Mar 21 02:41:34 2012 UTC by
 * jakepetroules@Lightning.local running './configure.py --os=windows --cpu=x86_64 --disable-shared --disable-asm --gen-amalgamation'
 *
 * Target
@@ -57527,7 +57613,7 @@ class BOTAN_DLL ANSI_X919_MAC : public MessageAuthenticationCode
 #include <utility>
 
 /*
-* This file was automatically generated Tue Mar 20 06:41:29 2012 UTC by
+* This file was automatically generated Wed Mar 21 02:41:35 2012 UTC by
 * jakepetroules@Lightning.local running './configure.py --os=macosx --cpu=i686 --disable-shared --disable-asm --gen-amalgamation'
 *
 * Target
@@ -73650,7 +73736,7 @@ class BOTAN_DLL ANSI_X919_MAC : public MessageAuthenticationCode
 #include <utility>
 
 /*
-* This file was automatically generated Tue Mar 20 06:41:30 2012 UTC by
+* This file was automatically generated Wed Mar 21 02:41:41 2012 UTC by
 * jakepetroules@Lightning.local running './configure.py --os=macosx --cpu=x86_64 --disable-shared --disable-asm --gen-amalgamation'
 *
 * Target
@@ -89811,7 +89897,7 @@ class BOTAN_DLL ANSI_X919_MAC : public MessageAuthenticationCode
 #include <utility>
 
 /*
-* This file was automatically generated Tue Mar 20 06:41:31 2012 UTC by
+* This file was automatically generated Wed Mar 21 02:41:44 2012 UTC by
 * jakepetroules@Lightning.local running './configure.py --os=linux --cpu=i686 --disable-shared --disable-asm --gen-amalgamation'
 *
 * Target
@@ -106039,7 +106125,7 @@ class BOTAN_DLL ANSI_X919_MAC : public MessageAuthenticationCode
 #include <utility>
 
 /*
-* This file was automatically generated Tue Mar 20 06:41:33 2012 UTC by
+* This file was automatically generated Wed Mar 21 02:41:46 2012 UTC by
 * jakepetroules@Lightning.local running './configure.py --os=linux --cpu=x86_64 --disable-shared --disable-asm --gen-amalgamation'
 *
 * Target

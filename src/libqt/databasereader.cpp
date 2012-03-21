@@ -62,10 +62,16 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
     if (!doc.setContent(fileDataString))
     {
         DatabaseCrypto::CryptoStatus status;
-        fileDataString = DatabaseCrypto::decrypt(fileDataString, password, &status);
+        QString extendedErrorInformation;
+        fileDataString = DatabaseCrypto::decrypt(fileDataString, password, &status, &extendedErrorInformation);
         if (status != DatabaseCrypto::NoError)
         {
             this->m_errorString = DatabaseCrypto::statusMessage(status);
+            if (!extendedErrorInformation.isEmpty())
+            {
+                this->m_errorString += " Details: " + extendedErrorInformation;
+            }
+
             return NULL;
         }
     }

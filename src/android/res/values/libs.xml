@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <array name="bundled_libs_fixed">
+        <!--
+            Fix for Necessitas bug, see: http://sourceforge.net/p/necessitas/tickets/106/
+            Note that the order in which libraries are specified is important, and the
+            main application library need not be included here
+        -->
+        <item>petroules-utilities</item>
+        <item>silverlocklib</item>
+    </array>
+    <array name="qt_libs">
+        <item>QtCore</item>
+        <item>QtGui</item>
+        <item>QtNetwork</item>
+        <item>QtXml</item>
+    </array>
+    <array name="bundled_libs"/>
+</resources>

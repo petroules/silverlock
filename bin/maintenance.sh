@@ -55,20 +55,6 @@ function gen-botan()
 	cat "$DEP_BOTAN_DIR/botan_all.cpp" >> "$DEP_BOTAN_DIR/../botan_all.cpp"
 	cat "$DEP_BOTAN_DIR/botan_all.h" >> "$DEP_BOTAN_DIR/../botan_all.h"
 
-	if [ "$OS" = "android" ] ; then
-		# Stop eclipse from whining about missing definitions because it is incompetent
-		# Also, -E is for BSD/OSX... GNU/Linux use -r
-		if [ "`uname -s`" = "Linux" ] ; then
-			SED_OPT="-r" # GNU/Linux
-		else
-			SED_OPT="-E" # BSD/OSX
-		fi
-
-		sed $SED_OPT -i '' 's/std(::(memset|memcpy|memmove))/\1/g' "$DEP_BOTAN_DIR/botan_all.h"
-
-		cp "$DEP_BOTAN_DIR"/botan_all.* "../src/android/jni"
-	fi
-
 	pushd "$DEP_BOTAN_DIR" >/dev/null
 	make clean
 	make distclean
@@ -104,7 +90,7 @@ function update-botan()
 	bappend "#endif"
 	bappend "#if 0"
 
-	gen-botan "defined(Q_OS_ANDROID) || defined(__ANDROID__)" android arm "--no-autoload --enable-modules=auto_rng,pbkdf2,dev_random,sha1"
+	gen-botan "defined(Q_OS_ANDROID) || defined(__ANDROID__)" android arm "--no-autoload --enable-modules=auto_rng,pbkdf2,dev_random,sha1,aes,cbc,pkcs7"
 	gen-botan "defined(Q_WS_WIN32) && defined(Q_CC_MINGW)" mingw i686
 	gen-botan "defined(Q_WS_WIN32) && defined(Q_CC_MSVC)" windows i686
 	gen-botan "defined(Q_WS_WIN64) && defined(Q_CC_MSVC)" windows x86_64

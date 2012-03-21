@@ -61,10 +61,12 @@ QString DatabaseCrypto::botanVersion()
     \param error If this parameter is non-\c NULL, it will be set to DatabaseCrypto::NoError if the
     encryption process succeeded, or one of the other DatabaseCrypto::CryptoStatus enumeration
     constants if an error occurred.
+    \param extendedErrorInformation If this parameter is non-\c NULL, it will be set to a string
+    containing detailed information about any errors that occurred.
 
     \return The encrypted data encoded in base 64, or an empty string if an error occurred.
  */
-QString DatabaseCrypto::encrypt(const QString &data, const QString &password, int compressionLevel, CryptoStatus *error)
+QString DatabaseCrypto::encrypt(const QString &data, const QString &password, int compressionLevel, CryptoStatus *error, QString *extendedErrorInformation)
 {
     const std::string algo = ALGO;
     const QString header = HEADER;
@@ -133,8 +135,13 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, in
 
         return out;
     }
-    catch (Algorithm_Not_Found)
+    catch (Algorithm_Not_Found &e)
     {
+        if (extendedErrorInformation)
+        {
+            *extendedErrorInformation = QString(e.what());
+        }
+
         if (error)
         {
             *error = UnknownError;
@@ -142,7 +149,11 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, in
     }
     catch (std::exception &e)
     {
-        std::cout << __FUNCTION__ << e.what() << std::endl;
+        if (extendedErrorInformation)
+        {
+            *extendedErrorInformation = QString(e.what());
+        }
+
         if (error)
         {
             *error = UnknownError;
@@ -160,10 +171,12 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, in
     \param error If this parameter is non-\c NULL, it will be set to DatabaseCrypto::NoError if the
     decryption process succeeded, or one of the other DatabaseCrypto::CryptoStatus enumeration
     constants if an error occurred.
+    \param extendedErrorInformation If this parameter is non-\c NULL, it will be set to a string
+    containing detailed information about any errors that occurred.
 
     \return The decrypted data, or an empty string if an error occurred.
  */
-QString DatabaseCrypto::decrypt(const QString &data, const QString &password, CryptoStatus *error)
+QString DatabaseCrypto::decrypt(const QString &data, const QString &password, CryptoStatus *error, QString *extendedErrorInformation)
 {
     const std::string algo = ALGO;
     const QString header = HEADER;
@@ -292,14 +305,23 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
     }
     catch (Algorithm_Not_Found &e)
     {
-        std::cout << __FUNCTION__ << e.what() << std::endl;
+        if (extendedErrorInformation)
+        {
+            *extendedErrorInformation = QString(e.what());
+        }
+
         if (error)
         {
             *error = UnknownError;
         }
     }
-    catch (Decoding_Error)
+    catch (Decoding_Error &e)
     {
+        if (extendedErrorInformation)
+        {
+            *extendedErrorInformation = QString(e.what());
+        }
+
         if (error)
         {
             *error = DecodingError;
@@ -307,7 +329,11 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
     }
     catch (std::exception &e)
     {
-        std::cout << __FUNCTION__ << e.what() << std::endl;
+        if (extendedErrorInformation)
+        {
+            *extendedErrorInformation = QString(e.what());
+        }
+
         if (error)
         {
             *error = UnknownError;

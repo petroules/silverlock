@@ -54,9 +54,20 @@ const QList<Group*>& Group::groups() const
 /*!
     Gets an immutable reference to the list of this group's child entries.
  */
-const QList<Entry*>& Group::entries() const
+const QList<Entry*> Group::entries(bool recursive) const
 {
-    return this->m_entries;
+    QList<Entry*> entries;
+    entries.append(this->m_entries);
+
+    if (recursive)
+    {
+        foreach (Group *subgroup, this->groups())
+        {
+            entries.append(subgroup->entries(true));
+        }
+    }
+
+    return entries;
 }
 
 /*!

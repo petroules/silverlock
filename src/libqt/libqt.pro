@@ -56,6 +56,8 @@ TRANSLATIONS += \
 OTHER_FILES += \
     silverlocklib.rc
 
+android:SOURCES += jni.cpp
+
 # --------------------------------------------------
 # This section contains all libraries that the
 # project links to, first system libraries, and then
@@ -89,6 +91,10 @@ macx:PRE_TARGETDEPS += $$OUT_PWD/$$PETROULESUTILITIES_PATH/libpetroules-utilitie
 
 win32:RC_FILE = silverlocklib.rc
 macx:ICON = ../../res/app.icns
+android:QMAKE_CXXFLAGS += -fexceptions
+#android:QMAKE_CXXFLAGS += -O3 -finline-functions -D_REENTRANT -Wno-long-long -fpermissive -W -Wall -marm -mno-thumb -fexceptions
+#android:QMAKE_CXXFLAGS -= -mthumb # This gets inserted in the makefile by the toolchain and causes problems, but this doesn't remove it
+message("C++ compiler flags are $$QMAKE_CXXFLAGS")
 
 # --------------------------------------------------
 # This section contains commands for deployment to

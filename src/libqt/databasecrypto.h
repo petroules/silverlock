@@ -57,8 +57,8 @@ public:
     };
 
     static QString botanVersion();
-    static QString encrypt(const QString &file, const QString &password, int compressionLevel, CryptoStatus *error = NULL);
-    static QString decrypt(const QString &file, const QString &password, CryptoStatus *error = NULL);
+    static QString encrypt(const QString &file, const QString &password, int compressionLevel, CryptoStatus *error = NULL, QString *extendedErrorInformation = NULL);
+    static QString decrypt(const QString &file, const QString &password, CryptoStatus *error = NULL, QString *extendedErrorInformation = NULL);
     static QString statusMessage(CryptoStatus status);
 
 private:
