@@ -1,5 +1,7 @@
 #include <QtGui>
-#define Q_IS_MOBILE defined(Q_OS_ANDROID) || defined(Q_OS_SYMBIAN) || defined(Q_WS_MAEMO_5) || defined(Q_OS_WINCE)
+#if (defined(Q_OS_ANDROID) || defined(Q_OS_SYMBIAN) || defined(Q_WS_MAEMO_5) || defined(Q_OS_WINCE))
+#define Q_IS_MOBILE
+#endif
 
 #ifdef Q_IS_MOBILE
 #include "mobile/mainwindow.h"

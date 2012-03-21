@@ -10,6 +10,9 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="windowIcon">
    <iconset resource="../../res/globalresources.qrc">
     <normaloff>:/main/res/app.svg</normaloff>:/main/res/app.svg</iconset>
@@ -22,7 +25,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="welcomePage">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -30,8 +33,8 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QWebView" name="welcomeWebView">
-          <property name="url">
+         <widget class="QWebView" name="welcomeWebView" native="true">
+          <property name="url" stdset="0">
            <url>
             <string>qrc:/main/res/welcome.html</string>
            </url>
@@ -179,6 +182,20 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="entryInfoPage">
+       <layout class="QVBoxLayout" name="verticalLayout_10">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QTextBrowser" name="entryInfoView">
+          <property name="openLinks">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -189,7 +206,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -317,29 +334,21 @@
    <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QDockWidget" name="infoDockWidget">
-   <property name="windowTitle">
-    <string>Entry Information</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>8</number>
-   </attribute>
-   <widget class="QWidget" name="infoDockWidgetContents">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="margin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QTextBrowser" name="infoView">
-       <property name="openLinks">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
   <widget class="QDockWidget" name="groupsDockWidget">
+   <property name="styleSheet">
+    <string notr="true">background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #e6eaef, stop:1 #d1d8e4);
+
+QScrollBar
+{
+	background: ;
+}</string>
+   </property>
+   <property name="features">
+    <set>QDockWidget::NoDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::NoDockWidgetArea</set>
+   </property>
    <property name="windowTitle">
     <string>Groups</string>
    </property>
@@ -889,22 +898,6 @@
     <hint type="destinationlabel">
      <x>39</x>
      <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionShowEntryView</sender>
-   <signal>triggered(bool)</signal>
-   <receiver>infoView</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>499</x>
-     <y>483</y>
     </hint>
    </hints>
   </connection>

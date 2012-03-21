@@ -247,6 +247,9 @@ void MainWindow::setupSignals()
  */
 void MainWindow::setupUiAdditional()
 {
+    // Remove dock widget header
+    this->ui->groupsDockWidget->setTitleBarWidget(new QWidget(this));
+
     // Add spacer and search widget to toolbar
     this->ui->standardToolBar->addWidget(new ExpandingSpacerWidget());
     this->ui->standardToolBar->addWidget(this->m_toolbarSearch =
@@ -316,8 +319,8 @@ void MainWindow::setupUiAdditional()
     this->ui->actionInternetExplorer->setVisible(false);
 #endif
 
-	// If automatic updates aren't enabled for this platform then we needn't show the menu item
-	this->ui->actionCheckForUpdates->setVisible(UpdateDialog::automaticUpdatesSupported());
+    // If automatic updates aren't enabled for this platform then we needn't show the menu item
+    this->ui->actionCheckForUpdates->setVisible(UpdateDialog::automaticUpdatesSupported());
 }
 
 /*!
@@ -332,11 +335,7 @@ void MainWindow::setupKeyboardShortcuts()
     this->ui->actionSave->setShortcut(QKeySequence::Save);
     this->ui->actionSaveAs->setShortcut(QKeySequence::SaveAs);
     this->ui->actionPrint->setShortcut(QKeySequence::Print);
-#if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)
     this->ui->actionExit->setShortcut(QKeySequence::Quit);
-#elif defined(Q_WS_MAC) || defined(Q_OS_LINUX)
-    this->ui->actionExit->setShortcut(QKeySequence(Qt::Key_Control | Qt::Key_Q));
-#endif
 
     // Edit menu
     this->ui->actionSelectAllEntries->setShortcut(QKeySequence::SelectAll);
@@ -352,14 +351,14 @@ void MainWindow::setupKeyboardShortcuts()
     this->ui->actionDeleteGroups->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_Delete));
 
     // View menu
+#ifdef Q_WS_MAC
+    this->ui->actionFullScreen->setShortcut(QKeySequence(Qt::CTRL | Qt::META | Qt::Key_F));
+#else
     this->ui->actionFullScreen->setShortcut(Qt::Key_F11);
+#endif
 
     // Tools menu
-#if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)
     this->ui->actionPreferences->setShortcut(QKeySequence::Preferences);
-#elif defined(Q_WS_MAC)
-    this->ui->actionPreferences->setShortcut(QKeySequence(Qt::Key_Control | Qt::Key_Comma));
-#endif
 
     // Help menu
     this->ui->actionHelpContents->setShortcut(QKeySequence::HelpContents);
@@ -371,11 +370,9 @@ void MainWindow::setupMenuIcons()
     this->ui->actionClose->setIcon(this->style()->standardIcon(QStyle::SP_DialogCloseButton));
     this->ui->actionSave->setIcon(this->style()->standardIcon(QStyle::SP_DialogSaveButton));
 
-#if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)
     this->ui->actionExit->setIcon(QIcon::fromTheme("application-exit"));
     this->ui->actionPreferences->setIcon(QIcon::fromTheme("preferences-other"));
     this->ui->actionAboutSilverlock->setIcon(QIcon::fromTheme("help-about"));
-#endif
 }
 
 void MainWindow::handleMessage(const QString &message)
@@ -540,8 +537,18 @@ void MainWindow::on_groupBrowser_itemSelectionChanged()
         QUuid uuid = this->ui->groupBrowser->selectedUuid();
         if (!uuid.isNull())
         {
+            Entry *entry = db->findEntry(uuid);
+            if (entry)
+            {
+                this->populateInfoView(entry);
+            }
+
             // Find the group for this UUID and populate the entry table with it
-            this->populateEntryTable(db->findGroup(uuid, true));
+            Group *group = db->findGroup(uuid, true);
+            if (group)
+            {
+                this->populateEntryTable(group);
+            }
         }
     }
 }
@@ -551,7 +558,7 @@ void MainWindow::on_groupBrowser_itemSelectionChanged()
  */
 void MainWindow::on_entryTable_itemSelectionChanged()
 {
-    this->updateInterfaceState();
+    /*this->updateInterfaceState();
 
     if (this->m_documentState.hasDocument())
     {
@@ -572,7 +579,7 @@ void MainWindow::on_entryTable_itemSelectionChanged()
             // Find the entry for this UUID and update the info view with its data
             this->populateInfoView(db->findEntry(uuid));
         }
-    }
+    }*/
 }
 
 void MainWindow::updateMenus()
@@ -631,7 +638,7 @@ void MainWindow::updateInterfaceState()
     // Update the main widgets
     this->ui->groupBrowser->setEnabled(hasDocument && !locked);
     this->ui->entryTable->setEnabled(hasDocument && !locked);
-    this->ui->infoView->setEnabled(hasDocument && !locked);
+    this->ui->entryInfoView->setEnabled(hasDocument && !locked);
 }
 
 /*!
@@ -656,7 +663,7 @@ void MainWindow::clearViews()
         this->ui->entryTable->clear();
     }
 
-    this->ui->infoView->clear();
+    this->ui->entryInfoView->clear();
     this->setNodeCount(NULL);
 
     this->ui->stackedWidget->setCurrentWidget(this->ui->mainPage);
@@ -713,30 +720,39 @@ void MainWindow::populateInfoView(Entry *const entry)
 {
     if (entry)
     {
+        this->ui->stackedWidget->setCurrentWidget(this->ui->entryInfoPage);
+
+        QString document;
+
         QStringList pairs;
+
+        // Title
+        document += QString("<h1>%1</h1>").arg(!entry->title().isEmpty() ? Qt::escape(entry->title()) : "<i>Untitled</i>");
+
+        // Group
         if (entry->parentNode() && !entry->parentNode()->title().isEmpty())
         {
-            pairs.append(tr("<b>Group:</b> %1").arg(Qt::escape(entry->parentNode()->title())));
+            document += tr("<small><b>Group:</b></small> %1").arg(Qt::escape(entry->parentNode()->title()));
         }
 
-        if (!entry->title().isEmpty())
-        {
-            pairs.append(tr("<b>Title:</b> %1").arg(Qt::escape(entry->title())));
-        }
+        document += "<table>";
 
+        // Username
         if (!entry->username().isEmpty())
         {
-            pairs.append(tr("<b>Username:</b> %1").arg(Qt::escape(entry->username())));
+            document += tr("<tr><td align='right'><b>Username:</b></td><td>%1</td></tr>").arg(Qt::escape(entry->username()));
         }
 
+        // Password
         if (!entry->password().isEmpty())
         {
-            pairs.append(tr("<b>Password:</b> %1").arg(Qt::escape(entry->password())));
+            document += tr("<tr><td align='right'><b>Password:</b></td><td>%1</td></tr>").arg(Qt::escape(entry->password()));
         }
 
+        // URLs
         if (!entry->url().isEmpty())
         {
-            pairs.append(tr("<b>URL:</b> <a href=\"%1\">%1</a>").arg(Qt::escape(entry->url().toString())));
+            document += tr("<tr><td align='right'><b>URL:</b></td><td><a href=\"%1\">%1</a></td></tr>").arg(Qt::escape(entry->url().toString()));
         }
 
         // Custom fields go after the primary data but before the unmodifiable details
@@ -744,8 +760,10 @@ void MainWindow::populateInfoView(Entry *const entry)
         while (j.hasNext())
         {
             j.next();
-            pairs.append(tr("<b>%1:</b> %2").arg(Qt::escape(j.key())).arg(Qt::escape(j.value())));
+            document += tr("<tr><td align='right'><b>%1:</b></td><td>%2</td></tr>").arg(Qt::escape(j.key())).arg(Qt::escape(j.value()));
         }
+
+        document += "</table>";
 
         // We'll always have a UUID, and the created/accessed/modified times
         pairs.append(tr("<font color='gray'><b>UUID:</b> %1</font>").arg(Qt::escape(entry->uuid().toString())));
@@ -769,12 +787,14 @@ void MainWindow::populateInfoView(Entry *const entry)
             .arg(pairs.join(", "))
             .arg(recoveryString)
             .arg(Qt::escape(entry->notes()).replace(QRegExp("((?:https?|ftp)://\\S+)"), "<a href=\"\\1\">\\1</a>").replace("\n", "<br />"));
-        this->ui->infoView->setText(info);
+
+        QString css = "<style type='text/css'>h1 { text-shadow: 1px 1px 1px #ccc; }</style>";
+        this->ui->entryInfoView->setText(css + document + info);
     }
     else
     {
         // If we couldn't find the entry, just clear the info view
-        this->ui->infoView->clear();
+        this->ui->entryInfoView->clear();
     }
 }
 

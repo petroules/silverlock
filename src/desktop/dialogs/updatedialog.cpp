@@ -247,11 +247,11 @@ void UpdateDialog::downloadReplyFinished(QNetworkReply *reply)
 #ifdef Q_WS_WIN
     QTemporaryFile temp(QDir::tempPath() + "/qt_temp.XXXXXX.msi");
 #elif defined(Q_WS_MAC)
-	QTemporaryFile temp(QDir::tempPath() + "/qt_temp.XXXXXX.dmg");
+    QTemporaryFile temp(QDir::tempPath() + "/qt_temp.XXXXXX.dmg");
 #elif defined(Q_OS_LINUX)
-	QTemporaryFile temp(QDir::tempPath() + "/qt_temp.XXXXXX.tar.gz");
+    QTemporaryFile temp(QDir::tempPath() + "/qt_temp.XXXXXX.tar.gz");
 #else
-	#error "Implement automatic updater for this platform!"
+    #error "Implement automatic updater for this platform!"
 #endif
     temp.setAutoRemove(false);
     if (temp.open())

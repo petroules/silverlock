@@ -170,10 +170,9 @@ void MainWindow::lockWorkspace(bool lock)
     this->ui->stackedWidget->setCurrentWidget(lock ? this->ui->unlockPage : this->ui->mainPage);
 
     this->ui->groupBrowser->setVisible(!lock);
-    this->ui->infoView->setVisible(!lock);
+    this->ui->entryInfoView->setVisible(!lock);
 
     this->ui->groupsDockWidget->setVisible(!lock);
-    this->ui->infoDockWidget->setVisible(!lock);
 
     if (lock)
     {

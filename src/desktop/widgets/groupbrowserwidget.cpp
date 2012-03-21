@@ -184,6 +184,15 @@ void GroupBrowserWidget::populate(QTreeWidgetItem *parentItem, Group *const grou
     // Add it to the parent
     parentItem->addChild(groupItem);
 
+    foreach (Entry *entry, group->entries())
+    {
+        QTreeWidgetItem *entryItem = new QTreeWidgetItem();
+        entryItem->setText(0, entry->title());
+        entryItem->setData(0, Qt::UserRole, entry->uuid().toString());
+        entryItem->setIcon(0, this->style()->standardIcon(QStyle::SP_FileIcon));
+        groupItem->addChild(entryItem);
+    }
+
     // Then add all the category's subcategories as children of itself
     foreach (Group *node, group->groups())
     {

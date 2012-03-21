@@ -76,7 +76,7 @@ void AboutDialog::displayBuildInformationDialog()
                                 "<ul>"
                                 "<li>Qt %4</li>"
                                 "<li>Qt Solutions %5</li>"
-                                "<li>Synteza %6</li>"
+                                "<li>Petroules Utilities %6</li>"
                                 "<li>Botan %7</li>"
                                 "</ul>"
                                 "<p>Running on %8 with a %9 processor.</p>")

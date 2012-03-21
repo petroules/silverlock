@@ -9,10 +9,29 @@ class MacToolbarSearchWidget::Private : public QMacCocoaViewContainer
     // Do not use Q_OBJECT with pimpl - it will generate a *_moc.cpp file which won't correctly compile with Objective-C++
 
 public:
-    Private(QWidget *parent = NULL) : QMacCocoaViewContainer([[NSSearchField alloc] init], parent) { }
-    ~Private() { [this->searchField() release]; }
-    QSize sizeHint() const { return QSize(150, 40); }
-    NSSearchField* searchField() const { return reinterpret_cast<NSSearchField*>(this->cocoaView()); }
+    Private(QWidget *parent = NULL)
+        : QMacCocoaViewContainer(0, parent)
+    {
+        // bug in 4.8.0, will be fixed in 4.8.1
+        setAttribute(Qt::WA_NativeWindow);
+        setCocoaView([[NSSearchField alloc] init]);
+        setMouseTracking(true);
+    }
+
+    ~Private()
+    {
+        [this->searchField() release];
+    }
+
+    QSize sizeHint() const
+    {
+        return QSize(150, 40);
+    }
+
+    NSSearchField* searchField() const
+    {
+        return reinterpret_cast<NSSearchField*>(this->cocoaView());
+    }
 };
 
 MacToolbarSearchWidget::MacToolbarSearchWidget(QWidget *parent)
