@@ -21,6 +21,7 @@ GroupBrowserWidget::GroupBrowserWidget(QWidget *parent) :
 {
     this->ui->setupUi(this);
     this->ui->treeBrowser->sortByColumn(0, Qt::AscendingOrder);
+    this->ui->treeBrowser->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     QObject::connect(this->ui->treeBrowser, SIGNAL(itemSelectionChanged()), SIGNAL(itemSelectionChanged()));
     QObject::connect(this->ui->treeBrowser, SIGNAL(customContextMenuRequested(QPoint)), SIGNAL(customContextMenuRequested(QPoint)));

@@ -23,6 +23,7 @@ EntryTableWidget::EntryTableWidget(QWidget *parent) :
     this->ui->setupUi(this);
     this->setFocusProxy(this->ui->table);
     this->ui->table->sortByColumn(COLUMN_TITLE, Qt::AscendingOrder);
+    this->ui->table->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     // All columns' obscured flags should be false by default
     for (int i = 0; i < COLUMN_COUNT; i++)

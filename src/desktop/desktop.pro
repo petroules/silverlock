@@ -10,7 +10,7 @@ QT += core gui network xml
 # Desktop-only
 win32|macx|unix {
     !android:!symbian:!maemo5 {
-        QT += svg webkit
+        QT += svg
         TEMPLATE = app
     }
 }
@@ -49,7 +49,8 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # * any other files belonging in the OTHER_FILES var
 # --------------------------------------------------
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    dialogs/welcomedialog.cpp
 
 # Mobile-specific sources
 android|symbian|maemo5|wince* {
@@ -88,7 +89,6 @@ android|symbian|maemo5|wince* {
         widgets/entryviewindexes.h \
         widgets/expandingspacerwidget.h \
         widgets/groupbrowserwidget.h \
-        widgets/itoolbarsearchwidget.h \
         widgets/toolbarsearchwidget.h \
         silverlockapplication.h \
         applicationmenu.h
@@ -115,7 +115,6 @@ android|symbian|maemo5|wince* {
         widgets/entrytablewidget.cpp \
         widgets/expandingspacerwidget.cpp \
         widgets/groupbrowserwidget.cpp \
-        widgets/itoolbarsearchwidget.cpp \
         widgets/toolbarsearchwidget.cpp \
         silverlockapplication.cpp \
         applicationmenu.cpp \
@@ -147,23 +146,6 @@ android|symbian|maemo5|wince* {
         silverlock.rc \
         silverlock.manifest \
         Info.plist
-}
-
-# Mac-specific sources
-macx {
-    HEADERS += \
-        mac/icocoaeventreceiver.h \
-        mac/macloginitemsmanager.h \
-        mac/mactoolbarsearchwidget.h
-    OBJECTIVE_HEADERS += \
-        mac/cocoaeventlistener.h \
-        mac/machelpers.h
-    OBJECTIVE_SOURCES += \
-        mac/cocoaeventlistener.mm \
-        mac/icocoaeventreceiver.mm \
-        mac/machelpers.mm \
-        mac/macloginitemsmanager.mm \
-        mac/mactoolbarsearchwidget.mm
 }
 
 # --------------------------------------------------
@@ -226,3 +208,12 @@ DEPLOYMENTFOLDERS = # file1 dir1
 # Please do not modify the following two lines. Required for deployment.
 include(deployment.pri)
 qtcAddDeployment()
+
+HEADERS += \
+    dialogs/welcomedialog.h
+
+FORMS += \
+    dialogs/welcomedialog.ui
+
+
+

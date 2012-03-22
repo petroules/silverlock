@@ -5,6 +5,5 @@
         <file>res/iexplore.png</file>
         <file>res/db.svg</file>
         <file>res/printer.svg</file>
-        <file>res/welcome.html</file>
     </qresource>
 </RCC>

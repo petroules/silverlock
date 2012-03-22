@@ -25,7 +25,7 @@ public:
 
     QSize sizeHint() const
     {
-        return QSize(150, 40);
+        return QSize(200, 40);
     }
 
     NSSearchField* searchField() const

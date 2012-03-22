@@ -1,7 +1,7 @@
 #ifndef TOOLBARSEARCHWIDGET_H
 #define TOOLBARSEARCHWIDGET_H
 
-#include "itoolbarsearchwidget.h"
+#include "petroules-utilities.h"
 
 namespace Ui
 {

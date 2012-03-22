@@ -10,7 +10,7 @@
 class SilverlockApplication::Private
 {
 public:
-    Private() : updateDialog(NULL), applicationMenu(NULL), dockMenu(NULL) { }
+    Private() : applicationMenu(NULL), updateDialog(NULL), dockMenu(NULL) { }
     ApplicationMenu *applicationMenu;
     UpdateDialog *updateDialog;
     QMenu *dockMenu;
@@ -109,7 +109,7 @@ bool SilverlockApplication::isDesktopFileManagerDrop(const QMimeData *mimeData, 
     return hasFiles;
 }
 
-bool SilverlockApplication::dockIconClicked(bool hasVisibleWindows)
+bool SilverlockApplication::handleReopen(bool hasVisibleWindows)
 {
     if (!hasVisibleWindows)
     {

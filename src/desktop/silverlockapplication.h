@@ -14,7 +14,7 @@ public:
     explicit SilverlockApplication(int &argc, char *argv[]);
     ~SilverlockApplication();
     static bool isDesktopFileManagerDrop(const QMimeData *mimeData, QStringList *files = NULL);
-    bool dockIconClicked(bool hasVisibleWindows);
+    bool handleReopen(bool hasVisibleWindows);
     QList<MainWindow*> windows() const;
     MainWindow* activeWindow2() const;
 
