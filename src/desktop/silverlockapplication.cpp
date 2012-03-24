@@ -146,7 +146,6 @@ void SilverlockApplication::createDockMenu()
 {
     this->d->dockMenu = new QMenu();
     this->d->dockMenu->addAction(tr("Check for Updates"), this, SLOT(checkForUpdates()));
-    this->d->dockMenu->addSeparator();
     this->d->dockMenu->addAction(tr("Preferences..."), this, SLOT(preferences()), QKeySequence::Preferences);
     this->macSetDockMenu(this->d->dockMenu);
 }

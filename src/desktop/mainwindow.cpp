@@ -19,6 +19,7 @@
 #include "widgets/toolbarsearchwidget.h"
 #ifdef Q_WS_MAC
 #include "mac/mactoolbarsearchwidget.h"
+#include "mac/machelpers.h"
 #endif
 
 /*!
@@ -49,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent) :
     SilverlockPreferences::instance().restoreWindowSettings(this);
 
     QObject::connect(qApp, SIGNAL(resetIdleTimer(QObject*)), SLOT(resetIdleTimer(QObject*)));
+
+    qt_mac_setLionFullscreenEnabled(this, true);
 }
 
 /*!
@@ -142,13 +145,15 @@ void MainWindow::changeEvent(QEvent* e)
 
                 break;
             }
-        case QEvent::Resize:
+    case QEvent::Resize:
             {
                 // Update geometry of select subwidgets
                 if (this->ui->standardToolBar)
                 {
                     this->ui->standardToolBar->updateGeometry();
                 }
+
+                break;
             }
         default:
             break;
@@ -493,7 +498,7 @@ void MainWindow::on_groupBrowser_customContextMenuRequested(QPoint pos)
     Q_UNUSED(pos);
     if (this->ui->groupBrowser->selectedUuids().count() > 0)
     {
-        this->ui->menuGroup->exec(QCursor::pos());
+        this->ui->menuEdit->exec(QCursor::pos());
     }
 }
 
@@ -505,11 +510,7 @@ void MainWindow::on_entryTable_customContextMenuRequested(QPoint pos)
     Q_UNUSED(pos);
     if (this->ui->entryTable->selectedUuids().count() > 0)
     {
-        this->ui->menuEntry->exec(QCursor::pos());
-    }
-    else
-    {
-        this->ui->menuGroup->exec(QCursor::pos());
+        this->ui->menuEdit->exec(QCursor::pos());
     }
 }
 
@@ -722,18 +723,40 @@ void MainWindow::populateInfoView(Entry *const entry)
     {
         this->ui->stackedWidget->setCurrentWidget(this->ui->entryInfoPage);
 
+        // HTML string to display an entry
         QString document;
 
+        // OLD
         QStringList pairs;
+
+        // Build a list of the group path to the entry from root to direct parent
+        QList<Group*> groupPath;
+        Group *currentGroup = entry->parentNode();
+        while (currentGroup)
+        {
+            groupPath.insert(0, currentGroup);
+            currentGroup = currentGroup->parentNode();
+        }
+
+        QStringList groupPathTitles;
+        foreach (Group *g, groupPath)
+        {
+            if (!g->title().isEmpty())
+            {
+                groupPathTitles += Qt::escape(g->title());
+            }
+            else
+            {
+                groupPathTitles += "<i>Untitled</i>";
+            }
+        }
+
+        document += tr("<b>Group:</b> %1<br />").arg(groupPathTitles.join(QString::fromUtf8(" \u203a ")));
+        document += tr("<b>Group:</b> %1").arg(groupPathTitles.join(QString::fromUtf8(" > ")));
 
         // Title
         document += QString("<h1>%1</h1>").arg(!entry->title().isEmpty() ? Qt::escape(entry->title()) : "<i>Untitled</i>");
 
-        // Group
-        if (entry->parentNode() && !entry->parentNode()->title().isEmpty())
-        {
-            document += tr("<small><b>Group:</b></small> %1").arg(Qt::escape(entry->parentNode()->title()));
-        }
 
         document += "<table>";
 

@@ -25,7 +25,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="welcomePage">
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -262,33 +262,6 @@
     <property name="title">
      <string>Edit</string>
     </property>
-    <widget class="QMenu" name="menuEntry">
-     <property name="title">
-      <string>Entry</string>
-     </property>
-     <addaction name="actionCopyFieldValue"/>
-     <addaction name="separator"/>
-     <addaction name="actionDefaultBrowser"/>
-     <addaction name="actionInternetExplorer"/>
-     <addaction name="separator"/>
-     <addaction name="actionMoveEntries"/>
-     <addaction name="actionDuplicateEntries"/>
-     <addaction name="actionEditEntry"/>
-     <addaction name="actionDeleteEntries"/>
-    </widget>
-    <widget class="QMenu" name="menuGroup">
-     <property name="title">
-      <string>Group</string>
-     </property>
-     <addaction name="actionAddSubgroup"/>
-     <addaction name="actionAddEntry"/>
-     <addaction name="separator"/>
-     <addaction name="actionMoveGroup"/>
-     <addaction name="actionEditGroup"/>
-     <addaction name="actionDeleteGroups"/>
-     <addaction name="separator"/>
-     <addaction name="actionFindInGroup"/>
-    </widget>
     <widget class="QMenu" name="menuSelectAll">
      <property name="title">
       <string>Select All</string>
@@ -296,8 +269,24 @@
      <addaction name="actionSelectAllEntries"/>
      <addaction name="actionSelectAllGroups"/>
     </widget>
-    <addaction name="menuEntry"/>
-    <addaction name="menuGroup"/>
+    <addaction name="actionCopyFieldValue"/>
+    <addaction name="separator"/>
+    <addaction name="actionDefaultBrowser"/>
+    <addaction name="actionInternetExplorer"/>
+    <addaction name="separator"/>
+    <addaction name="actionMoveEntries"/>
+    <addaction name="actionDuplicateEntries"/>
+    <addaction name="actionEditEntry"/>
+    <addaction name="actionDeleteEntries"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddSubgroup"/>
+    <addaction name="actionAddEntry"/>
+    <addaction name="separator"/>
+    <addaction name="actionMoveGroup"/>
+    <addaction name="actionEditGroup"/>
+    <addaction name="actionDeleteGroups"/>
+    <addaction name="separator"/>
+    <addaction name="actionFindInGroup"/>
     <addaction name="separator"/>
     <addaction name="menuSelectAll"/>
     <addaction name="separator"/>
@@ -313,9 +302,8 @@
    <property name="windowTitle">
     <string>Standard</string>
    </property>
-   <property name="styleSheet">
-    <string notr="true">padding-bottom: 0;
-margin-bottom: 0;</string>
+   <property name="movable">
+    <bool>false</bool>
    </property>
    <property name="iconSize">
     <size>
@@ -332,13 +320,7 @@ margin-bottom: 0;</string>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionNew"/>
-   <addaction name="actionOpen"/>
-   <addaction name="actionSave"/>
-   <addaction name="actionPrint"/>
-   <addaction name="separator"/>
    <addaction name="actionLockWorkspace"/>
-   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="sizeGripEnabled">
@@ -924,22 +906,6 @@ margin-bottom: 0;</string>
     <hint type="sourcelabel">
      <x>39</x>
      <y>220</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>499</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>menuView</sender>
-   <signal>aboutToShow()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>updateMenus()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>86</x>
-     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>499</x>
