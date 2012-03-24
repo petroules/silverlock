@@ -1,6 +1,13 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += petroules-utilities-qt libqt desktop
+
+!exists(petroules-utilities-qt) {
+    error("Please pull down the petroules-utilities-qt submodule using Git")
+}
+
+SUBDIRS += petroules-utilities-qt
+
+SUBDIRS += libqt desktop
 
 # Desktop only
 !android:!symbian:!maemo5:SUBDIRS += libqttest

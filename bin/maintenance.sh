@@ -120,7 +120,9 @@ function get-create-dmg()
 }
 
 if [ "$1" = "--update-dependencies" ] ; then
-	update-petroules-utilities
+	# TODO: Figure out what to do with this since Petroules Utilities for Qt
+	# is now included as a git submodule...
+	#update-petroules-utilities
 	update-botan
 elif [ "$1" = "--remove-dependencies" ] ; then
 	rm -rf "$DEP_PETROULES_UTILITIES_DIR"
