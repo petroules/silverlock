@@ -171,7 +171,9 @@ else:unix: LIBS += -L$$OUT_PWD/$$SILVERLOCKLIB_PATH/ -lsilverlocklib
 INCLUDEPATH += $$PWD/$$SILVERLOCKLIB_PATH
 DEPENDPATH += $$PWD/$$SILVERLOCKLIB_PATH
 
-macx:PRE_TARGETDEPS += $$OUT_PWD/$$SILVERLOCKLIB_PATH/libsilverlocklib.a
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/$$SILVERLOCKLIB_PATH/release/silverlocklib.lib
+else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/$$SILVERLOCKLIB_PATH/debug/silverlocklib.lib
+else:unix:!symbian: PRE_TARGETDEPS += $$OUT_PWD/$$SILVERLOCKLIB_PATH/libsilverlocklib.a
 
 # Petroules Utilities library
 
@@ -185,7 +187,9 @@ else:unix: LIBS += -L$$OUT_PWD/$$PETROULESUTILITIES_PATH/ -lpetroules-utilities
 INCLUDEPATH += $$PWD/$$PETROULESUTILITIES_PATH $$PWD/$$QTSOLUTIONS_PATH
 DEPENDPATH += $$PWD/$$PETROULESUTILITIES_PATH $$PWD/$$QTSOLUTIONS_PATH
 
-macx:PRE_TARGETDEPS += $$OUT_PWD/$$PETROULESUTILITIES_PATH/libpetroules-utilities.a
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/$$PETROULESUTILITIES_PATH/release/petroules-utilities.lib
+else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/$$PETROULESUTILITIES_PATH/debug/petroules-utilities.lib
+else:unix:!symbian: PRE_TARGETDEPS += $$OUT_PWD/$$PETROULESUTILITIES_PATH/libpetroules-utilities.a
 
 # --------------------------------------------------
 # This section contains miscellaneous commands such
