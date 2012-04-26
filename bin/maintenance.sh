@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 . ./functions.sh
 
@@ -68,6 +69,7 @@ function update-botan()
 		cecho "Fetching Botan..." blue bold
 		pushd `dirname "$DEP_BOTAN_DIR"` >/dev/null
 		git clone git://github.com/petroules/botan.git
+		git checkout 1.10.1 # Checkout the latest version known to work
 		popd >/dev/null
 	fi
 
@@ -133,6 +135,13 @@ elif [ "$1" = "--update-translations" ] ; then
 
 	mkdir ../src/desktop/tr
 	lupdate -no-obsolete ../src/desktop/desktop.pro
+elif [ "$1" = "--cloc" ] ; then
+	pushd ../ >/dev/null
+
+	cloc . --exclude-dir=doc,lib,res,test-data,src/petroules-utilities-qt,src/libjava/lib,src/libjava/test-data,src/libqt/botan,src/android/res,src/android/gen,src/qtc_packaging,xcodeproj \
+			--exclude-ext=pro,pri,xml,sln,csproj,vdproj,cfg,properties,md,rc,manifest,qrc,ui,ts,desktop,xib,plist
+
+	popd >/dev/null
 else
 	echo "Usage: $0 [OPTION]"
 	echo ""
