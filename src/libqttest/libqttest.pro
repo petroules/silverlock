@@ -35,7 +35,7 @@ SOURCES += tst_libqttesttest.cpp
 
 SILVERLOCKLIB_PATH = ../libqt
 PETROULESUTILITIES_PATH = ../petroules-utilities-qt/src
-QTSOLUTIONS_PATH = $$PETROULESUTILITIES_PATH/../lib/qtsingleapplication/src
+QTSOLUTIONS_PATH = $$PETROULESUTILITIES_PATH/../lib/qtsolutions/qtsingleapplication/src
 
 # Silverlock support library
 

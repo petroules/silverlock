@@ -68,7 +68,7 @@ android:SOURCES += jni.cpp
 win32:LIBS += -ladvapi32 -luser32
 
 PETROULESUTILITIES_PATH = ../petroules-utilities-qt/src
-QTSOLUTIONS_PATH = $$PETROULESUTILITIES_PATH/../lib/qtsingleapplication/src
+QTSOLUTIONS_PATH = $$PETROULESUTILITIES_PATH/../lib/qtsolutions/qtsingleapplication/src
 
 # Petroules Utilities library
 
