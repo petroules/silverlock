@@ -1,0 +1,16 @@
+language: cpp
+compiler:
+  - gcc
+  - clang
+before_script: qmake
+script: make
+branches:
+  only:
+    - master
+notifications:
+  recipients:
+    - jake.petroules+travis@petroules.com
+  email:
+    on_success: change
+    on_failure: always
+
