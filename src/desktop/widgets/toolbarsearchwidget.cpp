@@ -2,7 +2,7 @@
 #include "ui_toolbarsearchwidget.h"
 
 ToolbarSearchWidget::ToolbarSearchWidget(QWidget *parent) :
-    IToolbarSearchWidget(parent),
+    QWidget(parent),
     ui(new Ui::ToolbarSearchWidget)
 {
     this->ui->setupUi(this);

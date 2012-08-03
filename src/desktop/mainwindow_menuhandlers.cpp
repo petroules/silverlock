@@ -9,7 +9,7 @@
 #include "dialogs/newdatabasewizard.h"
 #include "dialogs/searchdatabasedialog.h"
 #include "dialogs/selectgroupdialog.h"
-#include "widgets/itoolbarsearchwidget.h"
+#include "widgets/toolbarsearchwidget.h"
 #include <silverlocklib.h>
 #include <petroules-utilities.h>
 

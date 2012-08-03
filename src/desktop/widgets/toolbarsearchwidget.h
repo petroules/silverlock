@@ -2,13 +2,14 @@
 #define TOOLBARSEARCHWIDGET_H
 
 #include "petroules-utilities.h"
+#include <QWidget>
 
 namespace Ui
 {
     class ToolbarSearchWidget;
 }
 
-class ToolbarSearchWidget : public IToolbarSearchWidget
+class ToolbarSearchWidget : public QWidget
 {
     Q_OBJECT
 
@@ -20,6 +21,9 @@ public:
     void clear();
     bool isTextHidden() const;
     void setTextHidden(bool hide);
+
+signals:
+    void searchRequested(QString);
 
 private slots:
     void requestSearch();

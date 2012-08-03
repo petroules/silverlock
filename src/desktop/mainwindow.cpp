@@ -18,8 +18,8 @@
 #include "widgets/expandingspacerwidget.h"
 #include "widgets/toolbarsearchwidget.h"
 #ifdef Q_WS_MAC
-#include "mac/mactoolbarsearchwidget.h"
-#include "mac/machelpers.h"
+#include "widgets/searchlineedit.h"
+//#include "mac/machelpers.h"
 #endif
 
 /*!
@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(qApp, SIGNAL(resetIdleTimer(QObject*)), SLOT(resetIdleTimer(QObject*)));
 
-    qt_mac_setLionFullscreenEnabled(this, true);
+    //qt_mac_setLionFullscreenEnabled(this, true);
 }
 
 /*!
@@ -257,13 +257,7 @@ void MainWindow::setupUiAdditional()
 
     // Add spacer and search widget to toolbar
     this->ui->standardToolBar->addWidget(new ExpandingSpacerWidget());
-    this->ui->standardToolBar->addWidget(this->m_toolbarSearch =
-#ifdef Q_WS_MAC
-        new MacToolbarSearchWidget()
-#else
-        new ToolbarSearchWidget()
-#endif
-    );
+    this->ui->standardToolBar->addWidget(this->m_toolbarSearch = new ToolbarSearchWidget());
 
     QObject::connect(this->m_toolbarSearch, SIGNAL(searchRequested(QString)), SLOT(toolbarSearch(QString)));
 

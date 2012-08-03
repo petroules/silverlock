@@ -10,7 +10,7 @@ class Entry;
 class Group;
 class SilverlockPreferences;
 class InactivityEventFilter;
-class IToolbarSearchWidget;
+class ToolbarSearchWidget;
 class GroupBrowserWidget;
 class EntryTableWidget;
 
@@ -62,7 +62,7 @@ private:
     QTimer *m_clearClipboardTimer;
     QTimer *m_idleTimer;
 
-    IToolbarSearchWidget *m_toolbarSearch;
+    ToolbarSearchWidget *m_toolbarSearch;
 
     qint32 m_lockIdleTimerValue;
     qint32 m_exitIdleTimerValue;
