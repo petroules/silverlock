@@ -15,6 +15,8 @@ win32|macx|unix {
     }
 }
 
+!win32:!embedded:!qpa:!mac:!symbian:CONFIG += x11
+
 TARGET = silverlock
 symbian:TARGET.UID3 = 0xE9A31305
 
@@ -156,6 +158,7 @@ android|symbian|maemo5|wince* {
 
 win32:LIBS += -luser32
 macx:LIBS += -framework CoreFoundation -framework Cocoa
+x11:LIBS += -lX11
 
 SILVERLOCKLIB_PATH = ../libqt
 PETROULESUTILITIES_PATH = ../petroules-utilities-qt/src

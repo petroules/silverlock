@@ -630,9 +630,9 @@ QString SilverlockPreferences::startupFileFor(LinuxSystemInfo::DesktopEnvironmen
     switch (desktopEnvironment)
     {
         case LinuxSystemInfo::GNOME:
-            return QString("%1/config/autostart/%2.desktop").arg(QDir::homePath()).arg(ApplicationInfo::unixName());
+            return QString("%1/config/autostart/%2.desktop").arg(QDir::homePath()).arg(qiApp->unixName());
         case LinuxSystemInfo::KDE:
-            return QString("%1/.kde/Autostart/%2").arg(QDir::homePath()).arg(ApplicationInfo::unixName());
+            return QString("%1/.kde/Autostart/%2").arg(QDir::homePath()).arg(qiApp->unixName());
         default:
             return QString();
     }
