@@ -6,7 +6,7 @@
 # --------------------------------------------------
 
 QT += core gui network xml
-macx:CONFIG += staticlib
+CONFIG += staticlib
 TEMPLATE = lib
 DEFINES += SILVERLOCKLIB_LIBRARY
 TARGET = silverlocklib
