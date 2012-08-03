@@ -74,17 +74,17 @@ Licenses for all third party components can be found in the `res/license` folder
 
 ### [Qt by Nokia](http://qt-project.org)
 
-See [res/lgpl-2.1.txt](res/lgpl-2.1.txt) and [res/qt-exception.txt](res/qt-exception.txt).
+See `res/lgpl-2.1.txt` and `res/qt-exception.txt`.
 
 ### [Qt Solutions by Nokia](http://qt.gitorious.org/qt-solutions)
 
 According to [Nokia](https://qt.nokia.com/products/qt-addons/solutions-archive/), the Qt Solutions are licensed under "the BSD license". A specific copy is not provided. We will assume this to mean the original 4-clause BSD license.
 
-See [res/qsa.txt](res/qsa.txt).
+See `res/qsa.txt`.
 
 ### [Botan](http://botan.randombit.net)
 
-See [res/botan.txt](res/botan.txt).
+See `res/botan.txt`.
 
 ### [create-dmg by YourSway](http://www.yoursway.com/free/#createdmg)
 
@@ -92,4 +92,4 @@ See [res/botan.txt](res/botan.txt).
 
 According to [YourSway's website](http://www.yoursway.com/free/#createdmg), the tool is "licensed under GNU General Public License, because it incorporates portions of GPL-licensed code from Adium repository". The version is not specified, but private correspondence with its author states "GPLv2 or any later version at your discretion".
 
-See [res/gpl-3.0.txt](res/gpl-3.0.txt).
+See `res/gpl-3.0.txt`.
