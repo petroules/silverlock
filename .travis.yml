@@ -2,7 +2,7 @@ language: cpp
 compiler:
   - gcc
   - clang
-before_script: qmake src/silverlock.pro -r
+before_script: git submodule update --init --recursive && qmake src/silverlock.pro -r
 script: make
 branches:
   only:
