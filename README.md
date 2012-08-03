@@ -1,4 +1,4 @@
-[Silverlock](http://www.petroules.com/products/silverlock)
+[Silverlock](http://www.petroules.com/products/silverlock) [![Build Status](https://secure.travis-ci.org/petroules/silverlock.png)](http://travis-ci.org/petroules/silverlock)
 ============
 
 Silverlock is a secure password management application designed to ease the management of account credentials and related information. It allows you to store your usernames, passwords, and other information related to your online accounts and authentications in a single file encrypted with a master password. Without the master password, no one else can access your information. The application is designed with simplicity and ease of use in mind.
