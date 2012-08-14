@@ -13,10 +13,10 @@
 #define VER_INTERNALNAME_STR        APP_DISPLAYNAME
 #define VER_PRODUCTNAME_STR         APP_DISPLAYNAME
 
-#define VER_COMPANYNAME_STR         "Petroules"
-#define VER_LEGALCOPYRIGHT_STR      "Copyright \xA9 2010-2011 Petroules Corporation"
+#define VER_COMPANYNAME_STR         "@PROJECT_VENDOR@"
+#define VER_LEGALCOPYRIGHT_STR      "@PROJECT_COPYRIGHT@" // backslash xA9 for real (c) symbol...
 #define VER_LEGALTRADEMARKS1_STR    "All Rights Reserved"
 #define VER_LEGALTRADEMARKS2_STR    VER_LEGALTRADEMARKS1_STR
-#define VER_COMPANYDOMAIN_STR       "petroules.com"
+#define VER_COMPANYDOMAIN_STR       "@ORG_DOMAIN@"
 
 #endif // VERSION_H_SLL
