@@ -1,3 +1,6 @@
 [submodule "lib/petroules-utilities-qt"]
 	path = lib/petroules-utilities-qt
 	url = git://github.com/petroules/petroules-utilities-qt.git
+[submodule "lib/botan"]
+	path = lib/botan
+	url = git://github.com/petroules/botan.git
