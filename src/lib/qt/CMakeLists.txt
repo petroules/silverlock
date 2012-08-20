@@ -17,7 +17,8 @@ set(SOURCES
     "${CMAKE_CURRENT_BINARY_DIR}/botan/botan_all.cpp"
   < "${CMAKE_CURRENT_BINARY_DIR}/botan/botan_all.h" >
   
-    cmake/botan.cmake
+    cmake/Botan.cmake
+    cmake/BotanUniversal.cmake
     
     database.cpp
     database.h
@@ -50,7 +51,7 @@ set(SOURCES
 
 qt_transform_sources(SOURCES "${SOURCES}")
 
-include(botan)
+include(Botan)
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/version.in.h" "${CMAKE_CURRENT_BINARY_DIR}/version.h")
 
