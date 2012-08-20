@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 # Install dependencies
 sudo apt-get install git
