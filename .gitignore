@@ -2,30 +2,13 @@
 .DS_Store
 Thumbs.db
 
-# Eclipse workspace
-.metadata
-
 # Other IDE and build files
-*.pro.user
-*.pro.autosave
-silverlock-build-*
+*.sln
+*.suo
+*.user
+*.autosave
 
-# 3rd party
-src/3rdparty/synteza/.git
-
-# Eclipse and Android stuff
-src/android/bin
-src/android/gen
-src/android/libs
-src/android/local.properties
-src/blackberry/bin
-src/libjava/bin
-
-# Xcode
-src/libobjc/**/xcuserdata
-src/libobjc/**/project.xcworkspace
-
-# Build files for deployment
-deploy/win32/*.msi
-deploy/win32/*.sln
-deploy/win32/*.suo
+# Temporary
+*.msi
+src/lib/dotnet/bin
+src/lib/dotnet/obj
