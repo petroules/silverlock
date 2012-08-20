@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Install dependencies
+sudo apt-get install git
+sudo apt-get install monotone
+
 # Clone all submodules
 git submodule update --init --recursive
 
