@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.6)
+cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/lib/petroules-utilities-qt/cmake ${CMAKE_MODULE_PATH})
 include(TargetArch)
 include(QtUtils)
