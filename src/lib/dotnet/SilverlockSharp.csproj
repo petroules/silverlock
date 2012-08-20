@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B7D89308-FECD-4473-A2A6-CFFCFE961C45}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SilverlockSharp</RootNamespace>
+    <AssemblyName>SilverlockSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile2</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ZLIB\Adler32.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="DatabaseCrypto.cs" />
+    <Compile Include="DatabaseCryptoTest.cs" />
+    <Compile Include="DatabaseKeys.cs" />
+    <Compile Include="DatabaseNode.cs" />
+    <Compile Include="DatabaseReader.cs" />
+    <Compile Include="DatabaseWriter.cs" />
+    <Compile Include="ZLIB\Deflate.cs" />
+    <Compile Include="EncryptedData.cs" />
+    <Compile Include="Entry.cs" />
+    <Compile Include="Group.cs" />
+    <Compile Include="ZLIB\InfBlocks.cs" />
+    <Compile Include="ZLIB\InfCodes.cs" />
+    <Compile Include="ZLIB\Inflate.cs" />
+    <Compile Include="ZLIB\InfTree.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlyDictionary.cs" />
+    <Compile Include="SearchParameters.cs" />
+    <Compile Include="ZLIB\StaticTree.cs" />
+    <Compile Include="ZLIB\SupportClass.cs" />
+    <Compile Include="ZLIB\Tree.cs" />
+    <Compile Include="ZLIB\ZInputStream.cs" />
+    <Compile Include="ZLIB\Zlib.cs" />
+    <Compile Include="ZLIB\ZOutputStream.cs" />
+    <Compile Include="ZLIB\ZStream.cs" />
+    <Compile Include="ZLIB\ZStreamException.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
