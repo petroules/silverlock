@@ -38,7 +38,7 @@ set(botan_reconfigure TRUE)
 # Botan has already been configured and we need not do it again
 if(EXISTS "${BOTAN_ARGFILE}")
     file(READ "${BOTAN_ARGFILE}" botan_args_file)
-    if("${BOTAN_ARGS}" STREQUAL "${botan_args_file}\n${botan_version_file}")
+    if("${BOTAN_ARGS}\n${botan_version_file}" STREQUAL "${botan_args_file}")
         set(botan_reconfigure FALSE)
     endif()
 endif()
