@@ -46,7 +46,7 @@ endif()
 
 use_qt_sdk_locations()
 
-find_package(Qt4 4.8.0 COMPONENTS QtCore QtGui QtNetwork QtSvg QtXml REQUIRED)
+find_package(Qt4 4.7.0 COMPONENTS QtCore QtGui QtNetwork QtSvg QtXml REQUIRED)
 if(QT4_FOUND)
     include(${QT_USE_FILE})
 endif()
