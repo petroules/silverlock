@@ -2,8 +2,8 @@ language: cpp
 compiler:
   - gcc
   - clang
-before_script: git submodule update --init --recursive && mkdir ../silverlock-build && cd ../silverlock-build && qmake ../silverlock/src/silverlock.pro -r
-script: make
+before_script: .travis/configure.sh
+script: .travis/make.sh
 branches:
   only:
     - master
@@ -13,4 +13,3 @@ notifications:
   email:
     on_success: change
     on_failure: always
-
