@@ -24,7 +24,7 @@ namespace Botan
     typedef unsigned char byte;
 }
 
-class SILVERLOCKLIBSHARED_EXPORT DatabaseCrypto : public QObject
+class SILVERLOCK_API DatabaseCrypto : public QObject
 {
     Q_OBJECT
 

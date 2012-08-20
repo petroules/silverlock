@@ -8,7 +8,7 @@
 
 class Entry;
 
-class SILVERLOCKLIBSHARED_EXPORT Group : public DatabaseNode
+class SILVERLOCK_API Group : public DatabaseNode
 {
     Q_OBJECT
 

@@ -5,7 +5,7 @@
 #include "entry.h"
 #include <QtCore>
 
-struct SILVERLOCKLIBSHARED_EXPORT SearchParameters : public QObject
+struct SILVERLOCK_API SearchParameters : public QObject
 {
     Q_OBJECT
 

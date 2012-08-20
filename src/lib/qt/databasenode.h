@@ -7,7 +7,7 @@
 
 class Group;
 
-class SILVERLOCKLIBSHARED_EXPORT DatabaseNode : public QObject
+class SILVERLOCK_API DatabaseNode : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QDateTime created READ created)

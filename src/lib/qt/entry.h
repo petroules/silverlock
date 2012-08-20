@@ -7,7 +7,7 @@
 
 class Group;
 
-class SILVERLOCKLIBSHARED_EXPORT Entry : public DatabaseNode
+class SILVERLOCK_API Entry : public DatabaseNode
 {
     Q_OBJECT
     Q_PROPERTY(QUrl url READ url WRITE setUrl)

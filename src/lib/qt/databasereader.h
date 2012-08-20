@@ -7,7 +7,7 @@
 class Database;
 class Group;
 
-class SILVERLOCKLIBSHARED_EXPORT DatabaseReader : public QObject
+class SILVERLOCK_API DatabaseReader : public QObject
 {
     Q_OBJECT
 

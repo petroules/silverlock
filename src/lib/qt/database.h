@@ -6,7 +6,7 @@
 #include <petroules-utilities.h>
 #include <QtXml>
 
-class SILVERLOCKLIBSHARED_EXPORT Database : public Group
+class SILVERLOCK_API Database : public Group
 {
     Q_OBJECT
     Q_PROPERTY(QString password READ password WRITE setPassword)
