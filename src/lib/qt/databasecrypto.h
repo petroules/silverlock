@@ -9,6 +9,15 @@
 #undef min
 #endif
 
+// remove wincrypt.h pollution
+// required to compile with MSVC
+#ifdef Q_OS_WIN
+#include <windows.h>
+#ifdef X942_DH_PARAMETERS
+#undef X942_DH_PARAMETERS
+#endif
+#endif
+
 namespace Botan
 {
     template <typename T> class SecureVector;
