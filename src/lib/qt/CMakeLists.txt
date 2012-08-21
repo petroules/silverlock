@@ -67,7 +67,6 @@ if(WIN32)
     target_link_libraries("${TARGET_NAME}" advapi32 user32)
 endif()
 
-# This library need not be installed on OS X as it gets embedded in the app bundle
-if(NOT APPLE)
-    install(TARGETS "${TARGET_NAME}" DESTINATION bin)
-endif()
+install(TARGETS "${TARGET_NAME}"
+    DESTINATION lib COMPONENT Runtime
+)
