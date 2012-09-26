@@ -2,7 +2,7 @@
 set -e
 
 # Install dependencies
-sudo apt-get install monotone
+sudo apt-get install monotone doxygen
 
 # Clone all submodules
 git submodule update --init --recursive
