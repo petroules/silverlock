@@ -10,14 +10,6 @@ if(APPLE)
     set(app_ext ".app")
 endif()
 
-# Path to the application bundle (OS X) or executable (other systems)
-# This looks weird because if we use don't use realpath (i.e. we have a
-# redundant ./ inside the path, CPack won't read the string length properly)
-set(APPS "\${CMAKE_INSTALL_PREFIX}/${app_dest_dir}${TARGET_NAME}${app_ext}")
-
-# Directories containing shared library dependencies
-set(DIRS ${QT_LIBRARY_DIRS})
-
 # for NSIS to create Start Menu shortcuts
 set(CPACK_PACKAGE_EXECUTABLES "${TARGET_NAME};${CMAKE_PROJECT_NAME}")
 
@@ -39,10 +31,17 @@ install(CODE "
     file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${qtconf_dest_dir}/qt.conf\" \"\")
     " COMPONENT Runtime)
 
+list(APPEND LIBDIRS "${QT_BINARY_DIR}") # DLLs are in the bin directory on Windows
+list(APPEND LIBDIRS "${QT_LIBRARY_DIR}")
+list(APPEND LIBDIRS "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+list(APPEND LIBDIRS "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}")
+list(APPEND LIBDIRS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+list(APPEND LIBDIRS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}")
+
 # Install dependencies
 install(CODE "
     file(GLOB_RECURSE QTPLUGINS
       \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
     include(BundleUtilities)
-    fixup_bundle(\"${APPS}\" \"\${QTPLUGINS}\" \"${DIRS}\")
+    fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${app_dest_dir}${TARGET_NAME}${app_ext}\" \"\${QTPLUGINS}\" \"${LIBDIRS}\")
     " COMPONENT Runtime)
