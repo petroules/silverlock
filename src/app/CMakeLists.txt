@@ -13,9 +13,9 @@ if(WIN32 AND BUILD_SHARED_LIBS)
 endif()
 
 if(APPLE)
-    set(TARGET_NAME "${CMAKE_PROJECT_NAME}")
+    set(TARGET_NAME "${SILVERLOCK_PACKAGE_NAME}")
 else()
-    set(TARGET_NAME "${PROJECT_NAME_UNIX}")
+    set(TARGET_NAME "${SILVERLOCK_PACKAGE_PREFIX}")
 endif()
 
 set(SOURCES
@@ -27,7 +27,6 @@ set(SOURCES
     databaseprinterfields.h
   
     cmake/install.cmake
-    cmake/package.cmake
     
     dialogs/aboutdialog.cpp
     dialogs/aboutdialog.h
@@ -155,4 +154,3 @@ elseif(UNIX)
 endif()
 
 include(install)
-include(package)

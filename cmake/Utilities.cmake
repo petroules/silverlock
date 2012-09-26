@@ -1,0 +1,11 @@
+function(version_string output_variable_short output_variable_long major minor patch build)
+    set(short_ver "${major}.${minor}")
+    if(build GREATER 0)
+        set(short_ver "${short_ver}.${patch}.${build}")
+    elseif(patch GREATER 0)
+        set(short_ver "${short_ver}.${patch}")
+    endif()
+
+    set(${output_variable_short} "${short_ver}" PARENT_SCOPE)
+    set(${output_variable_long} "${major}.${minor}.${patch}.${build}" PARENT_SCOPE)
+endfunction()

@@ -1,35 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/lib/petroules-utilities-qt/cmake ${CMAKE_MODULE_PATH})
+project(Silverlock)
 include(Solar)
-
-# --------------------------------------------------
-# PROJECT VARIABLES
-# --------------------------------------------------
-
-set(PROJECT_ID              "com.petroules.silverlock")
-set(PROJECT_UUID            "{CA3E50C3-460E-4E12-9EFB-34030DC15306}")
-
-project(                    "Silverlock") # sets PROJECT_NAME / CMAKE_PROJECT_NAME
-set(PROJECT_NAME_UNIX       "silverlock")
-set(PROJECT_SUMMARY         "Silverlock password manager")
-set(PROJECT_DESCRIPTION     "Silverlock is a secure password management application designed to ease the management of account credentials and related information. It allows you to store your usernames, passwords, and other information related to your online accounts and authentications in a single file encrypted with a master password. Without the master password, no one else can access your information. The application is designed with simplicity and ease of use in mind.")
-
-set(PROJECT_VERSION_MAJOR   "1")
-set(PROJECT_VERSION_MINOR   "1")
-set(PROJECT_VERSION_PATCH   "2")
-set(PROJECT_VERSION_BUILD   "0")
-set(PROJECT_VERSION         "1.1.2")
-
-git_append_shorttag(PROJECT_VERSION)
-
-set(PROJECT_VENDOR          "Petroules")
-set(PROJECT_CONTACT         "info@petroules.com")
-set(PROJECT_COPYRIGHT       "Copyright (c) 2010-2012 Petroules Corporation")
-set(ORG_WEBSITE             "http://www.petroules.com/")
-set(ORG_DOMAIN              "petroules.com")
-
-set(PROJECT_README          "README.md")
-set(PROJECT_LICENSE         "COPYING.md")
+include(Utilities)
+include(Variables)
+include(Package)
 
 # --------------------------------------------------
 # DEPENDENCIES
@@ -157,3 +132,6 @@ set(d ${CMAKE_SOURCE_DIR}/test-data)
 file(GLOB_RECURSE tests_SOURCES ${d}/*.txt ${d}/*.xml ${d}/*.sdbx)
 group_by_folder(${d} "${tests_SOURCES}")
 add_custom_target("Tests" SOURCES ${tests_SOURCES})
+
+include(InstallRequiredSystemLibraries)
+include(CPack)
