@@ -11,6 +11,8 @@ include_directories(
     "${CMAKE_SOURCE_DIR}/lib/petroules-utilities-qt/lib/qtsolutions/qtsingleapplication/src"
 )
 
+include(Botan)
+
 set(TARGET_NAME "silverlockqt")
 
 set(SOURCES
@@ -50,8 +52,6 @@ set(SOURCES
 )
 
 qt_transform_sources(SOURCES "${SOURCES}")
-
-include(Botan)
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/version.in.h" "${CMAKE_CURRENT_BINARY_DIR}/version.h")
 
