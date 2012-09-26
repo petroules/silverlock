@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/lib/petroules-utilities-qt/cmake ${CMAKE_MODULE_PATH})
-include(TargetArch)
-include(QtUtils)
-include(GitUtils)
+include(Solar)
 
 # --------------------------------------------------
 # PROJECT VARIABLES
@@ -145,3 +143,29 @@ if(WIN32)
 elseif(APPLE)
     add_subdirectory(src/lib/objc)
 endif()
+
+# All of the metadata-type files in the repository root directory
+add_custom_target("Meta" SOURCES CHANGELOG.md COPYING.md README.md)
+
+# Configuration and utility scripts
+file(GLOB_RECURSE scripts_SOURCES .travis/configure.sh .travis/make.sh .travis.yml .gitignore)
+list(APPEND scripts_SOURCES ${CMAKE_SOURCE_DIR}/deploy) # TODO: DELETE ONCE CMAKE PACKAGING IS DONE
+group_by_folder(${CMAKE_CURRENT_SOURCE_DIR} "${scripts_SOURCES}")
+add_custom_target("Scripts" SOURCES ${scripts_SOURCES})
+
+# All CMake scripts since some IDEs don't show the hierarchy
+file(GLOB_RECURSE cmake_SOURCES ${CMAKE_SOURCE_DIR}/*/CMakeLists.txt ${CMAKE_SOURCE_DIR}/*.cmake)
+group_by_folder(${CMAKE_CURRENT_SOURCE_DIR} "${cmake_SOURCES}")
+add_custom_target("CMake" SOURCES ${cmake_SOURCES} config.in.h)
+
+# Other shared resources (i.e. to be distributed in $prefix/share or elsewhere)
+set(d ${CMAKE_SOURCE_DIR}/res)
+file(GLOB_RECURSE shared_SOURCES ${d}/*.svg ${d}/*.ico ${d}/*.icns ${d}/*.png ${d}/*.qrc ${d}/*.txt ${d}/*.rtf)
+group_by_folder(${d} "${shared_SOURCES}")
+add_custom_target("Shared" SOURCES ${shared_SOURCES})
+
+# Test files for the database engine
+set(d ${CMAKE_SOURCE_DIR}/test-data)
+file(GLOB_RECURSE tests_SOURCES ${d}/*.txt ${d}/*.xml ${d}/*.sdbx)
+group_by_folder(${d} "${tests_SOURCES}")
+add_custom_target("Tests" SOURCES ${tests_SOURCES})
