@@ -128,21 +128,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_JAVA_TARGET_OUTPUT_DIR   ${CMAKE_BINARY_DIR}/lib)
 
+add_subdirectory(lib)
+add_subdirectory(src)
 add_subdirectory(doc)
-add_subdirectory(lib/petroules-utilities-qt/src)
-add_subdirectory(src/app)
-add_subdirectory(src/lib/java)
-add_subdirectory(src/lib/qt)
-
-if(WIN32)
-    add_subdirectory(src/launcher)
-    if(MSVC_VERSION GREATER 1500)
-        # TODO: temporarily disabled because it won't build as a Portable Library due to missing XML + Crypto classes
-        #include_external_msproject(silverlockdotnet "${CMAKE_SOURCE_DIR}/src/lib/dotnet/SilverlockSharp.csproj" TYPE "FAE04EC0-301F-11D3-BF4B-00C04F79EFBC")
-    endif()
-elseif(APPLE)
-    add_subdirectory(src/lib/objc)
-endif()
 
 # All of the metadata-type files in the repository root directory
 add_custom_target("Meta" SOURCES CHANGELOG.md COPYING.md README.md)
