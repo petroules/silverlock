@@ -15,14 +15,14 @@ set(TARGET_NAME "silverlockqt")
 
 set(SOURCES
     "${CMAKE_CURRENT_BINARY_DIR}/botan/botan_all.cpp"
-  < "${CMAKE_CURRENT_BINARY_DIR}/botan/botan_all.h" >
+    "${CMAKE_CURRENT_BINARY_DIR}/botan/botan_all.h"
   
     cmake/Botan.cmake
     cmake/BotanUniversal.cmake
     
     database.cpp
     database.h
-  < database_keys.h >
+    database_keys.h
     databasecrypto.cpp
     databasecrypto.h
     databasenode.cpp
@@ -37,16 +37,16 @@ set(SOURCES
     group.h
     searchparameters.cpp
     searchparameters.h
-  < silverlocklib.h >
+    silverlocklib.h
     silverlocklib.rc
-  < silverlocklib_global.h >
+    silverlocklib_global.h
     
     tr/silverlocklib_de.ts
     tr/silverlocklib_fr.ts
     
-  < version.in.h >
+    version.in.h
   
-  < ../../../config.in.h >
+    ../../../config.in.h
 )
 
 qt_transform_sources(SOURCES "${SOURCES}")

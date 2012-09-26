@@ -24,7 +24,7 @@ set(SOURCES
     databaseprinter.cpp
     databaseprinter.h
     databaseprinterfields.cpp
-  < databaseprinterfields.h >
+    databaseprinterfields.h
   
     cmake/install.cmake
     cmake/package.cmake
@@ -93,18 +93,18 @@ set(SOURCES
     silverlockapplication.cpp
     silverlockapplication.h
     silverlockpreferences.cpp
-  < silverlockpreferences.h >
-  < silverlockpreferences_keys.h >
+    silverlockpreferences.h
+    silverlockpreferences_keys.h
     
     tr/silverlock_de.ts
     tr/silverlock_fr.ts
     
-  < version.in.h >
+    version.in.h
 
     widgets/entrytablewidget.cpp
     widgets/entrytablewidget.h
     widgets/entrytablewidget.ui
-  < widgets/entryviewindexes.h >
+    widgets/entryviewindexes.h
     widgets/expandingspacerwidget.cpp
     widgets/expandingspacerwidget.h
     widgets/groupbrowserwidget.cpp
@@ -114,7 +114,7 @@ set(SOURCES
     widgets/toolbarsearchwidget.h
     widgets/toolbarsearchwidget.ui
 
-  < ../../config.in.h >
+    ../../config.in.h
 
     ../../res/app.icns
     ../../res/globalresources.qrc
