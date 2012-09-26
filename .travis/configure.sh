@@ -1,8 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 # Install dependencies
-sudo apt-get install git
 sudo apt-get install monotone
 
 # Clone all submodules
