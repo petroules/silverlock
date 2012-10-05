@@ -1,47 +1,23 @@
-set(app_ext "${CMAKE_EXECUTABLE_SUFFIX}")
-set(app_dest_dir bin/)
-set(plugin_dest_dir bin)
-set(qtconf_dest_dir bin)
+if(IS_RELEASE_BUILD)
+    install(TARGETS "${TARGET_NAME}"
+        BUNDLE DESTINATION . COMPONENT Runtime
+        RUNTIME DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_REL} COMPONENT Runtime
+    )
 
-if(APPLE)
-    set(plugin_dest_dir "${TARGET_NAME}.app/Contents/MacOS")
-    set(qtconf_dest_dir "${TARGET_NAME}.app/Contents/Resources")
-    set(app_dest_dir "")
-    set(app_ext ".app")
+    if(WIN32 OR APPLE)
+        if(WIN32)
+            set(ESUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
+        elseif(APPLE)
+            set(ESUFFIX .app)
+        endif()
+
+        list(APPEND LIBDIRS "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+        list(APPEND LIBDIRS "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}")
+        list(APPEND LIBDIRS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+        list(APPEND LIBDIRS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}")
+        list(APPEND PLUGINS qtaccessiblewidgets qcncodecs qjpcodecs qkrcodecs qtwcodecs qsvgicon qgif qico qjpeg qmng qsvg qtiff)
+        
+        include(DeployQt4)
+        install_qt4_executable("${TARGET_NAME}${ESUFFIX}" "${PLUGINS}" "" "${LIBDIRS}" "" "" Runtime)
+    endif()
 endif()
-
-# for NSIS to create Start Menu shortcuts
-set(CPACK_PACKAGE_EXECUTABLES "${TARGET_NAME};${CMAKE_PROJECT_NAME}")
-
-# ------------------------
-# Various install commands
-# ------------------------
-
-# The app gets installed in the root of the installation dir on OS X, and bin elsewhere
-install(TARGETS "${TARGET_NAME}"
-    BUNDLE DESTINATION . COMPONENT Runtime
-    RUNTIME DESTINATION bin COMPONENT Runtime
-)
-
-# Install Qt plugins - cull using 'REGEX "..." EXCLUDE'
-install(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${plugin_dest_dir}/plugins COMPONENT Runtime)
-
-# Install qt.conf
-install(CODE "
-    file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${qtconf_dest_dir}/qt.conf\" \"\")
-    " COMPONENT Runtime)
-
-list(APPEND LIBDIRS "${QT_BINARY_DIR}") # DLLs are in the bin directory on Windows
-list(APPEND LIBDIRS "${QT_LIBRARY_DIR}")
-list(APPEND LIBDIRS "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-list(APPEND LIBDIRS "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}")
-list(APPEND LIBDIRS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-list(APPEND LIBDIRS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}")
-
-# Install dependencies
-install(CODE "
-    file(GLOB_RECURSE QTPLUGINS
-      \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
-    include(BundleUtilities)
-    fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${app_dest_dir}${TARGET_NAME}${app_ext}\" \"\${QTPLUGINS}\" \"${LIBDIRS}\")
-    " COMPONENT Runtime)

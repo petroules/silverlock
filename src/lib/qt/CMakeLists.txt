@@ -67,6 +67,8 @@ if(WIN32)
     target_link_libraries("${TARGET_NAME}" advapi32 user32)
 endif()
 
-install(TARGETS "${TARGET_NAME}"
-    DESTINATION lib COMPONENT Runtime
-)
+if(IS_RELEASE_BUILD)
+    install(TARGETS "${TARGET_NAME}"
+        DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_REL} COMPONENT Runtime
+    )
+endif()

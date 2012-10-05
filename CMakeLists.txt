@@ -6,6 +6,14 @@ include(Utilities)
 include(Variables)
 include(Package)
 
+if("${CMAKE_BUILD_TYPE}" STREQUAL Release)
+    set(IS_RELEASE_BUILD TRUE)
+    set(PETROULES_UTILITIES_NO_INSTALL FALSE)
+else()
+    set(IS_RELEASE_BUILD FALSE)
+    set(PETROULES_UTILITIES_NO_INSTALL TRUE)
+endif()
+
 # --------------------------------------------------
 # DEPENDENCIES
 # --------------------------------------------------
@@ -97,11 +105,23 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.5)
 
+if(UNIX)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_REL bin)
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_REL lib)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_REL lib)
+    set(CMAKE_JAVA_TARGET_OUTPUT_DIR_REL   lib)
+else()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_REL .)
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_REL .)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_REL .)
+    set(CMAKE_JAVA_TARGET_OUTPUT_DIR_REL   .)
+endif()
+
 # Set output directories for binaries and static and shared libraries
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_JAVA_TARGET_OUTPUT_DIR   ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_RUNTIME_OUTPUT_DIRECTORY_REL})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_ARCHIVE_OUTPUT_DIRECTORY_REL})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_LIBRARY_OUTPUT_DIRECTORY_REL})
+set(CMAKE_JAVA_TARGET_OUTPUT_DIR   ${CMAKE_BINARY_DIR}/${CMAKE_JAVA_TARGET_OUTPUT_DIR_REL})
 
 add_subdirectory(lib)
 add_subdirectory(src)
@@ -133,5 +153,9 @@ file(GLOB_RECURSE tests_SOURCES ${d}/*.txt ${d}/*.xml ${d}/*.sdbx)
 group_by_folder(${d} "${tests_SOURCES}")
 add_custom_target("Tests" SOURCES ${tests_SOURCES})
 
-include(InstallRequiredSystemLibraries)
-include(CPack)
+if(IS_RELEASE_BUILD)
+    include(InstallRequiredSystemLibraries)
+    include(CPack)
+else()
+    install(CODE "message(FATAL_ERROR \"You cannot install or package debug builds\")")
+endif()

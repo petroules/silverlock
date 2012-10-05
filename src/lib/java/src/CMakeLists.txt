@@ -35,4 +35,6 @@ if(NOT WIN32)
     )
 endif()
 
-install_jar("${java_TARGET_NAME}" ${CMAKE_JAVA_TARGET_OUTPUT_DIR})
+if(IS_RELEASE_BUILD)
+    install_jar("${java_TARGET_NAME}" ${CMAKE_JAVA_TARGET_OUTPUT_DIR})
+endif()

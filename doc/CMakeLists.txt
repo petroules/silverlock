@@ -15,10 +15,12 @@ if(DOXYGEN_FOUND)
         SOURCES Doxyfile
     )
 
-    install(DIRECTORY "${CMAKE_BINARY_DIR}/docs/html"
-        COMPONENT doc
-        DESTINATION "share/doc/silverlock"
-    )
+    if(IS_RELEASE_BUILD)
+        install(DIRECTORY "${CMAKE_BINARY_DIR}/docs/html"
+            COMPONENT doc
+            DESTINATION "share/doc/silverlock"
+        )
+    endif()
 else()
     message(STATUS "Doxygen was NOT found; will not build documentation")
 endif()
