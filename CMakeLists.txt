@@ -10,6 +10,7 @@ include(Solar)
 include(Utilities)
 include(Variables)
 include(Package)
+include(DeployQt4)
 
 if("${CMAKE_BUILD_TYPE}" STREQUAL Release)
     set(IS_RELEASE_BUILD TRUE)
