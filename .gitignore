@@ -12,3 +12,7 @@ Thumbs.db
 *.msi
 src/lib/dotnet/bin
 src/lib/dotnet/obj
+
+# QBS
+/*-debug/
+/*-release/
