@@ -102,7 +102,7 @@ QString DatabaseCrypto::encrypt(const QString &data, const QString &password, in
         SymmetricKey mac_key = pbkdf->derive_key(16, "MAC" + passphrase, &salt[0], salt.size(), iterations);
 
         // Write the standard file header and the salt encoded in base64
-        out += QString("%1 %2 %3\n").arg(header).arg(Database::version().toString())
+        out += QString("%1 %2 %3\n").arg(header).arg(Database::version())
                .arg(compressed ? COMPRESSED : UNCOMPRESSED);
         out += QString::fromStdString(b64_encode(salt)) + "\n";
 
@@ -218,7 +218,7 @@ QString DatabaseCrypto::decrypt(const QString &data, const QString &password, Cr
                 .split(' ', QString::SkipEmptyParts);
         if (theRest.count() == 2)
         {
-            QVersion version(theRest[0]);
+            QString version(theRest[0]);
             if (version.simplified() != Database::version())
             {
                 if (error)

@@ -7,7 +7,6 @@
 
 class QDomDocument;
 class QDomElement;
-struct QVersion;
 
 class SILVERLOCK_API Database : public Group
 {
@@ -19,7 +18,7 @@ class SILVERLOCK_API Database : public Group
 public:
     Database(const QString &title = QString(), const QString &password = QString());
     ~Database();
-    static QVersion version();
+    static QString version();
     QString password() const;
     void setPassword(const QString &password);
     int compression() const;

@@ -1,6 +1,5 @@
 #include "database.h"
 #include "database_keys.h"
-#include <petroules-utilities.h>
 #include <QtXml>
 
 /*!
@@ -46,9 +45,9 @@ Database::~Database()
 
     This decision is subject to change.
  */
-QVersion Database::version()
+QString Database::version()
 {
-    return QVersion("1.0").simplified();
+    return QLatin1String("1.0");
 }
 
 /*!
@@ -140,7 +139,7 @@ QDomElement Database::toXml(QDomDocument &document) const
 {
     QDomElement element = Group::toXml(document);
     element.setTagName(XML_DATABASE);
-    element.setAttribute(XML_VERSION, Database::version().toString());
+    element.setAttribute(XML_VERSION, Database::version());
     element.setAttribute(XML_DBPASSWORD, this->m_password);
     element.setAttribute(XML_COMPRESSION, this->m_compression);
     return element;

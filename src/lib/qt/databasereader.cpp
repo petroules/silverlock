@@ -4,7 +4,6 @@
 #include "databasecrypto.h"
 #include "entry.h"
 #include "group.h"
-#include <petroules-utilities.h>
 #include <QtXml>
 
 /*!
@@ -86,10 +85,10 @@ Database* DatabaseReader::read(QIODevice &device, const QString &password)
             return NULL;
         }
 
-        QVersion version = QVersion(root.attribute(XML_VERSION)).simplified();
+        QString version = root.attribute(XML_VERSION).simplified();
         if (version != Database::version())
         {
-            this->m_errorString = tr("Unsupported database version: %1").arg(version.toString());
+            this->m_errorString = tr("Unsupported database version: %1").arg(version);
             return NULL;
         }
 
