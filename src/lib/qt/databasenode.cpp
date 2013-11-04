@@ -1,6 +1,7 @@
 #include "databasenode.h"
 #include "database.h"
 #include "group.h"
+#include <QtXml>
 
 /*!
     \class DatabaseNode

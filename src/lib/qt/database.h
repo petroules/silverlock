@@ -3,8 +3,11 @@
 
 #include "silverlocklib_global.h"
 #include "group.h"
-#include <petroules-utilities.h>
-#include <QtXml>
+#include <QtCore>
+
+class QDomDocument;
+class QDomElement;
+struct QVersion;
 
 class SILVERLOCK_API Database : public Group
 {

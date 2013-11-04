@@ -1,5 +1,7 @@
 #include "database.h"
 #include "database_keys.h"
+#include <petroules-utilities.h>
+#include <QtXml>
 
 /*!
     \class Database

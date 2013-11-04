@@ -5,6 +5,7 @@
 #include "entry.h"
 #include "group.h"
 #include <petroules-utilities.h>
+#include <QtXml>
 
 /*!
     \class DatabaseReader

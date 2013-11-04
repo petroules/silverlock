@@ -2,10 +2,12 @@
 #define DATABASEWRITER_H
 
 #include "silverlocklib_global.h"
-#include <QtXml>
+#include <QtCore>
 
 class Database;
 class Group;
+class QDomDocument;
+class QDomNode;
 
 class SILVERLOCK_API DatabaseWriter : public QObject
 {

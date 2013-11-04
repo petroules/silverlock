@@ -6,6 +6,8 @@
 #include <QtCore>
 
 class Group;
+class QDomDocument;
+class QDomElement;
 
 class SILVERLOCK_API Entry : public DatabaseNode
 {

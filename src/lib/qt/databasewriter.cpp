@@ -4,6 +4,7 @@
 #include "databasecrypto.h"
 #include "group.h"
 #include "entry.h"
+#include <QtXml>
 
 /*!
     \class DatabaseWriter

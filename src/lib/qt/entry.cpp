@@ -1,5 +1,6 @@
 #include "entry.h"
 #include "group.h"
+#include <QtXml>
 
 /*!
     \class Entry

@@ -3,9 +3,11 @@
 
 #include "silverlocklib_global.h"
 #include "database_keys.h"
-#include <QtXml>
+#include <QtCore>
 
 class Group;
+class QDomDocument;
+class QDomElement;
 
 class SILVERLOCK_API DatabaseNode : public QObject
 {

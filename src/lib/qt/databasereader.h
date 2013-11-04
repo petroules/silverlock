@@ -2,10 +2,11 @@
 #define DATABASEREADER_H
 
 #include "silverlocklib_global.h"
-#include <QtXml>
+#include <QtCore>
 
 class Database;
 class Group;
+class QDomElement;
 
 class SILVERLOCK_API DatabaseReader : public QObject
 {
