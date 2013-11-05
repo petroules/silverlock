@@ -2,7 +2,6 @@
 #define SILVERLOCKSETTINGS_H
 
 #include <QtCore>
-#include <petroules-utilities.h>
 
 class MainWindow;
 

@@ -1,12 +1,14 @@
 #ifndef SILVERLOCKAPPLICATION_H
 #define SILVERLOCKAPPLICATION_H
 
-#include <petroules-utilities.h>
+#include <QApplication>
+#include <QStringList>
 
+class QMimeData;
 class ApplicationMenu;
 class MainWindow;
 
-class SilverlockApplication : public IntegratedApplication
+class SilverlockApplication : public QApplication
 {
     Q_OBJECT
 

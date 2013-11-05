@@ -1,6 +1,8 @@
 #include "silverlockapplication.h"
 #include "applicationmenu.h"
+#include "inactivityeventfilter.h"
 #include "mainwindow.h"
+#include "nativeopenfiledialog.h"
 #include "silverlockpreferences.h"
 #include "version.h"
 #include "dialogs/aboutdialog.h"
@@ -18,7 +20,7 @@ public:
 };
 
 SilverlockApplication::SilverlockApplication(int &argc, char *argv[])
-    : IntegratedApplication(VER_APP_UUID, argc, argv), d(new Private())
+    : QApplication(argc, argv), d(new Private())
 {
     Q_INIT_RESOURCE(globalresources);
     Q_INIT_RESOURCE(resources);
@@ -26,18 +28,7 @@ SilverlockApplication::SilverlockApplication(int &argc, char *argv[])
     this->setOrganizationName(VER_COMPANYNAME_STR);
     this->setOrganizationDomain(VER_COMPANYDOMAIN_STR);
     this->setApplicationName(APP_DISPLAYNAME);
-    this->setUnixName(APP_UNIXNAME);
-    this->setBundleId(APP_BUNDLEID);
-    this->setApplicationVersion(QVersion(VER_PRODUCTVERSION_STR));
-    this->setFileVersion(QVersion(VER_FILEVERSION_STR));
-    this->setCopyright(VER_LEGALCOPYRIGHT_STR);
-    this->setTrademarks(VER_LEGALTRADEMARKS1_STR);
-
-    this->setUrl(OrganizationHomePage, QUrl("http://www.petroules.com/"));
-    this->setUrl(OrganizationDonations, QUrl("http://www.petroules.com/donate"));
-    this->setUrl(ApplicationHomePage, QUrl("http://www.petroules.com/products/silverlock"));
-    this->setUrl(ApplicationHelp, QUrl("http://www.petroules.com/support/silverlock"));
-    this->setUrl(ApplicationUpdate, QUrl("https://www.petroules.com/version/silverlock"));
+    this->setApplicationVersion(VER_PRODUCTVERSION_STR);
 
     this->createDockMenu();
 
@@ -48,6 +39,14 @@ SilverlockApplication::SilverlockApplication(int &argc, char *argv[])
     {
         QTimer::singleShot(5000, this, SLOT(checkForUpdatesSilent()));
     }
+
+    // Event filter for our idle timer to detect when the user appears to have gone away...
+    InactivityEventFilter *filter = new InactivityEventFilter(qApp);
+    qApp->installEventFilter(filter);
+    QObject::connect(filter, SIGNAL(resetIdleTimer(QObject*)), qApp, SIGNAL(resetIdleTimer(QObject*)));
+
+    // Mac OS X: This allows the application to recognize when the user double clicks a file in the Finder
+    QObject::connect(qApp, SIGNAL(fileOpenRequest(QString)), qApp, SIGNAL(messageReceived(QString)));
 }
 
 SilverlockApplication::~SilverlockApplication()
@@ -144,10 +143,6 @@ MainWindow* SilverlockApplication::activeWindow2() const
 
 void SilverlockApplication::createDockMenu()
 {
-    this->d->dockMenu = new QMenu();
-    this->d->dockMenu->addAction(tr("Check for Updates"), this, SLOT(checkForUpdates()));
-    this->d->dockMenu->addAction(tr("Preferences..."), this, SLOT(preferences()), QKeySequence::Preferences);
-    this->macSetDockMenu(this->d->dockMenu);
 }
 
 void SilverlockApplication::openFile()
@@ -234,17 +229,17 @@ void SilverlockApplication::closeFile()
 
 void SilverlockApplication::showHelpContents()
 {
-    QDesktopServices::openUrl(this->url(ApplicationHelp));
+    //QDesktopServices::openUrl(this->url(ApplicationHelp));
 }
 
 void SilverlockApplication::launchProductWebsite()
 {
-    QDesktopServices::openUrl(this->url(ApplicationHomePage));
+    //QDesktopServices::openUrl(this->url(ApplicationHomePage));
 }
 
 void SilverlockApplication::launchDonationsWebsite()
 {
-    QDesktopServices::openUrl(this->url(OrganizationDonations));
+    //QDesktopServices::openUrl(this->url(OrganizationDonations));
 }
 
 /*!

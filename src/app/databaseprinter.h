@@ -5,6 +5,8 @@
 #include <silverlocklib.h>
 #include "databaseprinterfields.h"
 
+class QTextDocument;
+
 class DatabasePrinter : public QObject
 {
     Q_OBJECT

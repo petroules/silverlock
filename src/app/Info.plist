@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en-US</string>
-	<key>CFBundleDisplayName</key>
-	<string>Silverlock</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -27,26 +23,10 @@
 			</array>
 		</dict>
 	</array>
-	<key>CFBundleExecutable</key>
-	<string>@EXECUTABLE@</string>
 	<key>CFBundleIconFile</key>
-	<string>@ICON@</string>
+	<string>app.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.petroules.silverlock.mac</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>Silverlock</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.2</string>
-	<key>CFBundleSignature</key>
-	<string>PETR</string>
-	<key>CFBundleVersion</key>
-	<string>1.2</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>10.5.0</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2010-2011 Petroules Corporation</string>
 	<key>UTExportedTypeDeclarations</key>

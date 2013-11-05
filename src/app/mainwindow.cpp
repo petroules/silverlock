@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <silverlocklib.h>
-#include <petroules-utilities.h>
 #include "silverlockapplication.h"
 #include "silverlockpreferences.h"
 #include "dialogs/aboutdialog.h"
@@ -10,6 +9,8 @@
 #include "dialogs/databaseprintpreviewdialog.h"
 #include "dialogs/entryeditdialog.h"
 #include "dialogs/groupeditdialog.h"
+#include "dialogs/nativedialogs.h"
+#include "dialogs/nativeprintdialog.h"
 #include "dialogs/newdatabasewizard.h"
 #include "dialogs/preferencesdialog.h"
 #include "dialogs/searchdatabasedialog.h"
@@ -17,10 +18,6 @@
 #include "dialogs/updatedialog.h"
 #include "widgets/expandingspacerwidget.h"
 #include "widgets/toolbarsearchwidget.h"
-#ifdef Q_WS_MAC
-#include "widgets/searchlineedit.h"
-//#include "mac/machelpers.h"
-#endif
 
 /*!
     \class MainWindow
@@ -40,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_lockIdleTimerValue(0), m_exitIdleTimerValue(0), widgetsAndToolbarsAction(NULL)
 {
     this->ui->setupUi(this);
-    WindowManager::centerMainWindow(this);
+    //WindowManager::centerMainWindow(this);
     this->updateSingleInstance();
     this->clearCurrentFile();
     this->setupSignals();
@@ -99,19 +96,6 @@ EntryTableWidget* MainWindow::entryTable() const
 
 void MainWindow::updateSingleInstance(MainWindow *mw)
 {
-    IntegratedApplication *singleApp = qiApp;
-    if (singleApp)
-    {
-        // Remove any previous messageReceived signal handler and reconnect it to the specified MainWindow
-        QObject::disconnect(singleApp, SIGNAL(messageReceived(const QString&)), NULL, NULL);
-        QObject::connect(singleApp, SIGNAL(messageReceived(const QString&)), mw, SLOT(handleMessage(const QString&)));
-
-        // Set the activation window to the specified one
-        singleApp->setActivationWindow(mw, false);
-
-        // Connect our needToShow signal
-        QObject::connect(mw, SIGNAL(needToShow()), singleApp, SLOT(activateWindow()));
-    }
 }
 
 /*!
@@ -579,7 +563,7 @@ void MainWindow::on_entryTable_itemSelectionChanged()
 
 void MainWindow::updateMenus()
 {
-    this->ui->actionAlwaysOnTop->setChecked(WindowManager::isTopMost(this));
+    //this->ui->actionAlwaysOnTop->setChecked(WindowManager::isTopMost(this));
     this->ui->actionFullScreen->setChecked(this->isFullScreen());
 }
 

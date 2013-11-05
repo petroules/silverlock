@@ -1,5 +1,5 @@
 #include "guardeddialog.h"
-#include <petroules-utilities.h>
+#include "nativedialogs.h"
 
 /*!
     \class GuardedDialog

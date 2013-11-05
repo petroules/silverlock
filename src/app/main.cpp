@@ -26,10 +26,6 @@ int main(int argc, char *argv[])
     QStringList args = instance.arguments();
     args.removeFirst();
     QString message = args.join(" ");
-    if (instance.sendMessage(message))
-    {
-        return 0;
-    }
 
     // No other instance was running, we're good to create and show the first window
     MainWindow *mw = new MainWindow();

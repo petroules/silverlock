@@ -1,9 +1,9 @@
 #ifndef UPDATEDIALOG_H
 #define UPDATEDIALOG_H
 
-#include <petroules-utilities.h>
 #include <QtGui>
 #include <QtNetwork>
+#include "qversion.h"
 
 namespace Ui
 {

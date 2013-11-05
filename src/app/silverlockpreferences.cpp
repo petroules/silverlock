@@ -1,9 +1,6 @@
 #include "silverlockpreferences.h"
 #include "silverlockpreferences_keys.h"
 #include "mainwindow.h"
-#ifdef Q_WS_MAC
-#include "mac/macloginitemsmanager.h"
-#endif
 
 SilverlockPreferences* SilverlockPreferences::m_instance = NULL;
 SilverlockPreferences* SilverlockPreferences::m_defaults = NULL;
@@ -311,115 +308,16 @@ void SilverlockPreferences::setMinimizeAfterLock(bool minimize)
  */
 bool SilverlockPreferences::runAtStartupSupported()
 {
-#if defined(Q_WS_WIN) || defined(Q_WS_MAC)
-    return true;
-#elif defined(Q_OS_LINUX)
-    return !SilverlockPreferences::startupFile().isEmpty();
-#else
     return false;
-#endif
 }
 
 bool SilverlockPreferences::runAtStartup() const
 {
-    if (!SilverlockPreferences::runAtStartupSupported())
-    {
-        qWarning() << "Run at startup is not supported on this platform and configuration.";
-    }
-
-#ifdef Q_WS_WIN
-    QString path = this->applicationPathForRegistry();
-
-    // If we're running on Windows, set the check box if the registry contains the correct key set to the running application's path
-    QSettings reg(KEY_WIN_STARTUP_PATH, QSettings::NativeFormat);
-    return reg.contains(KEY_WIN_STARTUP_NAME) && reg.value(KEY_WIN_STARTUP_NAME).toString().compare(path, Qt::CaseInsensitive) == 0;
-#elif defined(Q_WS_MAC)    
-    MacLoginItemsManager manager;
-    return manager.containsRunningApplication();
-#elif defined(Q_OS_LINUX)
-    return QFile::exists(SilverlockPreferences::startupFile());
-#else
     return false;
-#endif
 }
 
 void SilverlockPreferences::setRunAtStartup(bool run)
 {
-    if (!SilverlockPreferences::runAtStartupSupported())
-    {
-        Q_UNUSED(run);
-        qWarning() << "Run at startup is not supported on this platform and configuration.";
-        return;
-    }
-
-#ifdef Q_WS_WIN
-    QSettings settings(KEY_WIN_STARTUP_PATH, QSettings::NativeFormat);
-    if (run)
-    {
-        settings.setValue(KEY_WIN_STARTUP_NAME, this->applicationPathForRegistry());
-    }
-    else
-    {
-        settings.remove(KEY_WIN_STARTUP_NAME);
-    }
-#elif defined(Q_WS_MAC)
-    if (QFile::exists(SilverlockPreferences::macLoginItemsFile()))
-    {
-        MacLoginItemsManager manager;
-
-        if (run && !SilverlockPreferences::runAtStartup())
-        {
-            manager.appendRunningApplication();
-        }
-        else if (!run && SilverlockPreferences::runAtStartup())
-        {
-            manager.removeRunningApplication();
-        }
-    }
-#elif defined(Q_OS_LINUX)
-    switch (LinuxSystemInfo::desktopEnvironment())
-    {
-        case LinuxSystemInfo::GNOME:
-        {
-            if (run)
-            {
-                QFile file(SilverlockPreferences::startupFile());
-                if (file.open(QFile::WriteOnly | QFile::Truncate))
-                {
-                    file.setPermissions(file.permissions() | QFile::ExeOwner | QFile::ExeGroup);
-
-                    QTextStream out(&file);
-                    out << "[Desktop Entry]\n";
-                    out << "Type=Application\n";
-                    out << QString("Exec=%1.desktop\n").arg(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()));
-                    out << "Hidden=false\n";
-                    out << "NoDisplay=false\n";
-                    out << "X-GNOME-Autostart-enabled=true\n";
-                    out << "Name=Silverlock\n";
-                }
-            }
-            else
-            {
-                QFile::remove(SilverlockPreferences::startupFile());
-            }
-        }
-
-        case LinuxSystemInfo::KDE:
-        {
-            if (run)
-            {
-                QFile::link(QDir::toNativeSeparators(QCoreApplication::applicationFilePath()), SilverlockPreferences::startupFile());
-            }
-            else
-            {
-                QFile::remove(SilverlockPreferences::startupFile());
-            }
-        }
-
-        default:
-            return;
-    }
-#endif
 }
 
 /*!

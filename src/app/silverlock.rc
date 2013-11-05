@@ -1,5 +1,5 @@
-IDI_ICON1   ICON    DISCARDABLE "@RC_ICON@"
-1           24      DISCARDABLE "silverlock.manifest"
+IDI_ICON1   ICON    "@RC_ICON@"
+1           24      "silverlock.manifest"
 
 #include <windows.h>
 #include "version.h"

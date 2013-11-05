@@ -1,7 +1,7 @@
 #include "updatedialog.h"
 #include "ui_updatedialog.h"
+#include "nativedialogs.h"
 #include "silverlockpreferences.h"
-#include <petroules-utilities.h>
 #include <QtXml>
 
 /*!
@@ -63,7 +63,7 @@ bool UpdateDialog::automaticUpdatesSupported()
     // If the output from codesign says the object is not signed,
     // we're not running in the Mac App Store and can use our own automatic updates
     // Otherwise we let the Mac App Store keep the application up to date
-    return proc.readAllStandardError().endsWith(".app: code object is not signed\n");
+    return proc.exitCode() != 0;
 #elif (defined(Q_WS_WIN) && !defined(Q_WS_WINCE)) || (defined(Q_OS_LINUX) && defined(Q_WS_X11))
     // Windows and Linux/X11 support automatic updates by default
     return true;
@@ -76,7 +76,7 @@ bool UpdateDialog::automaticUpdatesSupported()
 void UpdateDialog::check()
 {
     this->ui->stackedWidget->setCurrentWidget(this->ui->checkingPage);
-    QNetworkReply *reply = this->m_network->get(QNetworkRequest(qiApp->url(IntegratedApplication::ApplicationUpdate)));
+    QNetworkReply *reply = this->m_network->get(QNetworkRequest(QString("https://www.petroules.com/version/silverlock")));
     QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(checkError(QNetworkReply::NetworkError)));
 }
 
@@ -107,13 +107,20 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
     int line;
     int column;
 
+    QString platformCode;
+#ifdef Q_OS_WIN
+    platformCode = "windows";
+#elif defined(Q_OS_MACX)
+    platformCode = "maosx";
+#endif
+
     QDomDocument doc;
     if (doc.setContent(QString(reply->readAll()), &error, &line, &column))
     {
         QDomElement release = doc.documentElement().firstChildElement();
         while (!release.isNull())
         {
-            if (release.attribute("Platform") == qiApp->platformCode())
+            if (release.attribute("Platform") == platformCode)
             {
                 QDomElement releaseChild = release.firstChildElement();
                 while (!releaseChild.isNull())
@@ -158,12 +165,12 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
         }
         else
         {
-            this->setError(tr("Your version of %1 appears to be newer than the latest available version. Please contact <a href=\"http://www.petroules.com/\">Petroules</a> for further assistance.").arg(qiApp->applicationName()));
+            this->setError(tr("Your version of %1 appears to be newer than the latest available version. Please contact <a href=\"http://www.petroules.com/\">Petroules</a> for further assistance.").arg(qApp->applicationName()));
         }
     }
     else
     {
-        QString error = tr("Unable to determine the latest version of %1.").arg(qiApp->applicationName());
+        QString error = tr("Unable to determine the latest version of %1.").arg(qApp->applicationName());
         if (!reply->errorString().isEmpty())
         {
             error += " " + reply->errorString();
@@ -175,7 +182,7 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
 
 void UpdateDialog::checkError(QNetworkReply::NetworkError error)
 {
-    this->setError(tr("A network error was encountered when attempting to determine the latest version of %1. The error returned was: %2").arg(qiApp->applicationName(), error));
+    this->setError(tr("A network error was encountered when attempting to determine the latest version of %1. The error returned was: %2").arg(qApp->applicationName(), error));
 }
 
 void UpdateDialog::setError(const QString &error)
@@ -190,7 +197,7 @@ void UpdateDialog::setError(const QString &error)
 void UpdateDialog::setAlreadyLatest(const QVersion &version)
 {
     this->ui->stackedWidget->setCurrentWidget(this->ui->alreadyLatestPage);
-    this->ui->updateCheckCompletedLabel->setText(tr("Congratulations, you are running the latest version of %1 (<b>%2</b>)! There is no need to update.").arg(qiApp->applicationName(), version.toString()));
+    this->ui->updateCheckCompletedLabel->setText(tr("Congratulations, you are running the latest version of %1 (<b>%2</b>)! There is no need to update.").arg(qApp->applicationName(), version.toString()));
 }
 
 void UpdateDialog::setUpdateAvailable(const QVersion &newVersion, const QVersion &currentVersion)
@@ -235,7 +242,7 @@ void UpdateDialog::acceptUpgrade()
 
 void UpdateDialog::downloadProgress(qint64 received, qint64 total)
 {
-    this->ui->downloadingLabel->setText(tr("Downloading %1 version <b>%2</b> from %3").arg(qiApp->applicationName(), this->m_newVersion.toString(), this->m_downloadUrl.toString()));
+    this->ui->downloadingLabel->setText(tr("Downloading %1 version <b>%2</b> from %3").arg(qApp->applicationName(), this->m_newVersion.toString(), this->m_downloadUrl.toString()));
 
     this->ui->progressBar->setTextVisible(true);
     this->ui->progressBar->setValue(received);
@@ -323,7 +330,7 @@ void UpdateDialog::on_cancelDownloadPushButton_clicked()
 void UpdateDialog::on_installPushButton_clicked()
 {
     QApplication::closeAllWindows();
-	
+
     QString nativeFilePath = QDir::toNativeSeparators(this->m_file);
 
     QProcess process;

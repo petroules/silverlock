@@ -1,4 +1,5 @@
 #include "databaseprinter.h"
+#include <QTextDocument>
 
 /*!
     Constructs a new DatabasePrinter for the specified \a Database.

@@ -6,12 +6,13 @@
 #include "dialogs/databaseprintpreviewdialog.h"
 #include "dialogs/entryeditdialog.h"
 #include "dialogs/groupeditdialog.h"
+#include "dialogs/nativedialogs.h"
+#include "dialogs/nativesavefiledialog.h"
 #include "dialogs/newdatabasewizard.h"
 #include "dialogs/searchdatabasedialog.h"
 #include "dialogs/selectgroupdialog.h"
 #include "widgets/toolbarsearchwidget.h"
 #include <silverlocklib.h>
-#include <petroules-utilities.h>
 
 void MainWindow::newFile()
 {
@@ -591,12 +592,10 @@ void MainWindow::findInGroup()
 
 void MainWindow::on_actionAlwaysOnTop_triggered(bool checked)
 {
-    WindowManager::setTopMost(this, checked);
 }
 
 void MainWindow::on_actionCenterToScreen_triggered()
 {
-    WindowManager::centerMainWindow(this);
 }
 
 void MainWindow::on_actionConfigureColumns_triggered()

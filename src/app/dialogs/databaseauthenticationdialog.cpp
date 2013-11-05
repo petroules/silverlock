@@ -61,7 +61,7 @@ void DatabaseAuthenticationDialog::getMessages(QStringList &errors, QStringList 
 
     if (this->ui->passwordLineEdit->text().isEmpty())
     {
-        warnings.append(tr("You have not entered a password."));
+        warnings.append(QObject::tr("You have not entered a password."));
     }
 }
 

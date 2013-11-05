@@ -1,7 +1,6 @@
 #ifndef TOOLBARSEARCHWIDGET_H
 #define TOOLBARSEARCHWIDGET_H
 
-#include "petroules-utilities.h"
 #include <QWidget>
 
 namespace Ui
