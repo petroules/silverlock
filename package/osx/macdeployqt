@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+
+if [ -z "$QT_INSTALL_LIBS" ] ; then
+    echo "QT_INSTALL_LIBS is not set" 1>&2
+    exit 1
+fi
+
+macdeployqt "$@"
+
+# Make bundle path absolute if necessary
+app="$1"
+if [[ "$app" != /* ]] ; then
+    app="$PWD/$1"
+fi
+
+# Copy the Info.plist files to each framework
+pushd "$app/Contents/Frameworks"
+for framework in Qt*.framework ; do
+    cp "$QT_INSTALL_LIBS/$framework/Contents/Info.plist" \
+       "$app/Contents/Frameworks/$framework/Resources/"
+done
+popd
