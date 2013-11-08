@@ -6,7 +6,7 @@ Project {
     qbsSearchPaths: "qbs"
 
     references: [
-        "lib/botan.qbs",
+        "src/3rdparty/botan.qbs",
         "src/app/app.qbs",
         "src/lib/qt/lib-qt.qbs"
     ]

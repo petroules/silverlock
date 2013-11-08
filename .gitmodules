@@ -1,3 +1,0 @@
-[submodule "lib/botan"]
-	path = lib/botan
-	url = git://github.com/petroules/botan.git
