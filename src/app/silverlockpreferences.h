@@ -78,15 +78,6 @@ private:
     QStringList m_recentFiles;
     bool m_windowSettingsCleared;
     QString m_updateInstallerPath;
-
-#ifdef Q_WS_WIN
-    static QString applicationPathForRegistry();
-#elif defined(Q_WS_MAC)
-    static QString macLoginItemsFile();
-#elif defined(Q_OS_LINUX)
-    static QString startupFile();
-    static QString startupFileFor(LinuxSystemInfo::DesktopEnvironment desktopEnvironment);
-#endif
 };
 
 #endif // SILVERLOCKSETTINGS_H
