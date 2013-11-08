@@ -8,15 +8,11 @@ StaticLibrary {
     version: "1.10"
     destinationDirectory: "botan"
 
+    property path botanSourceDirectory: "botan"
     property string makeTool: qbs.toolchain.contains("msvc") ? "nmake" : "make"
 
-    Group {
-        files: [ "botan/configure.py" ]
-        fileTags: [ "botan_configure" ]
-    }
-
     Rule {
-        inputs: [ "botan_configure" ]
+        inputs: [ "qbs" ]
 
         Artifact {
             fileName: FileInfo.joinPaths(product.destinationDirectory,
@@ -31,15 +27,17 @@ StaticLibrary {
             var cmd;
             var cmds = [];
             var args = [];
+            var botanConfigureScript = FileInfo.joinPaths(product.botanSourceDirectory, "configure.py");
             var botanBuildDirectory = FileInfo.path(output.fileName);
 
             if (product.moduleProperty("qbs", "hostOS").contains("windows"))
                 cmd = new Command("cmd", [ "/c", "mkdir", botanBuildDirectory ]);
             else
                 cmd = new Command("mkdir", [ "-p", botanBuildDirectory ]);
+            cmd.silent = true;
             cmds.push(cmd);
 
-            args = [ input.fileName ];
+            args = [ botanConfigureScript ];
             if (product.moduleProperty("cpp", "debugInformation"))
                 args.push("--enable-debug");
 
@@ -63,7 +61,7 @@ StaticLibrary {
             cmd.workingDirectory = botanBuildDirectory;
             cmds.push(cmd);
 
-            cmd = new Command(product.makeTool, []);
+            cmd = new Command(product.makeTool, product.makeTool === "nmake" ? ["/S"] : ["-s"]);
             cmd.description = "making botan";
             cmd.workingDirectory = botanBuildDirectory;
             cmds.push(cmd);
