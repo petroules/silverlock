@@ -6,13 +6,10 @@ Project {
     qbsSearchPaths: "qbs"
 
     references: [
+        "package/osx/appstore-pkg.qbs",
+        "package/osx/dmg.qbs",
         "src/3rdparty/botan.qbs",
         "src/app/app.qbs",
         "src/lib/qt/lib-qt.qbs"
     ]
-
-    SubProject {
-        condition: project.buildDistributionPackages
-        filePath: "package/osx/osx.qbs"
-    }
 }
