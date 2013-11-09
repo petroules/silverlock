@@ -21,14 +21,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 {
     this->ui->setupUi(this);
     this->load();
-
-    // If run at startup is not enabled on this platform, disable the checkbox and display a message to the user
-    this->ui->runAtStartupCheckBox->setEnabled(SilverlockPreferences::runAtStartupSupported());
-    this->ui->noRunAtStartupLabel->setVisible(!SilverlockPreferences::runAtStartupSupported());
-
-    // TODO: To be restored in a future version (perhaps Silverlock 1.2?)
-    this->ui->fileAssociationsGroupBox->setEnabled(false);
-    this->ui->fileAssociationsGroupBox->setVisible(false);
 }
 
 /*!
@@ -37,21 +29,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 PreferencesDialog::~PreferencesDialog()
 {
     delete this->ui;
-}
-
-/*!
-    Updates the state of the file associations group box.
-
-    \todo For a future Silverlock release...
- */
-void PreferencesDialog::updateFileAssociationState()
-{
-    SilverlockPreferences &prefs = SilverlockPreferences::instance();
-    bool set = prefs.isFileAssociationSet();
-    this->ui->createAssocPushButton->setEnabled(!set);
-    this->ui->removeAssocPushButton->setEnabled(set);
-    this->ui->fileAssociationStatusLabel->setText(QString("File associations are currently <b>%1</b>").arg(set ? "enabled" : "disabled"));
-    this->ui->fileAssociationStatusLabel->setStyleSheet(QString("color: %1;").arg(set ? "green" : "red"));
 }
 
 /*!
@@ -78,20 +55,9 @@ void PreferencesDialog::load(const SilverlockPreferences &prefs)
     this->ui->minimizeToTrayCheckBox->setChecked(prefs.minimizeToTray());
     this->ui->minimizeAfterClipboardCheckBox->setChecked(prefs.minimizeAfterClipboard());
     this->ui->minimizeAfterLockCheckBox->setChecked(prefs.minimizeAfterLock());
-    this->ui->runAtStartupCheckBox->setChecked(prefs.runAtStartup());
-    this->ui->runAtStartupCheckBox->setEnabled(prefs.runAtStartupSupported());
     this->ui->openLastDatabaseCheckBox->setChecked(prefs.openLastDatabase());
     this->ui->updateOnStartupCheckBox->setChecked(prefs.updateOnStartup());
     this->ui->autoSaveOnCloseCheckBox->setChecked(prefs.autoSaveOnClose());
-
-    this->ui->createAssocPushButton->setIcon(this->style()->standardIcon(QStyle::SP_VistaShield));
-    this->ui->removeAssocPushButton->setIcon(this->style()->standardIcon(QStyle::SP_VistaShield));
-#ifndef Q_WS_WIN
-    this->ui->createAssocPushButton->setEnabled(false);
-    this->ui->removeAssocPushButton->setEnabled(false);
-#else
-    this->updateFileAssociationState();
-#endif
 }
 
 /*!
@@ -112,7 +78,6 @@ void PreferencesDialog::save()
     prefs.setMinimizeToTray(this->ui->minimizeToTrayCheckBox->isChecked());
     prefs.setMinimizeAfterClipboard(this->ui->minimizeAfterClipboardCheckBox->isChecked());
     prefs.setMinimizeAfterLock(this->ui->minimizeAfterLockCheckBox->isChecked());
-    prefs.setRunAtStartup(this->ui->runAtStartupCheckBox->isChecked());
     prefs.setOpenLastDatabase(this->ui->openLastDatabaseCheckBox->isChecked());
     prefs.setUpdateOnStartup(this->ui->updateOnStartupCheckBox->isChecked());
     prefs.setAutoSaveOnClose(this->ui->autoSaveOnCloseCheckBox->isChecked());
@@ -161,28 +126,4 @@ void PreferencesDialog::on_buttonBox_clicked(QAbstractButton* button)
             this->restoreDefaults();
         }
     }
-}
-
-/*!
-    Creates file associations in Windows Explorer.
-
-    \todo For a future Silverlock release...
- */
-void PreferencesDialog::on_createAssocPushButton_clicked()
-{
-    SilverlockPreferences &prefs = SilverlockPreferences::instance();
-    prefs.setFileAssociationActive(true);
-    this->updateFileAssociationState();
-}
-
-/*!
-    Removes file associations in Windows Explorer.
-
-    \todo For a future Silverlock release...
- */
-void PreferencesDialog::on_removeAssocPushButton_clicked()
-{
-    SilverlockPreferences &prefs = SilverlockPreferences::instance();
-    prefs.setFileAssociationActive(false);
-    this->updateFileAssociationState();
 }

@@ -37,8 +37,6 @@ MainWindow::MainWindow(QWidget *parent) :
     m_lockIdleTimerValue(0), m_exitIdleTimerValue(0), widgetsAndToolbarsAction(NULL)
 {
     this->ui->setupUi(this);
-    //WindowManager::centerMainWindow(this);
-    this->updateSingleInstance();
     this->clearCurrentFile();
     this->setupSignals();
     this->setupUiAdditional();
@@ -47,8 +45,6 @@ MainWindow::MainWindow(QWidget *parent) :
     SilverlockPreferences::instance().restoreWindowSettings(this);
 
     QObject::connect(qApp, SIGNAL(resetIdleTimer(QObject*)), SLOT(resetIdleTimer(QObject*)));
-
-    //qt_mac_setLionFullscreenEnabled(this, true);
 }
 
 /*!
@@ -64,11 +60,6 @@ MainWindow::~MainWindow()
         {
             mainWindows.append(mainWin);
         }
-    }
-
-    if (mainWindows.count() > 0)
-    {
-        this->updateSingleInstance(mainWindows.last());
     }
 
     // Disconnect the document state signals first, otherwise
@@ -92,10 +83,6 @@ GroupBrowserWidget* MainWindow::groupBrowser() const
 EntryTableWidget* MainWindow::entryTable() const
 {
     return this->ui->entryTable;
-}
-
-void MainWindow::updateSingleInstance(MainWindow *mw)
-{
 }
 
 /*!
@@ -236,9 +223,6 @@ void MainWindow::setupSignals()
  */
 void MainWindow::setupUiAdditional()
 {
-    // Remove dock widget header
-    this->ui->groupsDockWidget->setTitleBarWidget(new QWidget(this));
-
     // Add spacer and search widget to toolbar
     this->ui->standardToolBar->addWidget(new ExpandingSpacerWidget());
     this->ui->standardToolBar->addWidget(this->m_toolbarSearch = new ToolbarSearchWidget());
@@ -463,7 +447,7 @@ void MainWindow::toolbarSearch(QString terms)
 /*!
     Opens URLs in the entry info view in the user's browser.
  */
-void MainWindow::on_infoView_anchorClicked(QUrl url)
+void MainWindow::on_entryInfoView_anchorClicked(QUrl url)
 {
     QDesktopServices::openUrl(url);
 }
@@ -699,8 +683,6 @@ void MainWindow::populateInfoView(Entry *const entry)
 {
     if (entry)
     {
-        this->ui->stackedWidget->setCurrentWidget(this->ui->entryInfoPage);
-
         // HTML string to display an entry
         QString document;
 
@@ -940,9 +922,6 @@ QString MainWindow::closeFileInternal()
         this->ui->groupBrowser->clear();
         this->ui->entryTable->clear();
         this->clearViews();
-
-        // Put the welcome page back
-        this->ui->stackedWidget->setCurrentWidget(this->ui->welcomePage);
 
         return fileName;
     }

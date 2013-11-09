@@ -5,6 +5,14 @@
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>630</width>
+    <height>259</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>About %1</string>
   </property>
@@ -76,7 +84,7 @@ border-bottom: 1px solid #000;</string>
          <string notr="true">border: 0;</string>
         </property>
         <property name="pixmap">
-         <pixmap resource="../../../res/globalresources.qrc">:/main/res/app.svg</pixmap>
+         <pixmap>:/main/res/app.svg</pixmap>
         </property>
         <property name="scaledContents">
          <bool>true</bool>
@@ -89,7 +97,7 @@ border-bottom: 1px solid #000;</string>
    <item>
     <widget class="QLabel" name="labelInfo">
      <property name="text">
-      <string>&lt;p&gt;%1. %2.&lt;br /&gt;%3 is made possible by the &lt;a href=&quot;http://qt.nokia.com/&quot;&gt;Qt&lt;/a&gt; framework by Nokia, and other open source software (see license).&lt;/p&gt;</string>
+      <string>Copyright © 2011-2014 Petroules Corporation. All Rights Reserved.</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -148,13 +156,6 @@ border-bottom: 1px solid #000;</string>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="buildInfoPushButton">
-       <property name="text">
-        <string>Build Information</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -175,9 +176,7 @@ border-bottom: 1px solid #000;</string>
   <tabstop>okPushButton</tabstop>
   <tabstop>licensePushButton</tabstop>
  </tabstops>
- <resources>
-  <include location="../../../res/globalresources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>okPushButton</sender>
@@ -211,25 +210,8 @@ border-bottom: 1px solid #000;</string>
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>buildInfoPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>AboutDialog</receiver>
-   <slot>displayBuildInformationDialog()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>325</x>
-     <y>361</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>244</x>
-     <y>191</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
  <slots>
   <slot>displayLicenseDialog()</slot>
-  <slot>displayBuildInformationDialog()</slot>
  </slots>
 </ui>

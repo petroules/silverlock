@@ -76,7 +76,7 @@ bool UpdateDialog::automaticUpdatesSupported()
 void UpdateDialog::check()
 {
     this->ui->stackedWidget->setCurrentWidget(this->ui->checkingPage);
-    QNetworkReply *reply = this->m_network->get(QNetworkRequest(QString("https://www.petroules.com/version/silverlock")));
+    QNetworkReply *reply = this->m_network->get(QNetworkRequest(QString("http://www.petroules.com/version/silverlock")));
     QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(checkError(QNetworkReply::NetworkError)));
 }
 

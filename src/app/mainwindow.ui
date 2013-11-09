@@ -14,36 +14,28 @@
    <bool>true</bool>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../res/globalresources.qrc">
+   <iconset>
     <normaloff>:/main/res/app.svg</normaloff>:/main/res/app.svg</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_5">
-    <property name="margin">
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
-      <widget class="QWidget" name="welcomePage">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="margin">
-         <number>0</number>
-        </property>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="mainPage">
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <property name="margin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="EntryTableWidget" name="entryTable" native="true"/>
-        </item>
-       </layout>
-      </widget>
       <widget class="QWidget" name="unlockPage">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
@@ -173,19 +165,40 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="entryInfoPage">
-       <layout class="QVBoxLayout" name="verticalLayout_10">
-        <property name="margin">
+      <widget class="QWidget" name="mainPage">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
-         <widget class="QTextBrowser" name="entryInfoView">
-          <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+         <widget class="QSplitter" name="splitter_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="openLinks">
-           <bool>false</bool>
-          </property>
+          <widget class="GroupBrowserWidget" name="groupBrowser" native="true"/>
+          <widget class="QSplitter" name="splitter_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <widget class="EntryTableWidget" name="entryTable" native="true"/>
+           <widget class="QTextBrowser" name="entryInfoView">
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="openLinks">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -232,12 +245,7 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
-    <addaction name="actionAlwaysOnTop"/>
-    <addaction name="actionCenterToScreen"/>
-    <addaction name="separator"/>
     <addaction name="actionConfigureColumns"/>
-    <addaction name="separator"/>
-    <addaction name="actionFullScreen"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -249,10 +257,7 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionHelpContents"/>
-    <addaction name="separator"/>
     <addaction name="actionWebsite"/>
-    <addaction name="actionDonate"/>
     <addaction name="separator"/>
     <addaction name="actionCheckForUpdates"/>
     <addaction name="separator"/>
@@ -320,6 +325,11 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionPrint"/>
+   <addaction name="separator"/>
    <addaction name="actionLockWorkspace"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
@@ -327,33 +337,9 @@
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QDockWidget" name="groupsDockWidget">
-   <property name="features">
-    <set>QDockWidget::NoDockWidgetFeatures</set>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::NoDockWidgetArea</set>
-   </property>
-   <property name="windowTitle">
-    <string>Groups</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="QWidget" name="groupsDockWidgetContent">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="margin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="GroupBrowserWidget" name="groupBrowser" native="true"/>
-     </item>
-    </layout>
-   </widget>
-  </widget>
   <action name="actionNew">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/main/res/db.svg</normaloff>:/main/res/db.svg</iconset>
    </property>
    <property name="text">
@@ -389,7 +375,7 @@
   </action>
   <action name="actionPrint">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/main/res/printer.svg</normaloff>:/main/res/printer.svg</iconset>
    </property>
    <property name="text">
@@ -401,7 +387,7 @@
   </action>
   <action name="actionPrintPreview">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/main/res/print_preview.png</normaloff>:/main/res/print_preview.png</iconset>
    </property>
    <property name="text">
@@ -580,7 +566,7 @@
   </action>
   <action name="actionHelpContents">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/main/res/help.png</normaloff>:/main/res/help.png</iconset>
    </property>
    <property name="text">
@@ -691,7 +677,7 @@
   </action>
   <action name="actionInternetExplorer">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/main/res/iexplore.png</normaloff>:/main/res/iexplore.png</iconset>
    </property>
    <property name="text">
@@ -711,7 +697,7 @@
   </action>
   <action name="actionLockWorkspace">
    <property name="icon">
-    <iconset resource="../../res/globalresources.qrc">
+    <iconset>
      <normaloff>:/main/res/app.svg</normaloff>:/main/res/app.svg</iconset>
    </property>
    <property name="text">
@@ -764,10 +750,7 @@
   <tabstop>unlockWorkspaceRevealToolButton</tabstop>
   <tabstop>unlockWorkspacePushButton</tabstop>
  </tabstops>
- <resources>
-  <include location="resources.qrc"/>
-  <include location="../../res/globalresources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>actionSave</sender>
@@ -846,70 +829,6 @@
     <hint type="destinationlabel">
      <x>512</x>
      <y>335</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionSelectAllEntries</sender>
-   <signal>triggered()</signal>
-   <receiver>entryTable</receiver>
-   <slot>selectAll()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>130</x>
-     <y>69</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionSelectAllGroups</sender>
-   <signal>triggered()</signal>
-   <receiver>groupBrowser</receiver>
-   <slot>selectAll()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>39</x>
-     <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>entryTable</sender>
-   <signal>populating()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>clearViews()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>130</x>
-     <y>69</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>499</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>groupBrowser</sender>
-   <signal>populating()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>clearViews()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>39</x>
-     <y>220</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>499</x>
-     <y>299</y>
     </hint>
    </hints>
   </connection>

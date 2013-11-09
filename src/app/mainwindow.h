@@ -74,8 +74,6 @@ private:
     void setupKeyboardShortcuts();
     void setupMenuIcons();
 
-    inline void updateSingleInstance() { this->updateSingleInstance(this); }
-    void updateSingleInstance(MainWindow *mw);
     void setNodeCount(Group *group);
     void populateWithSearchResults(const QList<Entry*> &entries, const QString &keywords);
     void populateEntryTable(Group *const group);
@@ -129,7 +127,7 @@ private slots:
     void on_actionDonate_triggered();
     void on_actionCheckForUpdates_triggered();
     void on_actionAboutSilverlock_triggered();
-    void on_infoView_anchorClicked(QUrl url);
+    void on_entryInfoView_anchorClicked(QUrl url);
     void on_groupBrowser_customContextMenuRequested(QPoint pos);
     void on_entryTable_customContextMenuRequested(QPoint pos);
     void on_groupBrowser_itemSelectionChanged();

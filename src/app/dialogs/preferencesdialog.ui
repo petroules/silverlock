@@ -5,6 +5,14 @@
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>678</width>
+    <height>274</height>
+   </rect>
+  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
     <horstretch>0</horstretch>
@@ -15,11 +23,11 @@
    <string>Preferences</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetFixedSize</enum>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetMaximumSize</enum>
-     </property>
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="sizePolicy">
@@ -289,149 +297,6 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="systemTab">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <attribute name="title">
-         <string>System</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <widget class="QCheckBox" name="runAtStartupCheckBox">
-           <property name="whatsThis">
-            <string>Checking this option will cause Silverlock to automatically run whenever the user logs in to their user account on their computer.</string>
-           </property>
-           <property name="text">
-            <string>Automatically run Silverlock when I start my computer or log into my user account</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="noRunAtStartupLabel">
-           <property name="text">
-            <string>This feature is not available on this platform and configuration.</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="fileAssociationsGroupBox">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="title">
-            <string>File associations</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <widget class="QLabel" name="securityWarningLabel">
-              <property name="text">
-               <string>&lt;p align=&quot;center&quot; style=&quot;color:#ff0000;&quot;&gt;&lt;b&gt;WARNING:&lt;/b&gt; Changing file association settings will take effect immediately and will not be restored by clicking the Cancel button.&lt;br /&gt;&lt;/p&gt;</string>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="fileAssociationsLabel">
-              <property name="text">
-               <string>On Windows, SDBX files can be associated with Silverlock. When you double-click an SDBX file in Windows Explorer, it will open in Silverlock if this option is set.</string>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout">
-              <item>
-               <widget class="QPushButton" name="createAssocPushButton">
-                <property name="whatsThis">
-                 <string>Clicking this button will immediately set SDBX files to be associated with Silverlock in Windows Explorer.</string>
-                </property>
-                <property name="text">
-                 <string>Create Association</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="removeAssocPushButton">
-                <property name="whatsThis">
-                 <string>Clicking this button will immediately remove the SDBX file association from Windows Explorer.</string>
-                </property>
-                <property name="text">
-                 <string>Remove association</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QLabel" name="fileAssociationStatusLabel">
-              <property name="text">
-               <string>SDBX file associations are currently &lt;b&gt;%1&lt;b&gt;.</string>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="Line" name="line">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="fileAssociationsMoreLabel">
-              <property name="text">
-               <string>&lt;p&gt;On Mac OS X, file associations are assigned using Silverlock's application bundle and cannot be modified.&lt;/p&gt;
-&lt;p&gt;File associations are not currently supported on Linux systems.&lt;/p&gt;</string>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>147</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </widget>
        <widget class="QWidget" name="advancedTab">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
@@ -519,9 +384,6 @@
   <tabstop>minimizeAfterLockCheckBox</tabstop>
   <tabstop>clearRecentFilesListPushButton</tabstop>
   <tabstop>clearWindowSettingsPushButton</tabstop>
-  <tabstop>runAtStartupCheckBox</tabstop>
-  <tabstop>createAssocPushButton</tabstop>
-  <tabstop>removeAssocPushButton</tabstop>
   <tabstop>openLastDatabaseCheckBox</tabstop>
   <tabstop>updateOnStartupCheckBox</tabstop>
   <tabstop>autoSaveOnCloseCheckBox</tabstop>

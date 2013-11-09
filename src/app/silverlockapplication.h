@@ -20,6 +20,9 @@ public:
     QList<MainWindow*> windows() const;
     MainWindow* activeWindow2() const;
 
+signals:
+    void resetIdleTimer(QObject *);
+
 public slots:
     // File menu
     void openFile();

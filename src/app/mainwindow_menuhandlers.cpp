@@ -173,8 +173,6 @@ void MainWindow::lockWorkspace(bool lock)
     this->ui->groupBrowser->setVisible(!lock);
     this->ui->entryInfoView->setVisible(!lock);
 
-    this->ui->groupsDockWidget->setVisible(!lock);
-
     if (lock)
     {
         // Focus to the enter password line edit

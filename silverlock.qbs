@@ -1,5 +1,9 @@
 Project {
-    property string version: "1.1.2"
+    property string version: [ versionMajor, versionMinor, versionPatch ].join(".")
+
+    property int versionMajor: 1
+    property int versionMinor: 2
+    property int versionPatch: 0
 
     property bool buildDistributionPackages: false
 

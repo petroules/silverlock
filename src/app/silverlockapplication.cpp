@@ -1,5 +1,4 @@
 #include "silverlockapplication.h"
-#include "applicationmenu.h"
 #include "inactivityeventfilter.h"
 #include "mainwindow.h"
 #include "nativeopenfiledialog.h"
@@ -44,9 +43,6 @@ SilverlockApplication::SilverlockApplication(int &argc, char *argv[])
     InactivityEventFilter *filter = new InactivityEventFilter(qApp);
     qApp->installEventFilter(filter);
     QObject::connect(filter, SIGNAL(resetIdleTimer(QObject*)), qApp, SIGNAL(resetIdleTimer(QObject*)));
-
-    // Mac OS X: This allows the application to recognize when the user double clicks a file in the Finder
-    QObject::connect(qApp, SIGNAL(fileOpenRequest(QString)), qApp, SIGNAL(messageReceived(QString)));
 }
 
 SilverlockApplication::~SilverlockApplication()

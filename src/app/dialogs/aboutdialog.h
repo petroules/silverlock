@@ -21,7 +21,6 @@ private:
 
 private slots:
     void displayLicenseDialog();
-    void displayBuildInformationDialog();
 };
 
 #endif // ABOUTDIALOG_H

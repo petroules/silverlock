@@ -21,8 +21,6 @@ CppApplication {
     cpp.infoPlistFile: "Info.plist"
 
     files: [
-        "applicationmenu.cpp",
-        "applicationmenu.h",
         "databaseprinter.cpp",
         "databaseprinter.h",
         "databaseprinterfields.cpp",

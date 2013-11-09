@@ -36,11 +36,6 @@ public:
     void setMinimizeAfterClipboard(bool minimize);
     bool minimizeAfterLock() const;
     void setMinimizeAfterLock(bool minimize);
-    static bool runAtStartupSupported();
-    bool runAtStartup() const;
-    void setRunAtStartup(bool run);
-    bool isFileAssociationSet() const;
-    void setFileAssociationActive(bool active);
     bool openLastDatabase() const;
     void setOpenLastDatabase(bool open);
     bool updateOnStartup() const;

@@ -24,15 +24,12 @@ protected:
     void getMessages(QStringList &errors, QStringList &warnings, QStringList &information) const;
 
 private:
-    void updateFileAssociationState();
     void load(const SilverlockPreferences &prefs);
     void restoreDefaults();
 
     Ui::PreferencesDialog *ui;
 
 private slots:
-    void on_removeAssocPushButton_clicked();
-    void on_createAssocPushButton_clicked();
     void on_buttonBox_clicked(QAbstractButton* button);
 };
 

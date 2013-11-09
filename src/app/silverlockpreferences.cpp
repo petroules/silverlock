@@ -303,41 +303,6 @@ void SilverlockPreferences::setMinimizeAfterLock(bool minimize)
     this->m_minimizeAfterLock = minimize;
 }
 
-/*!
-    Gets a value indicating whether run-at-startup is supported on this platform and configuration.
- */
-bool SilverlockPreferences::runAtStartupSupported()
-{
-    return false;
-}
-
-bool SilverlockPreferences::runAtStartup() const
-{
-    return false;
-}
-
-void SilverlockPreferences::setRunAtStartup(bool run)
-{
-}
-
-/*!
-    \todo For a future Silverlock release...
- */
-bool SilverlockPreferences::isFileAssociationSet() const
-{
-    return false;
-}
-
-/*!
-    \todo For a future Silverlock release...
-
-    \param active \c true to create file associations; \c false to remove them.
- */
-void SilverlockPreferences::setFileAssociationActive(bool active)
-{
-    Q_UNUSED(active);
-}
-
 bool SilverlockPreferences::openLastDatabase() const
 {
     return this->m_openLastDatabase;

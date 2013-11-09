@@ -1,7 +1,6 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 #include "licensedialog.h"
-#include <databasecrypto.h>
 
 /*!
     \class AboutDialog
@@ -27,10 +26,6 @@ AboutDialog::AboutDialog(QWidget *parent) :
     this->ui->labelApplication->setText(this->ui->labelApplication->text()
         .arg(qApp->applicationName())
         .arg(qApp->applicationVersion()));
-    /*this->ui->labelInfo->setText(this->ui->labelInfo->text()
-        .arg(qiApp->copyrightLink())
-        .arg(qiApp->trademarks())
-        .arg(qiApp->applicationName()));*/
 }
 
 /*!
@@ -48,11 +43,4 @@ void AboutDialog::displayLicenseDialog()
 {
     LicenseDialog dialog(this);
     dialog.exec();
-}
-
-/*!
-    Displays the build information dialog.
- */
-void AboutDialog::displayBuildInformationDialog()
-{
 }
