@@ -111,7 +111,7 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
 #ifdef Q_OS_WIN
     platformCode = "windows";
 #elif defined(Q_OS_MACX)
-    platformCode = "maosx";
+    platformCode = "macosx";
 #endif
 
     QDomDocument doc;
