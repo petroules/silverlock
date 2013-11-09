@@ -155,17 +155,13 @@ void UpdateDialog::checkReplyFinished(QNetworkReply *reply)
     if (this->m_newVersion.isValid() && !this->m_downloadUrl.isEmpty() && !this->m_checksum.isEmpty())
     {
         QVersion currentVersion = QVersion(QApplication::applicationVersion()).simplified();
-        if (this->m_newVersion == currentVersion)
+        if (this->m_newVersion <= currentVersion)
         {
             this->setAlreadyLatest(currentVersion);
         }
-        else if (this->m_newVersion > currentVersion)
-        {
-            this->setUpdateAvailable(this->m_newVersion, currentVersion);
-        }
         else
         {
-            this->setError(tr("Your version of %1 appears to be newer than the latest available version. Please contact <a href=\"http://www.petroules.com/\">Petroules</a> for further assistance.").arg(qApp->applicationName()));
+            this->setUpdateAvailable(this->m_newVersion, currentVersion);
         }
     }
     else
