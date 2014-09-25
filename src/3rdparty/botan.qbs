@@ -6,7 +6,6 @@ StaticLibrary {
 
     name: "botan"
     version: "1.10"
-    destinationDirectory: "botan"
 
     property path botanSourceDirectory: "botan"
     property string makeTool: qbs.toolchain.contains("msvc") ? "nmake" : "make"
@@ -15,7 +14,7 @@ StaticLibrary {
         inputs: [ "qbs" ]
 
         Artifact {
-            fileName: FileInfo.joinPaths(product.destinationDirectory,
+            filePath: FileInfo.joinPaths(product.destinationDirectory, "botan",
                         product.moduleProperty("cpp", "staticLibraryPrefix") +
                         product.targetName + "-" + product.version +
                         product.moduleProperty("cpp", "staticLibrarySuffix"))
@@ -28,7 +27,7 @@ StaticLibrary {
             var cmds = [];
             var args = [];
             var botanConfigureScript = FileInfo.joinPaths(product.botanSourceDirectory, "configure.py");
-            var botanBuildDirectory = FileInfo.path(output.fileName);
+            var botanBuildDirectory = FileInfo.path(output.filePath);
 
             if (product.moduleProperty("qbs", "hostOS").contains("windows"))
                 cmd = new Command("cmd", [ "/c", "mkdir", botanBuildDirectory ]);

@@ -19,14 +19,14 @@ Product {
         usings: ["applicationbundle"]
 
         Artifact {
-            fileName: FileInfo.joinPaths(product.destinationDirectory, product.targetName + ".pkg")
+            filePath: FileInfo.joinPaths(product.destinationDirectory, product.targetName + ".pkg")
             fileTags: ["pkg"]
         }
 
         prepare: {
             var cmd;
             var cmds = [];
-            var applicationBundle = inputs.applicationbundle[0].fileName;
+            var applicationBundle = inputs.applicationbundle[0].filePath;
             var pkgroot = FileInfo.joinPaths(product.buildDirectory, "GeneratedFiles", product.name);
 
             cmd = new Command("rm", ["-rf", pkgroot]);
@@ -92,8 +92,8 @@ Product {
             cmd = new Command("productbuild", ["--component", FileInfo.fileName(applicationBundle),
                                                "/Applications", "--sign",
                                                "3rd Party Mac Developer Installer:",
-                                               output.fileName]);
-            cmd.description = "creating " + FileInfo.fileName(output.fileName);
+                                               output.filePath]);
+            cmd.description = "creating " + output.fileName;
             cmd.workingDirectory = pkgroot;
             cmd.stdoutFilterFunction = function(output) {
                 return output.replace(/productbuild: (.*)\n/g, "");

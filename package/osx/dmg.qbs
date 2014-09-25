@@ -19,14 +19,14 @@ Product {
         usings: ["applicationbundle"]
 
         Artifact {
-            fileName: FileInfo.joinPaths(product.destinationDirectory, product.targetName + ".dmg")
+            filePath: FileInfo.joinPaths(product.destinationDirectory, product.targetName + ".dmg")
             fileTags: ["dmg"]
         }
 
         prepare: {
             var cmd;
             var cmds = [];
-            var applicationBundle = inputs.applicationbundle[0].fileName;
+            var applicationBundle = inputs.applicationbundle[0].filePath;
             var pkgroot = FileInfo.joinPaths(product.buildDirectory, "GeneratedFiles", product.name);
 
             cmd = new Command("rm", ["-rf", pkgroot]);
@@ -120,18 +120,18 @@ Product {
             cmd.stdoutFilterFunction += "};";
             cmds.push(cmd);
 
-            cmd = new Command("hdiutil", ["create", output.fileName,
+            cmd = new Command("hdiutil", ["create", output.filePath,
                                           "-srcfolder", ".",
                                           "-format", "UDZO",
                                           "-volname", FileInfo.completeBaseName(applicationBundle), "-ov"]);
-            cmd.description = "creating " + FileInfo.fileName(output.fileName);
+            cmd.description = "creating " + output.fileName;
             cmd.workingDirectory = pkgroot;
             cmd.stdoutFilterFunction = function(output) {
                 return output.replace(/created: \/(.*)\.dmg\n/, "");
             };
             cmds.push(cmd);
 
-            cmd = new Command("hdiutil", ["internet-enable", "-yes", output.fileName]);
+            cmd = new Command("hdiutil", ["internet-enable", "-yes", output.filePath]);
             cmd.silent = true;
             cmd.stderrFilterFunction = function(output) {
                 return output.replace("hdiutil: internet-enable: enable succeeded\n", "");
