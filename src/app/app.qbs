@@ -1,4 +1,5 @@
 import qbs
+import qbs.BundleTools
 import qbs.File
 import qbs.FileInfo
 
@@ -7,7 +8,6 @@ CppApplication {
     Depends { name: "Qt"; submodules: ["core", "gui", "network", "svg", "xml"] }
 
     targetName: qbs.targetOS.contains("darwin") ? "Silverlock" : "silverlock"
-    destinationDirectory: type.contains("applicationbundle") ? "Applications" : (qbs.targetOS.contains("windows") ? "." : "bin")
     version: project.version
 
     cpp.includePaths: [
@@ -38,7 +38,6 @@ CppApplication {
         "qversion.cpp",
         "qversion.h",
         "resources.qrc",
-        "../../res/app.icns",
         "../../res/globalresources.qrc",
         "silverlock.manifest",
         "silverlock.rc",
@@ -170,31 +169,25 @@ CppApplication {
         ]
     }
 
+    property string installDir: type.contains("applicationbundle") ? "Applications" : (qbs.targetOS.contains("windows") ? "." : "bin")
     Group {
         fileTagsFilter: product.type
         qbs.install: true
-        qbs.installDir: product.destinationDirectory
+        qbs.installDir: installDir
+    }
+
+    Group {
+        fileTagsFilter: ["qm"]
+        qbs.install: true
+        qbs.installDir: "share/silverlock/translations"
     }
 
     // QBS-451
-    Transformer {
-        inputs: ["../../res/app.icns"]
-
-        Artifact {
-            fileName: FileInfo.joinPaths(product.destinationDirectory,
-                                         product.targetName + ".app", "Contents", "Resources",
-                                         "app.icns")
-            fileTags: ["bundle_content"]
-        }
-
-        prepare: {
-            var cmd = new JavaScriptCommand();
-            cmd.description = "copying " + FileInfo.fileName(input.fileName) + " to bundle";
-            cmd.sourceCode = function() {
-                File.copy(input.fileName, output.fileName);
-            };
-            return cmd;
-        }
+    Group {
+        condition: qbs.targetOS.contains("osx")
+        files: ["../../res/app.icns"]
+        qbs.install: true
+        qbs.installDir: condition ? FileInfo.joinPaths(product.installDir, BundleTools.unlocalizedResourcesFolderPath(product)) : undefined
     }
 
     Properties {

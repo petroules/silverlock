@@ -9,7 +9,6 @@ DynamicLibrary {
     type: qbs.targetOS.contains("osx") ? "frameworkbundle" : "dynamiclibrary"
     targetName: type.contains("frameworkbundle") ? "Silvercore" : "silvercore"
     version: "1.0.0"
-    destinationDirectory: qbs.targetOS.contains("windows") ? "." : "lib" // macdeployqt has a bug preventing use of Frameworks
 
     cpp.defines: [ "SILVERLOCKLIB_EXPORTS" ]
     cpp.includePaths: [ "." ]
@@ -48,14 +47,15 @@ DynamicLibrary {
     }
 
     Group {
-        fileTagsFilter: {
-            var filter = product.type;
-            if (!product.type.contains("frameworkbundle"))
-                filter.push("dynamiclibrary_symlink");
-            return filter;
-        }
+        fileTagsFilter: product.type.concat(["dynamiclibrary_symlink"])
         qbs.install: true
-        qbs.installDir: product.destinationDirectory
+        qbs.installDir: qbs.targetOS.contains("windows") ? "." : (type.contains("frameworkbundle") ? "Library/Frameworks" : "lib")
+    }
+
+    Group {
+        fileTagsFilter: ["qm"]
+        qbs.install: true
+        qbs.installDir: "share/silverlock/translations"
     }
 
     Properties {
